@@ -9,9 +9,11 @@ export default function Index() {
         alignItems: "center",
       }}
     >
+      <Text>Wow its the front page can you believe it?</Text>
       <Text>
-        Wow its the front page can you believe it? Try writing different text
-        here and saving it to see the app update live.
+        Try writirng different text here and saving it to see the app update
+        live. You may need to press 'r' in the terminal before hot reload starts
+        working.
       </Text>
     </View>
   );
