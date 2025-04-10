@@ -1,3 +1,26 @@
+# Actually getting started
+
+Here is a guide to clone the repo and launch the app on your phone. Way below this is the premade readme content.
+
+To clone the repo (get it from github onto your device)
+- Open VSCode in whatever folder you want it to be.
+- Log in to github with the profile icon in the bottom left.
+- Run the command `git clone https://github.com/aster1ya/re.sippy.git`.
+- Navigate into the folder it just made with `cd re.sippy`.
+- Then run these two commands: `npm install expo` and `npm install https://github.com/aster1ya/re.sippy.git` to install dependencies that have been gitignored. Now you can launch the app. 
+
+To launch the app on your phone wirelessly (Cant do at AUT):
+- You need to download the Expo Go app.
+- Do the command `npx expo start`
+- Scan the QR code with the Expo Go app.
+
+To open the app over cable:
+- Have developer mode and USB debugging enabled on your phone (google it)
+- Run the command `npx expo start --localhost –android` and it just opens.
+
+
+
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
