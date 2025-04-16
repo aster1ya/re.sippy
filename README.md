@@ -2,6 +2,10 @@
 
 Here is a guide to clone the repo and launch the app on your phone. Way below this is the premade readme content.
 
+Installing things you need
+- Install nodejs from nodejs.org if you don't already have it. Use command `node -v` to check if you already have it installed
+- Install git from the website if you don't already have it.
+
 To clone the repo (get it from github onto your device)
 - Open VSCode in whatever folder you want it to be.
 - Log in to github with the profile icon in the bottom left.
@@ -17,6 +21,13 @@ To launch the app on your phone wirelessly (Cant do at AUT):
 To open the app over cable:
 - Have developer mode and USB debugging enabled on your phone (google it)
 - Run the command `npx expo start --localhost –android` and it just opens.
+
+Troubleshooting. Don't worry about this if everything is working fine. (These fixes worked for me ¯\\\_(ツ)\_/¯ )
+- If trying an `npm expo` command gives an error something along the lines of "doesn't have permissions to run scripts":
+   - press CTRL+P and search for settings.json.
+   - add `"args": ["-ExecutionPolicy", "Bypass"]` inside `"PowerShell"` just below "source" and "icon". 
+   - If you cant do that, youll have to create a new profile by doing CTRL+SHIFT+P and selecting `Create New Terminal (With Profile)` 
+- If trying to deploy the app over cable gives an error mentioning 'adb' or 'Android SDK', install android studio from their website, it'll download everything you need and put it in the right places.
 
 
 
