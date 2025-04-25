@@ -22,13 +22,17 @@ To open the app over cable:
 - Have developer mode and USB debugging enabled on your phone (google it)
 - Run the command `npx expo start --localhost –android` and it just opens.
 
+**(NEW) - To make the backend database work**
+- In index.tsx, theres a const apiUrl. You have to change the 192.168.xxx.xxx IP address in the string to your own local address. Find it by doing command `ipconfig` and looking for IPv4 Address.
+   - I realise this will cause git conflicts and you will have to change this every time you sync changes. We'll have to make a better system at some point.
+- When testing the app, you have to make have server.js in the backend folder running in another terminal. Do this with `node backend/server.js` Make sure you know what directory you are in.
+
 Troubleshooting. Don't worry about this if everything is working fine. (These fixes worked for me ¯\\\_(ツ)\_/¯ )
 - If trying an `npm expo` command gives an error something along the lines of "doesn't have permissions to run scripts":
    - press CTRL+P and search for settings.json.
    - add `"args": ["-ExecutionPolicy", "Bypass"]` inside `"PowerShell"` just below "source" and "icon". 
    - If you cant do that, youll have to create a new profile by doing CTRL+SHIFT+P and selecting `Create New Terminal (With Profile)` 
 - If trying to deploy the app over cable gives an error mentioning 'adb' or 'Android SDK', install android studio from their website, it'll download everything you need and put it in the right places.
-
 
 
 
