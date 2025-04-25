@@ -6,9 +6,11 @@ import 'react-native-gesture-handler' //makes drawers work
 
 const Index = () => {
 
-  //192.168.1.220 is my local IP. you will likely need to change this with your own IPv4 address (find with command 'ipconfig'). We can make a gitignore or automate this later
+  //192.168.1.220 is my local IP. you will likely need to change this with your own IPv4 address (find with command 'ipconfig').
+  //We can make a gitignore or automate this later. Also better store this in a separate file so any .tsx page can access it
   const apiUrl = "http://192.168.1.220:5000/api/recipes"
 
+  //create a variable which can be used in the page
   const [recipes, setRecipes] = useState([]);
 
   //function to do API call to get all recipes
@@ -27,6 +29,8 @@ const Index = () => {
     fetchRecipes();
   }, []);
 
+
+  //typescript that gets shown on the screen goes here
   return (
     <View
       style={{
