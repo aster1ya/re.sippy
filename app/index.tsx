@@ -1,14 +1,11 @@
 import { Link } from "expo-router";
-import { Text, View} from "react-native";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import 'react-native-gesture-handler' //makes drawers work
+import { Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "react-native-gesture-handler"; //makes drawers work
 
 const Index = () => {
-
-  //192.168.1.220 is my local IP. you will likely need to change this with your own IPv4 address (find with command 'ipconfig').
-  //We can make a gitignore or automate this later. Also better store this in a separate file so any .tsx page can access it
-  const apiUrl = "http://192.168.1.220:5000/api/recipes"
+  const apiUrl = "http://localhost:5000/api/recipes";
 
   //create a variable which can be used in the page
   const [recipes, setRecipes] = useState([]);
@@ -18,17 +15,16 @@ const Index = () => {
   const fetchRecipes = async () => {
     try {
       const response = await axios.get(apiUrl); //this axios.get() looks at the backend (server.js) and does the GET function with the /api/recipes route
-      setRecipes(response.data)
+      setRecipes(response.data);
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   //call the function to get recipes
   useEffect(() => {
     fetchRecipes();
   }, []);
-
 
   //typescript that gets shown on the screen goes here
   return (
@@ -53,11 +49,12 @@ const Index = () => {
 
       <Text>{"\n"}Recipes from the database:</Text>
       {recipes.map((recipe, index) => (
-        <Text key={index}>{index}. {recipe.title} - {recipe.ingredients}</Text> //idk how to remove these errors, but it works as expected
+        <Text key={index}>
+          {index}. {recipe.title} - {recipe.ingredients}
+        </Text> //idk how to remove these errors, but it works as expected
       ))}
-
     </View>
   );
-}
+};
 
 export default Index;

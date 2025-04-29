@@ -23,8 +23,7 @@ To open the app over cable:
 - Run the command `npx expo start --localhost –android` and it just opens.
 
 **(NEW) - To make the backend database work**
-- In index.tsx, theres a const apiUrl. You have to change the 192.168.xxx.xxx IP address in the string to your own local address. Find it by doing command `ipconfig` and looking for IPv4 Address.
-   - I realise this will cause git conflicts and you will have to change this every time you sync changes. We'll have to make a better system at some point.
+- Run command `adb reverse tcp:5000 tcp:5000`. You only need to do this once, but you may need to do it again when you re-open VSCode.
 - When testing the app, you have to make have server.js in the backend folder running in another terminal. Do this with `node backend/server.js` Make sure you know what directory you are in.
 
 Troubleshooting. Don't worry about this if everything is working fine. (These fixes worked for me ¯\\\_(ツ)\_/¯ )
