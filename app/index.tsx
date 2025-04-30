@@ -50,7 +50,7 @@ const Index = () => {
       <Text>{"\n"}Recipes from the database:</Text>
       {recipes.map((recipe, index) => (
         <Text key={index}>
-          {index}. {recipe.title} - {recipe.ingredients}
+          {index}. {recipe["title"]} - {recipe["ingredients"]}
         </Text> //idk how to remove these errors, but it works as expected
       ))}
     </View>
