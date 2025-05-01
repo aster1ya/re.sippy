@@ -1,3 +1,6 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../backend/firebaseConfig";
+
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
@@ -8,23 +11,19 @@ const register = () => {
   const apiUrl = "http://localhost:5000/api";
 
   const HandleSubmitRegister = () => {
-    RegisterUser();
-    //useEffect(function () {});
+    RegisterUser("email@email.com", "password1234");
   };
 
-  const RegisterUser = async () => {
-    const response = await axios
-      .post(apiUrl + "/register", {
-        username: "namee",
-        password: "passss", //needs to be encrypted, see tutorial
-        email: "eeeemail",
+  const RegisterUser = async (email: string, password: string) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log("user created");
+        const user = userCredential.user;
       })
-      .then(function (response) {
-        console.log("User api called");
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
+      .catch((error) => {
+        console.log("create user error");
+        console.log(error.code);
+        console.log(error.message);
       });
   };
 
@@ -32,7 +31,7 @@ const register = () => {
     <View>
       <Text>Register your account</Text>
 
-      <TextInput placeholder="username" />
+      <TextInput placeholder="email" />
       <TextInput placeholder="password" />
 
       <Button title="register" onPress={HandleSubmitRegister} />
