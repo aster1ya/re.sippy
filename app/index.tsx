@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "react-native-gesture-handler"; //makes drawers work
 
+import { email } from "../backend/firebaseConfig";
+
 const Index = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
 
@@ -53,6 +55,10 @@ const Index = () => {
           {index}. {recipe["title"]} - {recipe["ingredients"]}
         </Text> //idk how to remove these errors, but it works as expected
       ))}
+
+      <Text>{"\n"}Logged In Status:</Text>
+      <Text>Email: {email}</Text>
+      <Text>UID: not implemented</Text>
     </View>
   );
 };

@@ -5,13 +5,14 @@ import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
-
-const register = () => {
+const Register = () => {
   const apiUrl = "http://localhost:5000/api";
 
+  const [emailInput, setEmailInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+
   const HandleSubmitRegister = () => {
-    RegisterUser("email@email.com", "password1234");
+    RegisterUser(emailInput, passwordInput);
   };
 
   const RegisterUser = async (email: string, password: string) => {
@@ -31,8 +32,15 @@ const register = () => {
     <View>
       <Text>Register your account</Text>
 
-      <TextInput placeholder="email" />
-      <TextInput placeholder="password" />
+      <TextInput
+        placeholder="email"
+        keyboardType="email-address"
+        onChangeText={(newText) => setEmailInput(newText)}
+      />
+      <TextInput
+        placeholder="password"
+        onChangeText={(newText) => setPasswordInput(newText)}
+      />
 
       <Button title="register" onPress={HandleSubmitRegister} />
 
@@ -41,4 +49,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;
