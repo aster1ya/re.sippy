@@ -2,10 +2,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
 import { View, Text, TextInput, Button } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 
 const Login = () => {
+  const router = useRouter();
+
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
@@ -13,11 +15,12 @@ const Login = () => {
     LoginUser(emailInput, passwordInput);
   };
 
-  const LoginUser = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password)
+  const LoginUser = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("user Logged in with email: ", user.email);
+        router.back();
       })
       .catch((error) => {
         console.log("Login error");
@@ -28,7 +31,7 @@ const Login = () => {
 
   return (
     <View>
-      <Text>Register your account</Text>
+      <Text>Login to your account</Text>
 
       <TextInput
         placeholder="email"

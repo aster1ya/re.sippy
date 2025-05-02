@@ -2,9 +2,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/core";
 
 const Register = () => {
   const apiUrl = "http://localhost:5000/api";
@@ -12,18 +11,18 @@ const Register = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
-  const navigation = useNavigation();
+  const router = useRouter();
 
   const HandleSubmitRegister = () => {
     RegisterUser(emailInput, passwordInput);
   };
 
   const RegisterUser = async (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password)
+    await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("user created with email: ", user.email);
-        //navigation.navigate("Index");
+        router.replace("/login");
       })
       .catch((error) => {
         console.log("create user error");

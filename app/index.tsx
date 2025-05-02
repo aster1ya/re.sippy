@@ -5,14 +5,14 @@ import axios from "axios";
 import "react-native-gesture-handler"; //makes drawers work
 
 import { auth } from "../backend/firebaseConfig";
-import { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { User } from "firebase/auth";
 
 const Index = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
 
   //create a variable which can be used in the page
   const [recipes, setRecipes] = useState([]);
-  const [currentUserUid, setCurrentUserUid] = useState<string | null>("");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   //function to do API call to get all recipes
   //Remember you need to run backend/server.js in a new terminal to make the backend work
@@ -30,13 +30,12 @@ const Index = () => {
     fetchRecipes();
   }, []);
 
+  //need to have this auth observer with a useState on every page that needs to have auth updated without the page being recreated e.g. you dont need it on the profile page because updating auth (logging out) would involve going back to index and unloading the page, but you do need it on Index because it always exists at the bottom of the stack.
+  //for pages without the observer, just use the import. const user = auth.currentUser
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setCurrentUserUid(user.uid);
-      } else {
-        setCurrentUserUid("not signed in");
-      }
+      setCurrentUser(user);
+      console.log("auth updated: ", user);
     });
 
     return unsubscribe;
@@ -83,7 +82,7 @@ const Index = () => {
 
       <Text>{"\n"}Logged In Status:</Text>
       <Text>Email: {auth.currentUser?.email}</Text>
-      <Text>UID:{currentUserUid}</Text>
+      <Text>UID:{auth.currentUser?.uid}</Text>
 
       <Button title="Sign out" onPress={handleSignOut} />
     </View>
