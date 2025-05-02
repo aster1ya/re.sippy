@@ -1,16 +1,18 @@
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { Text, View, Button } from "react-native";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "react-native-gesture-handler"; //makes drawers work
 
-import { email } from "../backend/firebaseConfig";
+import { auth } from "../backend/firebaseConfig";
+import { FirebaseAuthTypes } from "@react-native-firebase/auth";
 
 const Index = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
 
   //create a variable which can be used in the page
   const [recipes, setRecipes] = useState([]);
+  const [currentUserUid, setCurrentUserUid] = useState<string | null>("");
 
   //function to do API call to get all recipes
   //Remember you need to run backend/server.js in a new terminal to make the backend work
@@ -27,6 +29,29 @@ const Index = () => {
   useEffect(() => {
     fetchRecipes();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUserUid(user.uid);
+      } else {
+        setCurrentUserUid("not signed in");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("signed out");
+      })
+      .catch((error) => {
+        console.log("sign out error: ", error.message);
+      });
+  };
 
   //typescript that gets shown on the screen goes here
   return (
@@ -57,8 +82,10 @@ const Index = () => {
       ))}
 
       <Text>{"\n"}Logged In Status:</Text>
-      <Text>Email: {email}</Text>
-      <Text>UID: not implemented</Text>
+      <Text>Email: {auth.currentUser?.email}</Text>
+      <Text>UID:{currentUserUid}</Text>
+
+      <Button title="Sign out" onPress={handleSignOut} />
     </View>
   );
 };

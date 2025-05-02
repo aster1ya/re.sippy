@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, initializeAuth, getReactNativePersistence, onAuthStateChanged } from "firebase/auth";
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -19,25 +21,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app)
+const auth = getAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+  })
 
-//PLEASE REDO THIS CODE ###################### should really make the observer work and somehow export the values
-var email = "starting value";
-if (auth.currentUser){
-    email = auth.currentUser.email;
-} else {
-    email = "not signed in";
-}
-
-// Observer to get the current user
-/*onAuthStateChanged(auth, (user) => {
-    if (user){
-        const uid = user.uid;
-        const email = user.email
-    }
-    else{
-        const email = "signed out"
-    }
-});*/
-
-export { auth, email}
+export { auth }

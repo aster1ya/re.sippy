@@ -16,8 +16,8 @@ const Login = () => {
   const LoginUser = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log("user Logged in");
         const user = userCredential.user;
+        console.log("user Logged in with email: ", user.email);
       })
       .catch((error) => {
         console.log("Login error");
@@ -41,7 +41,7 @@ const Login = () => {
         secureTextEntry
       />
 
-      <Button title="register" onPress={HandleSubmitLogin} />
+      <Button title="login" onPress={HandleSubmitLogin} />
 
       <Link href="/login">Already have an account? login instead.</Link>
     </View>
