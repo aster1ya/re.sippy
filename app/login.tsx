@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 
@@ -17,11 +17,14 @@ const Login = () => {
     LoginUser(emailInput, passwordInput);
   };
 
-  const LoginUser = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password)
+  const LoginUser = (email: string, password: string) => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("user Logged in with email: ", user.email);
+
+        //show login success alert, then go back to index
+        ShowSuccessAlert(email);
         router.back();
       })
       .catch((error) => {
@@ -29,6 +32,7 @@ const Login = () => {
         console.log(error.code);
         console.log(error.message);
 
+        //handle login errors
         switch (error.code) {
           case "auth/invalid-email":
           case "auth/missing-email":
@@ -44,6 +48,9 @@ const Login = () => {
         }
       });
   };
+
+  const ShowSuccessAlert = (loggedInEmail: string) =>
+    Alert.alert("Logged in", "Successfully logged in with " + loggedInEmail);
 
   return (
     <View>
