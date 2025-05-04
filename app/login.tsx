@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
-import { View, Text, TextInput, Button } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 
@@ -10,6 +10,8 @@ const Login = () => {
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+
+  const [loginError, setLoginError] = useState("");
 
   const HandleSubmitLogin = () => {
     LoginUser(emailInput, passwordInput);
@@ -26,6 +28,20 @@ const Login = () => {
         console.log("Login error");
         console.log(error.code);
         console.log(error.message);
+
+        switch (error.code) {
+          case "auth/invalid-email":
+          case "auth/missing-email":
+          case "auth/missing-password":
+          case "auth/invalid-credential":
+            setLoginError("Email and password do not match.");
+            break;
+          default:
+            setLoginError(
+              "Unhandled error: " + error.code + " " + error.message
+            );
+            break;
+        }
       });
   };
 
@@ -43,12 +59,19 @@ const Login = () => {
         onChangeText={(newText) => setPasswordInput(newText)}
         secureTextEntry
       />
+      <Text style={styles.error}>{loginError}</Text>
 
       <Button title="login" onPress={HandleSubmitLogin} />
 
-      <Link href="/login">Already have an account? login instead.</Link>
+      <Link href="/register">Don't have an account? Create one here.</Link>
     </View>
   );
 };
 
 export default Login;
+
+const styles = StyleSheet.create({
+  error: {
+    color: "red",
+  },
+});

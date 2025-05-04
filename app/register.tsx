@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  validatePassword,
+} from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
@@ -11,15 +14,19 @@ const Register = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   const router = useRouter();
 
-  const HandleSubmitRegister = () => {
+  const HandleSubmitRegister = async () => {
     RegisterUser(emailInput, passwordInput);
   };
 
-  const RegisterUser = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password)
+  const RegisterUser = (email: string, password: string) => {
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        //after logged in, goes to login page
         const user = userCredential.user;
         console.log("user created with email: ", user.email);
         router.replace("/login");
@@ -28,6 +35,33 @@ const Register = () => {
         console.log("create user error");
         console.log(error.code);
         console.log(error.message);
+
+        //uses the error codes to check if email is invalid. ignores if password is invalid
+        switch (error.code) {
+          case "auth/invalid-email":
+          case "auth/missing-email":
+            setEmailError("Email must be in correct format.");
+            break;
+          case "auth/password-does-not-meet-requirements":
+          case "auth/weak-password":
+          case "auth/missing-password":
+            setEmailError("");
+            break;
+          default:
+            setEmailError(
+              "Unhandled error: " + error.code + " " + error.message
+            );
+            break;
+        }
+
+        //only get one error code at a time, so checking for password validation separately
+        validatePassword(auth, passwordInput).then((status) => {
+          if (!status.isValid) {
+            setPasswordError("Password must be at least 6 characters.");
+          } else {
+            setPasswordError("");
+          }
+        });
       });
   };
 
@@ -40,10 +74,17 @@ const Register = () => {
         keyboardType="email-address"
         onChangeText={(newText) => setEmailInput(newText)}
       />
+      <Text style={styles.error} className="text-danger">
+        {emailError}
+      </Text>
+
       <TextInput
         placeholder="password"
         onChangeText={(newText) => setPasswordInput(newText)}
       />
+      <Text style={styles.error} className="text-danger">
+        {passwordError}
+      </Text>
 
       <Button title="register" onPress={HandleSubmitRegister} />
 
@@ -53,3 +94,9 @@ const Register = () => {
 };
 
 export default Register;
+
+const styles = StyleSheet.create({
+  error: {
+    color: "red",
+  },
+});
