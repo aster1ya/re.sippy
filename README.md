@@ -1,4 +1,4 @@
-# Actually getting started
+# Getting Started
 
 Here is a guide to clone the repo and launch the app on your phone. Way below this is the premade readme content.
 
@@ -20,7 +20,7 @@ To launch the app on your phone wirelessly (Cant do at AUT):
 
 To open the app over cable:
 - Have developer mode and USB debugging enabled on your phone (google it)
-- Run the command `npx expo start --localhost –android` and it just opens.
+- Run the command `npx expo start --localhost --android` and it just opens.
 
 **(NEW) - To make the backend database work**
 - Run command `adb reverse tcp:5000 tcp:5000`. You only need to do this once, but you may need to do it again when you re-open VSCode.
