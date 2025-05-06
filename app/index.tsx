@@ -4,6 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons';
+interface Recommendation {
+  strMeal: string;
+  strMealThumb: string;
+  strCategory: string;
+  strArea: string;
+}
+
 
 const images = [
   require('../assets/images/Pasta1.jpg'),
@@ -20,6 +27,7 @@ const Index = () => {
   const [index, setIndex] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
 
   const fetchRecipes = async () => {
     try {
@@ -30,10 +38,24 @@ const Index = () => {
     }
   };
 
+  
   useEffect(() => {
     fetchRecipes();
+    fetchRecommendation(); // ← Add this
   }, []);
-
+  const fetchRecommendation = async () => {
+    try {
+      const res = await axios.get("https://www.themealdb.com/api/json/v1/1/random.php");
+      const meals = res.data?.meals;
+      if (meals && meals.length > 0) {
+        setRecommendation(meals[0]);
+      } else {
+        console.warn("No meals returned from API");
+      }
+    } catch (err) {
+      console.error("Failed to fetch recommendation:", err);
+    }
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       Animated.timing(fadeAnim, {
@@ -89,10 +111,19 @@ const Index = () => {
 
       <View style={[styles.container, { backgroundColor: theme.containerBg }]}>
         <Text style={[styles.sectionHeader, { color: theme.textColor }]}>Today's Recommendation</Text>
-        <Animated.Image source={images[index]} style={[styles.recipeImage, { opacity: fadeAnim }]} />
-        <Text style={[styles.recipeTitle, { color: theme.textColor }]}>Creamy Garlic Shrimp Pasta</Text>
-        <Text style={[styles.recipeInfo, { color: theme.subTextColor }]}>⏱ 25 mins   🌟 Easy   🍤 Shrimp, cream, fettuccine</Text>
-      </View>
+        {recommendation ? (
+  <>
+    <Image source={{ uri: recommendation.strMealThumb }} style={styles.recipeImage} />
+    <Text style={[styles.recipeTitle, { color: theme.textColor }]}>{recommendation.strMeal}</Text>
+    <Text style={[styles.recipeInfo, { color: theme.subTextColor }]}>
+      🍽 {recommendation.strCategory} • 🌍 {recommendation.strArea}
+    </Text>
+  </>
+) : (
+  <Text style={{ color: theme.subTextColor }}>Loading...</Text>
+)}
+
+</View>
 
       <View style={[styles.tabContainer, { backgroundColor: theme.tabBg }]}>
         <Link href="/" style={styles.tabButton}>
