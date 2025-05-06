@@ -1,4 +1,4 @@
-import { Tabs, Link } from "expo-router";
+import { Tabs, Link, router } from "expo-router";
 import { Text, View, StyleSheet, TextInput, SafeAreaView, StatusBar, Platform, TouchableOpacity, Image, Animated } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -10,6 +10,7 @@ const images = [
   require('../assets/images/Pasta2.jpg'),
   require('../assets/images/Pasta3.jpg'),
 ];
+
 
 const Index = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
@@ -65,12 +66,17 @@ const Index = () => {
           <View style={[styles.searchBarContainer, { backgroundColor: theme.inputBg }]}>
             <Ionicons name="search" size={20} color={theme.placeholderColor} style={styles.searchIconInline} />
             <TextInput
-              style={[styles.searchBar, { color: theme.textColor }]}
-              placeholder="Search recipes..."
-              placeholderTextColor={theme.placeholderColor}
-              value={searchText}
-              onChangeText={setSearchText}
-            />
+  style={[styles.searchBar, { color: theme.textColor }]}
+  placeholder="Search recipes..."
+  placeholderTextColor={theme.placeholderColor}
+  value={searchText}
+  onChangeText={setSearchText}
+  onSubmitEditing={() => {
+    if (searchText.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchText.trim())}`);
+    }
+  }}
+/>
           </View>
           <TouchableOpacity onPress={() => setIsDarkMode(prev => !prev)}>
             <Ionicons name="moon" size={28} color={theme.iconColor} style={{ marginHorizontal: 10 }} />
