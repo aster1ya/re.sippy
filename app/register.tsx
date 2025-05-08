@@ -88,7 +88,9 @@ const Register = () => {
 
       <Button title="register" onPress={HandleSubmitRegister} />
 
-      <Link href="/login">Already have an account? login instead.</Link>
+      <Link href="/login" style={styles.link}>
+        {"\n"}Already have an account? login instead.
+      </Link>
     </View>
   );
 };
@@ -98,5 +100,10 @@ export default Register;
 const styles = StyleSheet.create({
   error: {
     color: "red",
+  },
+
+  link: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });

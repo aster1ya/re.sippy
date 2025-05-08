@@ -69,8 +69,10 @@ const Login = () => {
       <Text style={styles.error}>{loginError}</Text>
 
       <Button title="login" onPress={HandleSubmitLogin} />
-
-      <Link href="/register">Don't have an account? Create one here.</Link>
+      <Text>{"\n"}</Text>
+      <Link href="/register" style={styles.link}>
+        Don't have an account? Create one here.
+      </Link>
     </View>
   );
 };
@@ -80,5 +82,10 @@ export default Login;
 const styles = StyleSheet.create({
   error: {
     color: "red",
+  },
+
+  link: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });

@@ -1,9 +1,21 @@
 import { Tabs, Link, router } from "expo-router";
-import { Text, View, Button, StyleSheet, TextInput, SafeAreaView, StatusBar, Platform, TouchableOpacity, Image, Animated } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  TextInput,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+  TouchableOpacity,
+  Image,
+  Animated,
+} from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "react-native-gesture-handler";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 interface Recommendation {
   strMeal: string;
   strMealThumb: string;
@@ -11,13 +23,11 @@ interface Recommendation {
   strArea: string;
 }
 
-
 const images = [
-  require('../assets/images/Pasta1.jpg'),
-  require('../assets/images/Pasta2.jpg'),
-  require('../assets/images/Pasta3.jpg'),
+  require("../assets/images/Pasta1.jpg"),
+  require("../assets/images/Pasta2.jpg"),
+  require("../assets/images/Pasta3.jpg"),
 ];
-
 
 import { auth } from "../backend/firebaseConfig";
 import { User } from "firebase/auth";
@@ -32,8 +42,9 @@ const Index = () => {
   const [index, setIndex] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
-
+  const [recommendation, setRecommendation] = useState<Recommendation | null>(
+    null
+  );
 
   const fetchRecipes = async () => {
     try {
@@ -44,14 +55,15 @@ const Index = () => {
     }
   };
 
-  
   useEffect(() => {
     fetchRecipes();
     fetchRecommendation(); // ← Add this
   }, []);
   const fetchRecommendation = async () => {
     try {
-      const res = await axios.get("https://www.themealdb.com/api/json/v1/1/random.php");
+      const res = await axios.get(
+        "https://www.themealdb.com/api/json/v1/1/random.php"
+      );
       const meals = res.data?.meals;
       if (meals && meals.length > 0) {
         setRecommendation(meals[0]);
@@ -69,7 +81,7 @@ const Index = () => {
         duration: 500,
         useNativeDriver: true,
       }).start(() => {
-        setIndex(prev => (prev + 1) % images.length);
+        setIndex((prev) => (prev + 1) % images.length);
         Animated.timing(fadeAnim, {
           toValue: 1,
           duration: 500,
@@ -79,7 +91,6 @@ const Index = () => {
     }, 4000);
     return () => clearInterval(interval);
   }, []);
-
 
   //need to have this auth observer with a useState on every page that needs to have auth updated without the page being recreated e.g. you dont need it on the profile page because updating auth (logging out) would involve going back to index and unloading the page, but you do need it on Index because it always exists at the bottom of the stack.
   //for pages without the observer, just use the import. const user = auth.currentUser
@@ -104,7 +115,7 @@ const Index = () => {
   };
 
   //typescript that gets shown on the screen goes here
-        /* REIMPLEMENT SIGNOUT AND THE "LOGGED IN AS" TEXT 
+  /* REIMPLEMENT SIGNOUT AND THE "LOGGED IN AS" TEXT 
   return (
     <View
       style={{
@@ -143,66 +154,112 @@ const Index = () => {
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
-    <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.backgroundColor }]}>
-      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} backgroundColor={theme.containerBg} />
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: theme.backgroundColor }]}
+    >
+      <StatusBar
+        barStyle={isDarkMode ? "light-content" : "dark-content"}
+        backgroundColor={theme.containerBg}
+      />
 
       <View style={[styles.topSection, { backgroundColor: "#417023" }]}>
-        <Text style={[styles.appName, { color: theme.textColor }]}>re.sippy</Text>
-        <Text style={[styles.tagline, { color: theme.subTextColor }]}>Stirring up delicious moments.</Text>
+        <Text style={[styles.appName, { color: theme.textColor }]}>
+          re.sippy
+        </Text>
+        <Text style={[styles.tagline, { color: theme.subTextColor }]}>
+          {currentUser ? "Logged in as " + currentUser?.email : "Not Logged In"}
+        </Text>
 
         <View style={styles.topRowInline}>
-          <View style={[styles.searchBarContainer, { backgroundColor: theme.inputBg }]}>
-            <Ionicons name="search" size={20} color={theme.placeholderColor} style={styles.searchIconInline} />
+          <View
+            style={[
+              styles.searchBarContainer,
+              { backgroundColor: theme.inputBg },
+            ]}
+          >
+            <Ionicons
+              name="search"
+              size={20}
+              color={theme.placeholderColor}
+              style={styles.searchIconInline}
+            />
             <TextInput
-  style={[styles.searchBar, { color: theme.textColor }]}
-  placeholder="Search recipes..."
-  placeholderTextColor={theme.placeholderColor}
-  value={searchText}
-  onChangeText={setSearchText}
-  onSubmitEditing={() => {
-    if (searchText.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchText.trim())}`);
-    }
-  }}
-/>
+              style={[styles.searchBar, { color: theme.textColor }]}
+              placeholder="Search recipes..."
+              placeholderTextColor={theme.placeholderColor}
+              value={searchText}
+              onChangeText={setSearchText}
+              onSubmitEditing={() => {
+                if (searchText.trim()) {
+                  router.push(
+                    `/search?q=${encodeURIComponent(searchText.trim())}`
+                  );
+                }
+              }}
+            />
           </View>
-          <TouchableOpacity onPress={() => setIsDarkMode(prev => !prev)}>
-            <Ionicons name="moon" size={28} color={theme.iconColor} style={{ marginHorizontal: 10 }} />
+          <TouchableOpacity onPress={() => setIsDarkMode((prev) => !prev)}>
+            <Ionicons
+              name="moon"
+              size={28}
+              color={theme.iconColor}
+              style={{ marginHorizontal: 10 }}
+            />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => location.href = '/login'}>
-            <Ionicons name="person-circle-outline" size={32} color={theme.iconColor} />
-          </TouchableOpacity>
+          {currentUser ? (
+            <Button title={"Sign\nout"} onPress={handleSignOut} />
+          ) : (
+            <TouchableOpacity onPress={() => router.push("/login")}>
+              <Ionicons
+                name="person-circle-outline"
+                size={32}
+                color={theme.iconColor}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
       <View style={[styles.container, { backgroundColor: theme.containerBg }]}>
-        <Text style={[styles.sectionHeader, { color: theme.textColor }]}>Today's Recommendation</Text>
+        <Text style={[styles.sectionHeader, { color: theme.textColor }]}>
+          Today's Recommendation
+        </Text>
         {recommendation ? (
-  <>
-    <Image source={{ uri: recommendation.strMealThumb }} style={styles.recipeImage} />
-    <Text style={[styles.recipeTitle, { color: theme.textColor }]}>{recommendation.strMeal}</Text>
-    <Text style={[styles.recipeInfo, { color: theme.subTextColor }]}>
-      🍽 {recommendation.strCategory} • 🌍 {recommendation.strArea}
-    </Text>
-  </>
-) : (
-  <Text style={{ color: theme.subTextColor }}>Loading...</Text>
-)}
-
-</View>
+          <>
+            <Image
+              source={{ uri: recommendation.strMealThumb }}
+              style={styles.recipeImage}
+            />
+            <Text style={[styles.recipeTitle, { color: theme.textColor }]}>
+              {recommendation.strMeal}
+            </Text>
+            <Text style={[styles.recipeInfo, { color: theme.subTextColor }]}>
+              🍽 {recommendation.strCategory} • 🌍 {recommendation.strArea}
+            </Text>
+          </>
+        ) : (
+          <Text style={{ color: theme.subTextColor }}>Loading...</Text>
+        )}
+      </View>
 
       <View style={[styles.tabContainer, { backgroundColor: theme.tabBg }]}>
         <Link href="/" style={styles.tabButton}>
           <Ionicons name="home" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>Home</Text>
+          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
+            Home
+          </Text>
         </Link>
         <Link href="/register" style={styles.tabButton}>
           <Ionicons name="restaurant" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>Recipes</Text>
+          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
+            Recipes
+          </Text>
         </Link>
         <Link href="/settings" style={styles.tabButton}>
           <Ionicons name="settings" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>Settings</Text>
+          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
+            Settings
+          </Text>
         </Link>
       </View>
     </SafeAreaView>
@@ -265,8 +322,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   searchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderRadius: 25,
     paddingHorizontal: 10,
     width: 280,
@@ -282,25 +339,25 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   recipeImage: {
     width: 380,
     height: 270,
     borderRadius: 20,
-    resizeMode: 'cover',
+    resizeMode: "cover",
     marginBottom: 10,
   },
   recipeTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   recipeInfo: {
     fontSize: 14,
     marginTop: 4,
     marginBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
   tabContainer: {
     flexDirection: "row",
