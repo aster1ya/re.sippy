@@ -47,6 +47,13 @@ const Index = () => {
       <Link href="/register">go to Register screen</Link>
       <Link href="/login">go to Login screen</Link>
 
+      <Text>{"\n"}</Text>
+      <Link href="/recipe_details/base">go to Recipe Base screen</Link>
+      <Link href="/recipe_details/6809a9f676c6ad1e4a2d3e7f">
+        go to recipe detail screen for the first recipe
+      </Link>
+      {/* hard coded to go to the first recipe */}
+
       <Text>{"\n"}Recipes from the database:</Text>
       {recipes.map((recipe, index) => (
         <Text key={index}>

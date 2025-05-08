@@ -1,11 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Link } from 'expo-router'
-import Card from '../card'
-import axios from 'axios'
+import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Link } from "expo-router";
+import Card from "../card";
+import axios from "axios";
 
 const book = () => {
-
   //copied over code to experiment
   const apiUrl = "http://localhost:5000/api/recipes";
 
@@ -13,7 +12,7 @@ const book = () => {
 
   const fetchRecipes = async () => {
     try {
-      const response = await axios.get(apiUrl); //this axios.get() looks at the backend (server.js) and does the GET function with the /api/recipes route
+      const response = await axios.get(apiUrl);
       setRecipes(response.data);
     } catch (e) {
       console.log(e);
@@ -24,25 +23,37 @@ const book = () => {
     fetchRecipes();
   }, []);
 
- //new code to try and display the data as separate cards (also with card.tsx)
-  const cards = () => {
-    return recipes.map((recipe,index) => (<Card key={recipes._id} recipes={recipes}/>));
-  }
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        {recipes.map((recipe, index) => (
+          <View key={index} style={styles.recipePreview}>
+            <Text style={styles.header}>{recipe.title}</Text>
+            <Text>{recipe.description}</Text>
+            <Button title="View Recipe" />
+          </View>
+        ))}
+      </View>
+    </ScrollView>
+  );
+};
 
-  const styles = StyleSheet.create({
-    container:{
-      flex:1,
-      backgroundColor:'white',
-      alignItems:'center',
-      justifyContent:'center',
-    },
-  })
+export default book;
 
-  return(
-    <View style={styles.container}>
-      {cards()}
-    </View>
-  )
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    padding: 15,
+  },
 
-export default book
+  recipePreview: {
+    marginBottom: 30,
+  },
+
+  header: {
+    fontSize: 26,
+  },
+});
