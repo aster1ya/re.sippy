@@ -49,18 +49,37 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
+app.get('/api/recipes', async (req, res) => {
+  try {
+    const id = req.query.recipeId;
+    //if 'id' parameter is provided, find the recipe with that id. otherwise, give all recipes.
+    if (id) {
+      const recipes = await Recipe.find({_id : id});
+      const recipe = recipes[0];
+      res.json(recipe);
+    } else {
+      const recipes = await Recipe.find();
+      res.json(recipes);
+    }
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 
 //POST request to create a recipe based on the request
 app.post('/api/recipes', async (req, res) => {
   
   //destructures the input (req.body) into useful variables
-  const { title, ingredients, instructions } = req.body;
+  const { title, description, ingredients, instructions } = req.body;
 
   //uses those variable to create a new recipe from the Recipe model
     try {
       const recipe = await Recipe.create({
         title: title,
+        description: description,
         ingredients: ingredients,
         instructions: instructions,
       })

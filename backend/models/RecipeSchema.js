@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 //schema is the fields and datatypes that the recipe model will have
 const RecipeSchema = new mongoose.Schema({
     title: { type: String, required: true, default: "default recipe title"},
-    description: {type: String },
+    description: {type: String, default: "default description" },
     ingredients: { type: String, default: "default ingredients" },
     instructions: { type: String, default: "default instructions" },
 
