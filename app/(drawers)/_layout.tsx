@@ -12,9 +12,9 @@ const _Layout = () => {
       drawerStyle: { backgroundColor: '#f0f0f0' },
     }}
     >
-      
   </Drawer>
   )
 }
-
 export default _Layout
+
+

@@ -29,14 +29,19 @@ app.listen(port, () => {
 
 //--- end of startup ---
 
+//Gets the exported RecipeDetails model from RecipeSchema.js
+const Recipe = require('./models/RecipeSchema');
+
+const User = require('./models/UserSchema');
+
+
 
 
 // ####
 // #### Here you create GET and POST requests with a chosen url extension to make API calls with
 // ####
 
-//Gets the exported RecipeDetails model from RecipeSchema.js
-const Recipe = require('./models/RecipeSchema');
+
 
 //GET request to get all recipes
 //had to do /api/recipes instead of just /recipes because /recipes is already taken by the page recipes.tsx
@@ -118,3 +123,21 @@ app.post('/api/recipes/test', async (req, res) => {
       res.send(e.message)
     }
     });
+
+
+app.post('/api/register', async (req, res) => {
+  const {username, password, email} = req.body
+  console.log("register post called")
+  try{
+
+    const user = await User.create({
+      username: username,
+      password: password,
+      email: email
+      
+    })
+    res.send("user created: " + user.username)
+  }catch (e) {
+    res.send("ERROR"+e.message)
+  }
+})
