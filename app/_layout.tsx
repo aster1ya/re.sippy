@@ -1,22 +1,22 @@
 import { Stack } from "expo-router";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"; // Import necessary components
+import React from "react";
 
 export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen //this hides the header of every screen in the (drawer) folder
-
         name="(drawers)"
         options={{
           headerShown: false,
         }}
       />
-
-      {/* You can add buttons here or in the layout */}
-      <View style={styles.container}>
+      {/*
+      {/* You can add buttons here or in the layout 
+       <View style={styles.container}>
         <Text style={styles.title}>Welcome to the App!</Text>
 
-        {/* Navigation Buttons as Round-Square Tabs */}
+        {/* Navigation Buttons as Round-Square Tabs 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Go to Search screen</Text>
@@ -28,7 +28,7 @@ export default function RootLayout() {
             <Text style={styles.buttonText}>Go to Login screen</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
     </Stack>
   );
 }

@@ -9,18 +9,20 @@ import {
   Button,
   Alert,
 } from "react-native";
+import { useRouter } from "expo-router";
 import axios from "axios";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
+  const router = useRouter();
 
   //All these useStates could probably be replaced by a single Recipe class
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [title, setTitle] = useState<String | null>(null);
+  const [description, setDescription] = useState<String | null>(null);
+  const [ingredients, setIngredients] = useState<String | null>(null);
+  const [instructions, setInstructions] = useState<String | null>(null);
 
   const handleCreateRecipe = () => {
     UploadRecipe();
@@ -28,6 +30,10 @@ const CreateRecipe = () => {
 
   const showCreatedRecipeAlert = () => {
     Alert.alert("success", "Recipe has been successfully created");
+  };
+
+  const showFailedToCreateRecipeAlert = () => {
+    Alert.alert("failed", "Recipe not created. Please enter a title");
   };
 
   const UploadRecipe = () => {
@@ -39,8 +45,18 @@ const CreateRecipe = () => {
         instructions: instructions,
       })
       .then((response) => {
-        console.log("Recipe created: " + title);
-        showCreatedRecipeAlert();
+        if (response.data.success) {
+          console.log("Recipe created: " + response.data.recipe.title);
+          showCreatedRecipeAlert();
+          router.replace("/book");
+          router.push({
+            pathname: "/recipe_details/[id]",
+            params: { id: response.data.recipe._id },
+          });
+        } else {
+          showFailedToCreateRecipeAlert();
+          console.log("Recipe not created");
+        }
       })
       .catch((error) => {
         console.log(error);

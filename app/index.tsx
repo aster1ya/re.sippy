@@ -114,50 +114,6 @@ const Index = () => {
       });
   };
 
-  //typescript that gets shown on the screen goes here
-  /* REIMPLEMENT SIGNOUT AND THE "LOGGED IN AS" TEXT 
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Wow its the front screen can you believe it?</Text>
-      <Text>
-        Try writirng different text here and saving it to see the app update
-        live. You may need to press 'r' in the terminal before hot reload starts
-        working. {"\n"}
-      </Text>
-
-      <Text>Links:</Text>
-      <Link href="/search">go to Search screen</Link>
-      <Link href="/register">go to Register screen</Link>
-      <Link href="/login">go to Login screen</Link>
-
-      <Text>{"\n"}</Text>
-      <Link href="/recipe_details/base">go to Recipe Base screen</Link>
-      <Link href="/recipe_details/6809a9f676c6ad1e4a2d3e7f">
-        go to recipe detail screen for the first recipe
-      </Link>
-      {/* hard coded to go to the first recipe */}
-
-      <Text>{"\n"}Recipes from the database:</Text>
-      {recipes.map((recipe, index) => (
-        <Text key={index}>
-          {index}. {recipe["title"]} - {recipe["ingredients"]}
-        </Text> //idk how to remove these errors, but it works as expected
-      ))}
-
-      <Text>{"\n"}Logged In Status:</Text>
-      <Text>Email: {auth.currentUser?.email}</Text>
-      <Text>UID:{auth.currentUser?.uid}</Text>
-
-      <Button title="Sign out" onPress={handleSignOut} />
-    </View>
-        */
-
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
@@ -250,22 +206,16 @@ const Index = () => {
       </View>
 
       <View style={[styles.tabContainer, { backgroundColor: theme.tabBg }]}>
-        <Link href="/" style={styles.tabButton}>
-          <Ionicons name="home" size={24} color={theme.iconColor} />
+        <Link href="/book" style={styles.tabButton}>
+          <Ionicons name="book" size={24} color={theme.iconColor} />
           <Text style={[styles.tabLabel, { color: theme.textColor }]}>
-            Home
+            Recipe Book
           </Text>
         </Link>
-        <Link href="/register" style={styles.tabButton}>
+        <Link href="/create" style={styles.tabButton}>
           <Ionicons name="restaurant" size={24} color={theme.iconColor} />
           <Text style={[styles.tabLabel, { color: theme.textColor }]}>
-            Recipes
-          </Text>
-        </Link>
-        <Link href="/settings" style={styles.tabButton}>
-          <Ionicons name="settings" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
-            Settings
+            Create Recipe
           </Text>
         </Link>
       </View>

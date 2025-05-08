@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Link } from "expo-router";
-import Card from "../card";
+import { Link, useRouter } from "expo-router";
+import Card from "./card";
 import axios from "axios";
 
 const book = () => {
-  //copied over code to experiment
   const apiUrl = "http://localhost:5000/api/recipes";
+  const router = useRouter();
 
   const [recipes, setRecipes] = useState([]);
 
@@ -23,14 +23,27 @@ const book = () => {
     fetchRecipes();
   }, []);
 
+  const goToRecipe = (recipeId: string) => {
+    router.push({
+      pathname: "/recipe_details/[id]",
+      params: { id: recipeId },
+    });
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
+        <Text style={styles.title}>All Recipes</Text>
         {recipes.map((recipe, index) => (
           <View key={index} style={styles.recipePreview}>
-            <Text style={styles.header}>{recipe.title}</Text>
+            <View style={styles.row}>
+              <Text style={styles.header}>{recipe.title}</Text>
+              <Button
+                title="View Recipe"
+                onPress={() => goToRecipe(recipe._id)}
+              />
+            </View>
             <Text>{recipe.description}</Text>
-            <Button title="View Recipe" />
           </View>
         ))}
       </View>
@@ -44,16 +57,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    alignItems: "flex-start",
     justifyContent: "center",
-    padding: 15,
   },
 
   recipePreview: {
     marginBottom: 30,
+    backgroundColor: "#e0e0e0",
+    padding: 10,
   },
 
   header: {
     fontSize: 26,
+  },
+
+  title: {
+    fontSize: 30,
+    alignSelf: "center",
+    margin: 15,
+  },
+
+  row: {
+    flexDirection: "row",
+    display: "flex",
+    justifyContent: "space-between",
   },
 });

@@ -56,17 +56,21 @@ app.get('/api/recipes', async (req, res) => {
 
 app.get('/api/recipes', async (req, res) => {
   try {
-    const id = req.query.recipeId;
-    //if 'id' parameter is provided, find the recipe with that id. otherwise, give all recipes.
-    if (id) {
       const recipes = await Recipe.find({_id : id});
       const recipe = recipes[0];
       res.json(recipe);
-    } else {
-      const recipes = await Recipe.find();
-      res.json(recipes);
-    }
 
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/api/recipe', async (req, res) => {
+  try {
+    const id = req.query.recipeId;
+
+      const recipes = await Recipe.find({_id : id});
+      res.json(recipes);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -88,10 +92,10 @@ app.post('/api/recipes', async (req, res) => {
         ingredients: ingredients,
         instructions: instructions,
       })
-      res.send({recipe}) // send a copy of the created recipe after it is created
+      res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
     }
     catch (e) {
-      res.send(e.message) // sends an error if fails
+      res.send({error : e.message, success : false}) // sends an error if fails
     }
     });
 

@@ -4,7 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
 
 const Details = () => {
-  const apiUrl = "http://localhost:5000/api/recipes";
+  const apiUrl = "http://localhost:5000/api/recipe";
 
   const { id } = useLocalSearchParams();
 
