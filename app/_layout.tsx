@@ -4,7 +4,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native"; // Impo
 export default function RootLayout() {
   return (
     <Stack>
-      <Stack.Screen // this hides the header of every screen in the (drawer) folder
+      <Stack.Screen //this hides the header of every screen in the (drawer) folder
+
         name="(drawers)"
         options={{
           headerShown: false,
