@@ -29,14 +29,19 @@ app.listen(port, () => {
 
 //--- end of startup ---
 
+//Gets the exported RecipeDetails model from RecipeSchema.js
+const Recipe = require('./models/RecipeSchema');
+
+const User = require('./models/UserSchema');
+
+
 
 
 // ####
 // #### Here you create GET and POST requests with a chosen url extension to make API calls with
 // ####
 
-//Gets the exported RecipeDetails model from RecipeSchema.js
-const Recipe = require('./models/RecipeSchema');
+
 
 //GET request to get all recipes
 //had to do /api/recipes instead of just /recipes because /recipes is already taken by the page recipes.tsx
@@ -49,25 +54,48 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
+app.get('/api/recipes', async (req, res) => {
+  try {
+      const recipes = await Recipe.find({_id : id});
+      const recipe = recipes[0];
+      res.json(recipe);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/api/recipe', async (req, res) => {
+  try {
+    const id = req.query.recipeId;
+
+      const recipes = await Recipe.find({_id : id});
+      res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 
 //POST request to create a recipe based on the request
 app.post('/api/recipes', async (req, res) => {
   
   //destructures the input (req.body) into useful variables
-  const { title, ingredients, instructions } = req.body;
+  const { title, description, ingredients, instructions } = req.body;
 
   //uses those variable to create a new recipe from the Recipe model
     try {
       const recipe = await Recipe.create({
         title: title,
+        description: description,
         ingredients: ingredients,
         instructions: instructions,
       })
-      res.send({recipe}) // send a copy of the created recipe after it is created
+      res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
     }
     catch (e) {
-      res.send(e.message) // sends an error if fails
+      res.send({error : e.message, success : false}) // sends an error if fails
     }
     });
 
@@ -99,3 +127,21 @@ app.post('/api/recipes/test', async (req, res) => {
       res.send(e.message)
     }
     });
+
+
+app.post('/api/register', async (req, res) => {
+  const {username, password, email} = req.body
+  console.log("register post called")
+  try{
+
+    const user = await User.create({
+      username: username,
+      password: password,
+      email: email
+      
+    })
+    res.send("user created: " + user.username)
+  }catch (e) {
+    res.send("ERROR"+e.message)
+  }
+})
