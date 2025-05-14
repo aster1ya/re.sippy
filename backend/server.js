@@ -54,24 +54,15 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
-app.get('/api/recipes', async (req, res) => {
-  try {
-      const recipes = await Recipe.find({_id : id});
-      const recipe = recipes[0];
-      res.json(recipe);
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 app.get('/api/recipe', async (req, res) => {
   try {
     const id = req.query.recipeId;
 
-      const recipes = await Recipe.find({_id : id});
-      res.json(recipes);
+    const recipes = await Recipe.find({_id : id});
+    console.log("real recipes:"+recipes)
+    res.json(recipes);
   } catch (err) {
+    console.log("real error: "+err.message)
     res.status(500).json({ message: err.message });
   }
 });
@@ -111,22 +102,6 @@ app.post('/api/recipes', async (req, res) => {
 */
 
 
-
-//POST request to create a default, hard coded recipe with no request needed.
-app.post('/api/recipes/test', async (req, res) => {
-
-    try {
-      const recipe = await Recipe.create({
-        title: "pizza",
-        ingredients: "asd",
-        instructions: "dddddd",
-      })
-      res.send({recipe})
-    }
-    catch (e) {
-      res.send(e.message)
-    }
-    });
 
 
 app.post('/api/register', async (req, res) => {

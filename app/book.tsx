@@ -3,24 +3,24 @@ import React, { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import Card from "./card";
 import axios from "axios";
+import { GetAllRecipes } from "../controller";
+import RecipeType from "../types/Recipe";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<RecipeType[]>([]);
 
-  const fetchRecipes = async () => {
-    try {
-      const response = await axios.get(apiUrl);
-      setRecipes(response.data);
-    } catch (e) {
-      console.log(e);
+  //get recipes and set them if request is successful.
+  const fetchAllRecipes = async () => {
+    const allRecipes = await GetAllRecipes();
+    if (allRecipes) {
+      setRecipes(allRecipes);
     }
   };
-
   useEffect(() => {
-    fetchRecipes();
+    fetchAllRecipes();
   }, []);
 
   const goToRecipe = (recipeId: string) => {

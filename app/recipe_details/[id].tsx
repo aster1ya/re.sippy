@@ -2,29 +2,22 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
+import RecipeType from "../../types/Recipe";
+import { GetRecipeById } from "../../controller";
 
 const Details = () => {
   const apiUrl = "http://localhost:5000/api/recipe";
 
   const { id } = useLocalSearchParams();
 
-  const [recipe, setRecipe] = useState();
+  const [recipe, setRecipe] = useState<RecipeType>();
 
-  const fetchRecipe = () => {
-    axios
-      .get(apiUrl, {
-        params: {
-          recipeId: id,
-        },
-      })
-      .then((response) => {
-        const recipes = response.data;
-        setRecipe(recipes[0]);
-        console.log("recipes gotten");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const fetchRecipe = async () => {
+    console.log("first id: " + id);
+    const recipe = await GetRecipeById(id);
+    if (recipe) {
+      setRecipe(recipe);
+    }
   };
 
   useEffect(() => {

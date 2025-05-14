@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
-//schema is the fields and datatypes that the recipe model will have
+//##############################################################################
+//IF YOU UPDATE THIS SCHEMA, PLEASE ALSO UPDATE types/Recipe.tsx TO BE THE SAME.
+//##############################################################################
+
 const RecipeSchema = new mongoose.Schema({
     title: { type: String, required: true, default: "default recipe title"},
     description: {type: String, default: "default description" },
