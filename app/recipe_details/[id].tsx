@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import axios from "axios";
-import RecipeType from "../../types/Recipe";
+import IRecipe from "../../types/Recipe";
 import { GetRecipeById } from "../../controller";
 
 const Details = () => {
@@ -10,11 +10,11 @@ const Details = () => {
 
   const { id } = useLocalSearchParams();
 
-  const [recipe, setRecipe] = useState<RecipeType>();
+  const [recipe, setRecipe] = useState<IRecipe>();
 
   const fetchRecipe = async () => {
-    console.log("first id: " + id);
-    const recipe = await GetRecipeById(id);
+    const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
+    const recipe = await GetRecipeById(idStr);
     if (recipe) {
       setRecipe(recipe);
     }

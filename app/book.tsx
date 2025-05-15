@@ -4,13 +4,13 @@ import { Link, useRouter } from "expo-router";
 import Card from "./card";
 import axios from "axios";
 import { GetAllRecipes } from "../controller";
-import RecipeType from "../types/Recipe";
+import IRecipe from "../types/Recipe";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
+  const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   //get recipes and set them if request is successful.
   const fetchAllRecipes = async () => {

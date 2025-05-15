@@ -21,10 +21,10 @@ const CreateRecipe = () => {
   const router = useRouter();
 
   //All these useStates could probably be replaced by a single Recipe class
-  const [title, setTitle] = useState<String | null>(null);
-  const [description, setDescription] = useState<String | null>(null);
-  const [ingredients, setIngredients] = useState<String | null>(null);
-  const [instructions, setInstructions] = useState<String | null>(null);
+  const [title, setTitle] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
+  const [ingredients, setIngredients] = useState<string | null>(null);
+  const [instructions, setInstructions] = useState<string | null>(null);
 
   const handleCreateRecipe = () => {
     UploadRecipe();

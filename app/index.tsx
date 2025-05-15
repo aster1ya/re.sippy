@@ -16,6 +16,10 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+
+import { SearchRecipes, GetRecipeById } from "../controller";
+import IRecipe from "../types/Recipe";
+
 interface Recommendation {
   strMeal: string;
   strMealThumb: string;
@@ -114,6 +118,21 @@ const Index = () => {
       });
   };
 
+  //TESTING FUNCTION FOR SearchRecipes() IN controller.tsx
+  //ALSO UNCOMMENT THE TEST BUTTON TO TEST THIS FUNCTION
+  //
+  // const testFunction = async () => {
+  //   const recipes: IRecipe[] = await SearchRecipes({
+  //     title: "izz",
+  //     categories: ["both"],
+  //   });
+  //   console.log("RECIPE OUTPUT:");
+  //   console.log(recipes);
+  //   // for (let i = 0; i < recipes.; i++) {
+  //   //   console.log(recipes[i].title);
+  //   // }
+  // };
+
   const theme = isDarkMode ? darkTheme : lightTheme;
 
   return (
@@ -204,6 +223,9 @@ const Index = () => {
           <Text style={{ color: theme.subTextColor }}>Loading...</Text>
         )}
       </View>
+
+      {/* TEST BUTTON FOR SearchRecipes() */}
+      {/* <Button title="test" onPress={testFunction} /> */}
 
       <View style={[styles.tabContainer, { backgroundColor: theme.tabBg }]}>
         <Link href="/book" style={styles.tabButton}>

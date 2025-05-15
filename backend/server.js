@@ -72,8 +72,8 @@ app.get('/api/recipe', async (req, res) => {
 //POST request to create a recipe based on the request
 app.post('/api/recipes', async (req, res) => {
   
-  //destructures the input (req.body) into useful variables
-  const { title, description, ingredients, instructions } = req.body;
+  //destructures the input (req.query) into useful variables
+  const { title, description, ingredients, instructions } = req.query;
 
   //uses those variable to create a new recipe from the Recipe model
     try {
@@ -103,19 +103,38 @@ app.post('/api/recipes', async (req, res) => {
 
 
 
-
-app.post('/api/register', async (req, res) => {
-  const {username, password, email} = req.body
-  console.log("register post called")
+//search recipes by title, tags, author, or if favorited. You can only put in one of the search types and it'll only search by that.
+app.get('/api/search', async (req, res) => {
   try{
+    console.log(req.query)
+    const {searchTerm = null, categories = null, userAuthorId = null, userFavoriteIds = null} = req.query
+    let query = {}
 
-    const user = await User.create({
-      username: username,
-      password: password,
-      email: email
-      
-    })
-    res.send("user created: " + user.username)
+
+    //each of the following conditions are added to the final query only if the variable is provided
+    //the final query gets recipes where all conditions are true 
+
+    if(searchTerm){ //recipes' title must contain the search term, case insensitive
+      query["title"] = { $regex: searchTerm, $options: "i" };
+    }
+
+    if(categories){//it must have all categories given
+      const categoriesArray = Array.isArray(categories) ? categories : [categories] //turn categores into an array if it isnt already
+      query["categories"] = {$all: categoriesArray};
+    }
+
+    if(userAuthorId){ //it recipe must have the given author (UNTESTED)
+      query["authorId"] = userAuthorId;
+    } 
+
+    if(userFavoriteIds){ //its id must be in the list of given favorites (UNTESTED)
+      query["_id"] = { $in: userFavoriteIds }
+    }
+    console.log("query:")
+    console.log(query)
+    const recipes = await Recipe.find(query);
+    res.json(recipes)
+    
   }catch (e) {
     res.send("ERROR"+e.message)
   }
