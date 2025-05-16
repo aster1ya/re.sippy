@@ -3,8 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useRouter } from "expo-router";
 import Card from "./card";
 import axios from "axios";
-import { GetAllRecipes } from "../controller";
+import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
+import RecipeList from "../components/RecipeList";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
@@ -32,21 +33,8 @@ const book = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.title}>All Recipes</Text>
-        {recipes.map((recipe, index) => (
-          <View key={index} style={styles.recipePreview}>
-            <View style={styles.row}>
-              <Text style={styles.header}>{recipe.title}</Text>
-              <Button
-                title="View Recipe"
-                onPress={() => goToRecipe(recipe._id)}
-              />
-            </View>
-            <Text>{recipe.description}</Text>
-          </View>
-        ))}
-      </View>
+      <Text style={styles.title}>All Recipes</Text>
+      <RecipeList recipes={recipes} title="All Recipes" />
     </ScrollView>
   );
 };
@@ -54,31 +42,9 @@ const book = () => {
 export default book;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    justifyContent: "center",
-  },
-
-  recipePreview: {
-    marginBottom: 30,
-    backgroundColor: "#e0e0e0",
-    padding: 10,
-  },
-
-  header: {
-    fontSize: 26,
-  },
-
   title: {
     fontSize: 30,
     alignSelf: "center",
     margin: 15,
-  },
-
-  row: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between",
   },
 });
