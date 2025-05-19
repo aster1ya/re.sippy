@@ -124,7 +124,7 @@ const Index = () => {
   // const testFunction = async () => {
   //   const recipes: IRecipe[] = await SearchRecipes({
   //     title: "izz",
-  //     categories: ["both"],
+  //     tags: ["both"],
   //   });
   //   console.log("RECIPE OUTPUT:");
   //   console.log(recipes);

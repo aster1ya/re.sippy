@@ -62,14 +62,14 @@ export const CreateRecipeRequest = async (
 
 interface SearchRecipesParams {
   title?: string | null;
-  categories?: string[] | null;
+  tags?: string[] | null;
   authorId?: string | null;
   favoriteIds?: string[] | null;
 }
 
 export const SearchRecipes = async ({
   title = null,
-  categories = null,
+  tags = null,
   authorId = null,
   favoriteIds = null,
 }: SearchRecipesParams) => {
@@ -77,7 +77,7 @@ export const SearchRecipes = async ({
     const response = await axios.get(apiUrl + "/search", {
       params: {
         searchTerm: title,
-        categories: categories,
+        tags: tags,
         userAuthorId: authorId,
         userFavoriteIds: favoriteIds,
       },

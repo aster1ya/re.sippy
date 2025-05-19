@@ -107,7 +107,7 @@ app.post('/api/recipes', async (req, res) => {
 app.get('/api/search', async (req, res) => {
   try{
     console.log(req.query)
-    const {searchTerm = null, categories = null, userAuthorId = null, userFavoriteIds = null} = req.query
+    const {searchTerm = null, tags = null, userAuthorId = null, userFavoriteIds = null} = req.query
     let query = {}
 
 
@@ -118,9 +118,9 @@ app.get('/api/search', async (req, res) => {
       query["title"] = { $regex: searchTerm, $options: "i" };
     }
 
-    if(categories){//it must have all categories given
-      const categoriesArray = Array.isArray(categories) ? categories : [categories] //turn categores into an array if it isnt already
-      query["categories"] = {$all: categoriesArray};
+    if(tags){//it must have all tags given
+      const tagsArray = Array.isArray(tags) ? tags : [tags] //turn categores into an array if it isnt already
+      query["tags"] = {$all: tagsArray};
     }
 
     if(userAuthorId){ //it recipe must have the given author (UNTESTED)

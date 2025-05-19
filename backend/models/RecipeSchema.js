@@ -18,13 +18,9 @@ const RecipeSchema = new mongoose.Schema({
     cookTime: { type: String },
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
-    categories: { type: [String] },
+    tags: { type: [String] },
 
-    isGlutenFree: { type: Boolean, default: false },
-    isVegetarian: { type: Boolean, default: false },
-    isVegan: { type: Boolean, default: false },
-    isHalal: { type: Boolean, default: false },
-    isPet: { type: Boolean, default: false },
+
 
 
 

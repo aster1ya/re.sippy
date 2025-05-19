@@ -14,11 +14,5 @@ export default interface IRecipe {
   rating: Number;
   difficulty: String;
   cookTime: String;
-  categories: [String];
-
-  isGlutenFree?: Boolean;
-  isVegetarian?: Boolean;
-  isVegan?: Boolean;
-  isHalal?: Boolean;
-  isPet?: Boolean;
+  tags: [String];
 }
