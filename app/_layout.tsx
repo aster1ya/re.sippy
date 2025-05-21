@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native"; // Import necessary components
 import React from "react";
-import styles from "@/styles";
+import styles from "../styles";
 
 export default function RootLayout() {
   return (

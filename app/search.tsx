@@ -13,7 +13,7 @@ import {
   StatusBar,
 } from "react-native";
 import axios from "axios";
-import styles from "@/styles";
+import styles from "../styles";
 
 interface Recipe {
   idMeal: string;

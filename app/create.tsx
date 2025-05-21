@@ -15,7 +15,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 //import styles from "../styles";
 import { CreateRecipeRequest } from "../controller";
-import styles from "@/styles";
+import styles from "../styles";
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();

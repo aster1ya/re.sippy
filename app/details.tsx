@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import axios from "axios";
-import styles from "@/styles";
+import styles from "../styles";
 
 const RecipeDetail = () => {
   const { id } = useLocalSearchParams();
