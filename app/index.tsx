@@ -16,6 +16,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+import styles from "@/styles";
 
 import { SearchRecipes, GetRecipeById } from "../controller";
 import IRecipe from "../types/Recipe";
@@ -137,25 +138,25 @@ const Index = () => {
 
   return (
     <SafeAreaView
-      style={[styles.safeArea, { backgroundColor: theme.backgroundColor }]}
+      style={[styles.indexSafeArea, { backgroundColor: theme.backgroundColor }]}
     >
       <StatusBar
         barStyle={isDarkMode ? "light-content" : "dark-content"}
         backgroundColor={theme.containerBg}
       />
 
-      <View style={[styles.topSection, { backgroundColor: "#417023" }]}>
-        <Text style={[styles.appName, { color: theme.textColor }]}>
+      <View style={[styles.indexTopSection, { backgroundColor: "#417023" }]}>
+        <Text style={[styles.indexAppName, { color: theme.textColor }]}>
           re.sippy
         </Text>
-        <Text style={[styles.tagline, { color: theme.subTextColor }]}>
+        <Text style={[styles.indexTagline, { color: theme.subTextColor }]}>
           {currentUser ? "Logged in as " + currentUser?.email : "Not Logged In"}
         </Text>
 
-        <View style={styles.topRowInline}>
+        <View style={styles.indexTopRowInline}>
           <View
             style={[
-              styles.searchBarContainer,
+              styles.indexSearchBarContainer,
               { backgroundColor: theme.inputBg },
             ]}
           >
@@ -163,10 +164,10 @@ const Index = () => {
               name="search"
               size={20}
               color={theme.placeholderColor}
-              style={styles.searchIconInline}
+              style={styles.indexSearchIconInline}
             />
             <TextInput
-              style={[styles.searchBar, { color: theme.textColor }]}
+              style={[styles.indexSearchBar, { color: theme.textColor }]}
               placeholder="Search recipes..."
               placeholderTextColor={theme.placeholderColor}
               value={searchText}
@@ -202,8 +203,8 @@ const Index = () => {
         </View>
       </View>
 
-      <View style={[styles.container, { backgroundColor: theme.containerBg }]}>
-        <Text style={[styles.sectionHeader, { color: theme.textColor }]}>
+      <View style={[styles.indexContainer, { backgroundColor: theme.containerBg }]}>
+        <Text style={[styles.indexSectionHeader, { color: theme.textColor }]}>
           Today's Recommendation
         </Text>
         {recommendation ? (
@@ -212,10 +213,10 @@ const Index = () => {
               source={{ uri: recommendation.strMealThumb }}
               style={styles.recipeImage}
             />
-            <Text style={[styles.recipeTitle, { color: theme.textColor }]}>
+            <Text style={[styles.indexRecipeTitle, { color: theme.textColor }]}>
               {recommendation.strMeal}
             </Text>
-            <Text style={[styles.recipeInfo, { color: theme.subTextColor }]}>
+            <Text style={[styles.indexRecipeInfo, { color: theme.subTextColor }]}>
               🍽 {recommendation.strCategory} • 🌍 {recommendation.strArea}
             </Text>
           </>
@@ -227,16 +228,16 @@ const Index = () => {
       {/* TEST BUTTON FOR SearchRecipes() */}
       {/* <Button title="test" onPress={testFunction} /> */}
 
-      <View style={[styles.tabContainer, { backgroundColor: theme.tabBg }]}>
-        <Link href="/book" style={styles.tabButton}>
+      <View style={[styles.indexTabContainer, { backgroundColor: theme.tabBg }]}>
+        <Link href="/book" style={styles.indexTabButton}>
           <Ionicons name="book" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
+          <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>
             Recipe Book
           </Text>
         </Link>
-        <Link href="/create" style={styles.tabButton}>
+        <Link href="/create" style={styles.indexTabButton}>
           <Ionicons name="restaurant" size={24} color={theme.iconColor} />
-          <Text style={[styles.tabLabel, { color: theme.textColor }]}>
+          <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>
             Create Recipe
           </Text>
         </Link>
@@ -266,92 +267,5 @@ const darkTheme = {
   tabBg: "#1f1f1f",
   iconColor: "#fff",
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
-  topSection: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  topRowInline: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  tagline: {
-    fontSize: 14,
-    textAlign: "center",
-    marginBottom: 5,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-  searchBarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: 25,
-    paddingHorizontal: 10,
-    width: 280,
-    marginRight: 10,
-  },
-  searchBar: {
-    flex: 1,
-    height: 40,
-    paddingHorizontal: 10,
-  },
-  searchIconInline: {
-    marginRight: 5,
-  },
-  sectionHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  recipeImage: {
-    width: 380,
-    height: 270,
-    borderRadius: 20,
-    resizeMode: "cover",
-    marginBottom: 10,
-  },
-  recipeTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  recipeInfo: {
-    fontSize: 14,
-    marginTop: 4,
-    marginBottom: 10,
-    textAlign: "center",
-  },
-  tabContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: "#444",
-  },
-  tabButton: {
-    alignItems: "center",
-  },
-  tabLabel: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-});
 
 export default Index;

@@ -11,7 +11,7 @@ const Search = () => {
   )
 }
 
-export default Search
+export default Search;
 
 const styles = StyleSheet.create({
   container: {

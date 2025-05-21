@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import styles from '@/styles';
 
 const RecipeBase = () => {
     //set up and establish connection to API to pull recipe data
@@ -69,12 +70,12 @@ const RecipeBase = () => {
     return (
         <SafeAreaProvider>
             <ScrollView>
-                <View style={styles.container}>
+                <View style={styles.baseContainer}>
                     <View>
-                        <Text style={styles.title}>{newName}</Text>
+                        <Text style={styles.baseTitle}>{newName}</Text>
                     </View>
 
-                    <View style={styles.subContainer}>
+                    <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Information</Text>
                         <View style={styles.infoGrid}>
                             <View style={styles.infoSection}>
@@ -105,18 +106,18 @@ const RecipeBase = () => {
                     </View>
                 </View>
 
-                <View style={styles.container}>
-                    <View style={styles.subContainer}>
+                <View style={styles.baseContainer}>
+                    <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Ingredients</Text>
                         <Text style={styles.h2}>Section</Text>
-                        <View style={styles.checklist}>
-                            <BouncyCheckbox style={styles.checklist}
+                        <View style={styles.baseChecklist}>
+                            <BouncyCheckbox style={styles.baseChecklist}
                                 onPress={(isChecked: boolean) => console.log(isChecked)}
                                 text="e.g. 250g sugar"
                                 iconStyle={{borderRadius:0}}
                                 innerIconStyle={{borderRadius:0}}
                             />
-                            <BouncyCheckbox style={styles.checklist}
+                            <BouncyCheckbox style={styles.baseChecklist}
                                 onPress={(isChecked: boolean) => console.log(isChecked)}
                                 text="e.g. 50g unsalted butter"
                                 iconStyle={{borderRadius:0}}
@@ -126,15 +127,15 @@ const RecipeBase = () => {
                     </View>
                 </View>
                 
-                <View style={styles.container}>
-                    <View style={styles.subContainer}>
+                <View style={styles.baseContainer}>
+                    <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Instructions</Text>
                         
                     </View>
                 </View>
 
-                <View style={styles.container}>
-                    <View style={styles.subContainer}>
+                <View style={styles.baseContainer}>
+                    <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Notes</Text>
                         
                     </View>
@@ -145,66 +146,4 @@ const RecipeBase = () => {
     )
 };
 
-//stylesheet for UI components
-const styles=StyleSheet.create({
-    container:{
-        backgroundColor:'lightsalmon',
-        borderColor:'lightsalmon',
-        borderRadius:10,
-        borderWidth:2.5,
-        flex:1,
-        margin:10,
-        padding:10
-    },
-    subContainer:{
-        backgroundColor:'whitesmoke',
-        borderColor:'whitesmoke',
-        borderRadius:5,
-        borderWidth:5,
-        padding:10
-    },
-    body:{
-        fontSize:18,
-        margin:10,
-        textAlign:'left'
-    },
-    title:{
-        flex:1,
-        flexDirection:'row',
-        fontSize:30,
-        fontWeight:'bold',
-        marginTop:10,
-        paddingBottom:20,
-        textAlign:'center'
-    },
-    h1:{
-        fontSize:26,
-        paddingBottom:10,
-        textAlign:'center'
-    },
-    h2:{
-        fontSize:20,
-        paddingBottom:10,
-        textAlign:'left'
-    },
-    infoGrid:{
-        alignItems:'flex-start',
-        flex:3,
-        flexDirection:'row',
-        flexWrap:'wrap',
-        fontSize:18,
-        margin:10
-    },
-    infoSection:{
-        alignItems:'center',
-        padding:5,
-        width:'50%'
-    },
-    infoLabel:{
-        fontWeight:'bold'
-    },
-    checklist:{
-        padding:5,
-    }
-});
 export default RecipeBase;

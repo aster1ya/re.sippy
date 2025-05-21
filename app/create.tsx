@@ -13,9 +13,9 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import styles from "../styles";
+//import styles from "../styles";
 import { CreateRecipeRequest } from "../controller";
-
+import styles from "@/styles";
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
@@ -71,17 +71,17 @@ const CreateRecipe = () => {
   return (
     <SafeAreaProvider>
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.baseContainer}>
           <View>
             <TextInput
               autoCapitalize="words"
               defaultValue="New Recipe"
               inputMode="text"
-              style={styles.title}
+              style={styles.createTitle}
             />
           </View>
 
-          <View style={styles.subContainer}>
+          <View style={styles.baseSubContainer}>
             <Text style={styles.h1}>Information</Text>
             <View style={styles.infoGrid}>
               <View style={styles.infoSection}>
@@ -119,7 +119,7 @@ const CreateRecipe = () => {
             </View>
           </View>
 
-          <View style={styles.subContainer}>
+          <View style={styles.baseSubContainer}>
             <Text>Title</Text>
             <TextInput
               placeholder="title..."
