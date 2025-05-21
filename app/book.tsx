@@ -6,7 +6,7 @@ import axios from "axios";
 import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
-import styles from "@/styles";
+import styles from "../styles";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";

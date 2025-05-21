@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import styles from '@/styles';
+import styles from '../../styles';
 
 const RecipeBase = () => {
     //set up and establish connection to API to pull recipe data

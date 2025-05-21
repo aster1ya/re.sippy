@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
 import { useNavigation } from '@react-navigation/native';
-import styles from '@/styles';
+import styles from '../../styles';
 
 type MainMenuNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MainMenu'>;
 

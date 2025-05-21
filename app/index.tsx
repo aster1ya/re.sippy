@@ -16,7 +16,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import styles from "@/styles";
+import styles from "../styles";
 
 import { SearchRecipes, GetRecipeById } from "../controller";
 import IRecipe from "../types/Recipe";

@@ -7,7 +7,7 @@ import { auth } from "../backend/firebaseConfig";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
-import styles from "@/styles";
+import styles from "../styles";
 
 const Register = () => {
   const apiUrl = "http://localhost:5000/api";
