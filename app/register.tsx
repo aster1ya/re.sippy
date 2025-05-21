@@ -7,6 +7,7 @@ import { auth } from "../backend/firebaseConfig";
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
+import styles from "@/styles";
 
 const Register = () => {
   const apiUrl = "http://localhost:5000/api";
@@ -74,7 +75,7 @@ const Register = () => {
         keyboardType="email-address"
         onChangeText={(newText) => setEmailInput(newText)}
       />
-      <Text style={styles.error} className="text-danger">
+      <Text style={styles.authError} className="text-danger">
         {emailError}
       </Text>
 
@@ -82,13 +83,13 @@ const Register = () => {
         placeholder="password"
         onChangeText={(newText) => setPasswordInput(newText)}
       />
-      <Text style={styles.error} className="text-danger">
+      <Text style={styles.authError} className="text-danger">
         {passwordError}
       </Text>
 
       <Button title="register" onPress={HandleSubmitRegister} />
 
-      <Link href="/login" style={styles.link}>
+      <Link href="/login" style={styles.authLink}>
         {"\n"}Already have an account? login instead.
       </Link>
     </View>
@@ -96,14 +97,3 @@ const Register = () => {
 };
 
 export default Register;
-
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-  },
-
-  link: {
-    color: "blue",
-    textDecorationLine: "underline",
-  },
-});

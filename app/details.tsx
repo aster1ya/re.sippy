@@ -12,6 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import axios from "axios";
+import styles from "@/styles";
 
 const RecipeDetail = () => {
   const { id } = useLocalSearchParams();
@@ -47,22 +48,22 @@ const RecipeDetail = () => {
   if (!meal) return <Text style={{ color: "#fff", margin: 20 }}>Recipe not found.</Text>;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.container}>
-        <Image source={{ uri: meal.strMealThumb }} style={styles.image} />
-        <Text style={styles.title}>{meal.strMeal}</Text>
-        <Text style={styles.category}>{meal.strCategory} • {meal.strArea}</Text>
+    <SafeAreaView style={styles.detailSafeArea}>
+      <ScrollView style={styles.detailContainer}>
+        <Image source={{ uri: meal.strMealThumb }} style={styles.recipeImage} />
+        <Text style={styles.detailTitle}>{meal.strMeal}</Text>
+        <Text style={styles.detailCategory}>{meal.strCategory} • {meal.strArea}</Text>
 
-        <Text style={styles.section}>Instructions</Text>
-        <Text style={styles.instructions}>{meal.strInstructions}</Text>
+        <Text style={styles.detailSection}>Instructions</Text>
+        <Text style={styles.recipeInstructions}>{meal.strInstructions}</Text>
 
-        <Text style={styles.section}>Ingredients</Text>
+        <Text style={styles.detailSection}>Ingredients</Text>
         {Array.from({ length: 20 }, (_, i) => {
           const ingredient = meal[`strIngredient${i + 1}`];
           const measure = meal[`strMeasure${i + 1}`];
           if (ingredient) {
             return (
-              <Text key={i} style={styles.ingredient}>
+              <Text key={i} style={styles.recipeIngredients}>
                 - {ingredient} {measure}
               </Text>
             );
@@ -73,50 +74,5 @@ const RecipeDetail = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#1c1c1c",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
-  container: {
-    padding: 20,
-  },
-  image: {
-    width: "100%",
-    height: 240,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
-    marginBottom: 5,
-  },
-  category: {
-    fontSize: 14,
-    color: "#ccc",
-    marginBottom: 20,
-  },
-  section: {
-    fontSize: 18,
-    color: "#fff",
-    marginTop: 20,
-    marginBottom: 8,
-    fontWeight: "600",
-  },
-  instructions: {
-    fontSize: 14,
-    color: "#ddd",
-    lineHeight: 22,
-  },
-  ingredient: {
-    fontSize: 14,
-    color: "#eee",
-    marginBottom: 2,
-  },
-});
 
 export default RecipeDetail;

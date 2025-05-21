@@ -4,6 +4,7 @@ import { auth } from "../backend/firebaseConfig";
 import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
+import styles from "../styles";
 
 const Login = () => {
   const router = useRouter();
@@ -66,11 +67,11 @@ const Login = () => {
         onChangeText={(newText) => setPasswordInput(newText)}
         secureTextEntry
       />
-      <Text style={styles.error}>{loginError}</Text>
+      <Text style={styles.authError}>{loginError}</Text>
 
       <Button title="login" onPress={HandleSubmitLogin} />
       <Text>{"\n"}</Text>
-      <Link href="/register" style={styles.link}>
+      <Link href="/register" style={styles.authLink}>
         Don't have an account? Create one here.
       </Link>
     </View>
@@ -78,14 +79,3 @@ const Login = () => {
 };
 
 export default Login;
-
-const styles = StyleSheet.create({
-  error: {
-    color: "red",
-  },
-
-  link: {
-    color: "blue",
-    textDecorationLine: "underline",
-  },
-});

@@ -6,6 +6,7 @@ import axios from "axios";
 import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
+import styles from "@/styles";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
@@ -33,18 +34,10 @@ const book = () => {
 
   return (
     <ScrollView>
-      <Text style={styles.title}>All Recipes</Text>
+      <Text style={styles.bookTitle}>All Recipes</Text>
       <RecipeList recipes={recipes} title="All Recipes" />
     </ScrollView>
   );
 };
 
 export default book;
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 30,
-    alignSelf: "center",
-    margin: 15,
-  },
-});
