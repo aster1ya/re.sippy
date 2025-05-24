@@ -139,3 +139,19 @@ app.get('/api/search', async (req, res) => {
     res.send("ERROR"+e.message)
   }
 })
+
+app.post("/api/register", async (req, res) => {
+
+  const { UID } = req.query;
+
+  try {
+      const user = await User.create({
+        firebaseUID : UID,
+      })
+      res.send({user : user, success : true}) // send a copy of the created recipe after it is created
+    }
+    catch (e) {
+      res.send({error : e.message, success : false}) // sends an error if fails
+    }
+
+});

@@ -3,6 +3,7 @@ import {
   validatePassword,
 } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
+import { RegisterUser } from "../controller";
 
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import { Link, useRouter } from "expo-router";
@@ -21,49 +22,16 @@ const Register = () => {
   const router = useRouter();
 
   const HandleSubmitRegister = async () => {
-    RegisterUser(emailInput, passwordInput);
-  };
-
-  const RegisterUser = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        //after logged in, goes to login page
-        const user = userCredential.user;
-        console.log("user created with email: ", user.email);
-        router.replace("/login");
-      })
-      .catch((error) => {
-        console.log("create user error");
-        console.log(error.code);
-        console.log(error.message);
-
-        //uses the error codes to check if email is invalid. ignores if password is invalid
-        switch (error.code) {
-          case "auth/invalid-email":
-          case "auth/missing-email":
-            setEmailError("Email must be in correct format.");
-            break;
-          case "auth/password-does-not-meet-requirements":
-          case "auth/weak-password":
-          case "auth/missing-password":
-            setEmailError("");
-            break;
-          default:
-            setEmailError(
-              "Unhandled error: " + error.code + " " + error.message
-            );
-            break;
-        }
-
-        //only get one error code at a time, so checking for password validation separately
-        validatePassword(auth, passwordInput).then((status) => {
-          if (!status.isValid) {
-            setPasswordError("Password must be at least 6 characters.");
-          } else {
-            setPasswordError("");
-          }
-        });
-      });
+    const { success, emailError, passwordError } = await RegisterUser(
+      emailInput,
+      passwordInput
+    );
+    if (success) {
+      router.replace("/login");
+    } else {
+      setEmailError(emailError);
+      setPasswordError(passwordError);
+    }
   };
 
   return (
