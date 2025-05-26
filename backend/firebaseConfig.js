@@ -29,13 +29,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 //admin setup
-var admin = require("firebase-admin");
+//var admin = require("firebase-admin");
+//
+//var serviceAccount = require("./resippy-1bc93-firebase-adminsdk-fbsvc-85c81c7948.json");
+//
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount)
+// });
 
-var serviceAccount = require("./resippy-1bc93-firebase-adminsdk-fbsvc-85c81c7948.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
-export { auth, admin }
-module.exports = { auth: auth, admin: admin }
+export { auth }
+module.exports = { auth: auth }

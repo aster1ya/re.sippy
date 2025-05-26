@@ -8,6 +8,7 @@ import {
   validatePassword,
 } from "firebase/auth";
 import { auth } from "./backend/firebaseConfig";
+import IUser from "./types/User";
 
 const apiUrl = "http://localhost:5000/api";
 
@@ -100,10 +101,8 @@ export const SearchRecipes = async ({
 
 const CreateMongoUser = async (id: string) => {
   try {
-    const response = await axios.get(apiUrl + "/register", {
-      params: {
-        UID: id,
-      },
+    const response = await axios.post(apiUrl + "/register", {
+      UID: id,
     });
 
     return response;
@@ -121,8 +120,8 @@ export const RegisterUser = async (email: string, password: string) => {
       email,
       password
     );
-
     const user = userCredential.user;
+
     console.log("user created with email: ", user.email);
 
     ///aaaaaaaa how do i error catch this
@@ -185,6 +184,10 @@ export const GetMongoUserByUID = async (UID: string) => {
       },
     });
     const user = response.data.user;
+    console.log(user);
+    if (!user) {
+      console.log("No mongo user found");
+    }
     return user;
   } catch (error) {
     console.log("error finding mongo user:" + error);
@@ -195,15 +198,34 @@ export const GetMongoUserByUID = async (UID: string) => {
 export const ToggleFavorite = async (UID: string, recipeId: string) => {
   try {
     const response = await axios.post(apiUrl + "/recipe/favorite", {
-      params: {
-        UID: UID,
-        recipeId: recipeId,
-      },
+      UID: UID,
+      recipeId: recipeId,
     });
 
     return { success: true, favorited: response.data.favorited };
   } catch (error) {
     console.log("error favoriting recipe:" + error);
     return { success: false };
+  }
+};
+
+export const CheckIfFavorited = async (UID: string, recipeId: string) => {
+  try {
+    const user = await GetMongoUserByUID(UID);
+    const favorited = user.favoriteRecipeIds.includes(recipeId);
+
+    return { success: true, favorited: favorited };
+  } catch (error) {
+    console.log("error checking if favorited:" + error);
+    return { success: false };
+  }
+};
+
+export const GetCurrentUID = () => {
+  const user = auth.currentUser;
+  if (user) {
+    return user.uid;
+  } else {
+    return "";
   }
 };

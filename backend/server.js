@@ -59,10 +59,8 @@ app.get('/api/recipe', async (req, res) => {
     const id = req.query.recipeId;
 
     const recipes = await Recipe.find({_id : id});
-    console.log("real recipes:"+recipes)
     res.json(recipes);
   } catch (err) {
-    console.log("real error: "+err.message)
     res.status(500).json({ message: err.message });
   }
 });
@@ -132,8 +130,7 @@ app.get('/api/search', async (req, res) => {
       const favoriteRecipeIds = mongoUser.favoriteRecipeIds;
       query["_id"] = { $in: favoriteRecipeIds }
     }
-    console.log("query:")
-    console.log(query)
+
     const recipes = await Recipe.find(query);
     res.json(recipes)
     
@@ -144,25 +141,28 @@ app.get('/api/search', async (req, res) => {
 
 app.post("/api/register", async (req, res) => {
 
-  const { UID } = req.query;
+  const { UID } = req.body
 
   try {
       const user = await User.create({
         firebaseUID : UID,
       })
-      res.send({user : user, success : true}) // send a copy of the created recipe after it is created
+      console.log("mongo user created successfully")
+      res.send({user : user, success : true}) // send a copy of the created user after it is created
     }
     catch (e) {
+      console.log("error creating mongo user: " + e)
       res.send({error : e.message, success : false}) // sends an error if fails
     }
 
 });
 
 app.get("/api/user", async (req, res) => {
+
   const { UID } = req.query;
 
   try {
-    const query = { firebaseUid : UID };
+    const query = { firebaseUID : UID };
     const user = await User.findOne(query);
     
     res.send({user : user, success : true}) 
@@ -174,26 +174,27 @@ app.get("/api/user", async (req, res) => {
 
 app.post("/api/recipe/favorite", async (req, res) => {
   try{
-
-    const { UID, recipeId } = req.query;
+    const { UID, recipeId } = req.body;
     let didFavorite;
     
     const user = await User.findOne({ "firebaseUID" : UID })
     const favoriteIds = user.favoriteRecipeIds;
     
-    if (favoriteIds.includes(recipeId)){
-      favoriteIds.pop(recipeId);
+    console.log("Found user uid:" + user.firebaseUID);
+
+    const index = user.favoriteRecipeIds.indexOf(recipeId);
+    if (index > -1) {
+      user.favoriteRecipeIds.splice(index, 1);
       didFavorite = false;
     } else {
-      favoriteIds.push(recipeId)
+      user.favoriteRecipeIds.push(recipeId);
       didFavorite = true;
     }
     
-    user.updateOne({ favoriteRecipeIds : favoriteIds })
-
+    user.save();
     res.send({success: true, favorited: didFavorite})
   } catch (error) {
-    res.send({error : e.message, success : false}) 
+    res.send({error : error.message, success : false}) 
   }
     
   })

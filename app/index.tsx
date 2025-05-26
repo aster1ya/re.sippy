@@ -102,7 +102,6 @@ const Index = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-      console.log("auth updated: ", user);
     });
 
     return unsubscribe;
@@ -203,7 +202,9 @@ const Index = () => {
         </View>
       </View>
 
-      <View style={[styles.indexContainer, { backgroundColor: theme.containerBg }]}>
+      <View
+        style={[styles.indexContainer, { backgroundColor: theme.containerBg }]}
+      >
         <Text style={[styles.indexSectionHeader, { color: theme.textColor }]}>
           Today's Recommendation
         </Text>
@@ -216,7 +217,9 @@ const Index = () => {
             <Text style={[styles.indexRecipeTitle, { color: theme.textColor }]}>
               {recommendation.strMeal}
             </Text>
-            <Text style={[styles.indexRecipeInfo, { color: theme.subTextColor }]}>
+            <Text
+              style={[styles.indexRecipeInfo, { color: theme.subTextColor }]}
+            >
               🍽 {recommendation.strCategory} • 🌍 {recommendation.strArea}
             </Text>
           </>
@@ -228,7 +231,9 @@ const Index = () => {
       {/* TEST BUTTON FOR SearchRecipes() */}
       {/* <Button title="test" onPress={testFunction} /> */}
 
-      <View style={[styles.indexTabContainer, { backgroundColor: theme.tabBg }]}>
+      <View
+        style={[styles.indexTabContainer, { backgroundColor: theme.tabBg }]}
+      >
         <Link href="/book" style={styles.indexTabButton}>
           <Ionicons name="book" size={24} color={theme.iconColor} />
           <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>

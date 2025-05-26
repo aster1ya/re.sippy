@@ -19,18 +19,22 @@ const RecipeList = ({ recipes }: RecipeListProps) => {
 
   return (
     <View style={styles.container}>
-      {recipes.map((recipe, index) => (
-        <View key={index} style={styles.recipePreview}>
-          <View style={styles.row}>
-            <Text style={styles.header}>{recipe.title}</Text>
-            <Button
-              title="View Recipe"
-              onPress={() => goToRecipe(recipe._id)}
-            />
+      {recipes && recipes != undefined ? (
+        recipes.map((recipe, index) => (
+          <View key={index} style={styles.recipePreview}>
+            <View style={styles.row}>
+              <Text style={styles.header}>{recipe.title}</Text>
+              <Button
+                title="View Recipe"
+                onPress={() => goToRecipe(recipe._id)}
+              />
+            </View>
+            <Text>{recipe.description}</Text>
           </View>
-          <Text>{recipe.description}</Text>
-        </View>
-      ))}
+        ))
+      ) : (
+        <Text>No Recipes</Text>
+      )}
     </View>
   );
 };
