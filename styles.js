@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
 
-  authLink: {
+  hyperlink: {
     color: 'blue',
     textDecorationLine: 'underline',
   },

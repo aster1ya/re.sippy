@@ -5,10 +5,9 @@ import { useRouter } from "expo-router";
 
 type RecipeListProps = {
   recipes: IRecipe[];
-  title: string;
 };
 
-const RecipeList = ({ recipes, title }: RecipeListProps) => {
+const RecipeList = ({ recipes }: RecipeListProps) => {
   const router = useRouter();
 
   const goToRecipe = (recipeId: string) => {

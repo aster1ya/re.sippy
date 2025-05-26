@@ -107,7 +107,7 @@ app.post('/api/recipes', async (req, res) => {
 app.get('/api/search', async (req, res) => {
   try{
     console.log(req.query)
-    const {searchTerm = null, tags = null, userAuthorId = null, userFavoriteIds = null} = req.query
+    const {searchTerm = null, tags = null, userAuthorId = null, userIdForFavorites = null} = req.query
     let query = {}
 
 
@@ -127,8 +127,10 @@ app.get('/api/search', async (req, res) => {
       query["authorId"] = userAuthorId;
     } 
 
-    if(userFavoriteIds){ //its id must be in the list of given favorites (UNTESTED)
-      query["_id"] = { $in: userFavoriteIds }
+    if(userIdForFavorites){ //its id must be in the list of given favorites (UNTESTED)
+      const mongoUser = await User.findOne({ firebaseUID : userIdForFavorites})
+      const favoriteRecipeIds = mongoUser.favoriteRecipeIds;
+      query["_id"] = { $in: favoriteRecipeIds }
     }
     console.log("query:")
     console.log(query)
@@ -155,3 +157,43 @@ app.post("/api/register", async (req, res) => {
     }
 
 });
+
+app.get("/api/user", async (req, res) => {
+  const { UID } = req.query;
+
+  try {
+    const query = { firebaseUid : UID };
+    const user = await User.findOne(query);
+    
+    res.send({user : user, success : true}) 
+  }
+  catch (e) {
+    res.send({error : e.message, success : false}) 
+  }
+})
+
+app.post("/api/recipe/favorite", async (req, res) => {
+  try{
+
+    const { UID, recipeId } = req.query;
+    let didFavorite;
+    
+    const user = await User.findOne({ "firebaseUID" : UID })
+    const favoriteIds = user.favoriteRecipeIds;
+    
+    if (favoriteIds.includes(recipeId)){
+      favoriteIds.pop(recipeId);
+      didFavorite = false;
+    } else {
+      favoriteIds.push(recipeId)
+      didFavorite = true;
+    }
+    
+    user.updateOne({ favoriteRecipeIds : favoriteIds })
+
+    res.send({success: true, favorited: didFavorite})
+  } catch (error) {
+    res.send({error : e.message, success : false}) 
+  }
+    
+  })

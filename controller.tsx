@@ -70,14 +70,14 @@ interface SearchRecipesParams {
   title?: string | null;
   tags?: string[] | null;
   authorId?: string | null;
-  favoriteIds?: string[] | null;
+  favoriteUserId?: string | null;
 }
 
 export const SearchRecipes = async ({
   title = null,
   tags = null,
   authorId = null,
-  favoriteIds = null,
+  favoriteUserId = null,
 }: SearchRecipesParams) => {
   try {
     const response = await axios.get(apiUrl + "/search", {
@@ -85,7 +85,7 @@ export const SearchRecipes = async ({
         searchTerm: title,
         tags: tags,
         userAuthorId: authorId,
-        userFavoriteIds: favoriteIds,
+        userIdForFavorites: favoriteUserId,
       },
       paramsSerializer: { indexes: null },
     });
@@ -174,5 +174,36 @@ export const RegisterUser = async (email: string, password: string) => {
       emailError: emailErrorMessage,
       passwordError: passwordErrorMessage,
     };
+  }
+};
+
+export const GetMongoUserByUID = async (UID: string) => {
+  try {
+    const response = await axios.get(apiUrl + "/user", {
+      params: {
+        UID: UID,
+      },
+    });
+    const user = response.data.user;
+    return user;
+  } catch (error) {
+    console.log("error finding mongo user:" + error);
+    return null;
+  }
+};
+
+export const ToggleFavorite = async (UID: string, recipeId: string) => {
+  try {
+    const response = await axios.post(apiUrl + "/recipe/favorite", {
+      params: {
+        UID: UID,
+        recipeId: recipeId,
+      },
+    });
+
+    return { success: true, favorited: response.data.favorited };
+  } catch (error) {
+    console.log("error favoriting recipe:" + error);
+    return { success: false };
   }
 };

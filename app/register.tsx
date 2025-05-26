@@ -57,7 +57,7 @@ const Register = () => {
 
       <Button title="register" onPress={HandleSubmitRegister} />
 
-      <Link href="/login" style={styles.authLink}>
+      <Link href="/login" style={styles.hyperlink}>
         {"\n"}Already have an account? login instead.
       </Link>
     </View>

@@ -71,7 +71,7 @@ const Login = () => {
 
       <Button title="login" onPress={HandleSubmitLogin} />
       <Text>{"\n"}</Text>
-      <Link href="/register" style={styles.authLink}>
+      <Link href="/register" style={styles.hyperlink}>
         Don't have an account? Create one here.
       </Link>
     </View>

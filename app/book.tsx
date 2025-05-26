@@ -35,7 +35,10 @@ const book = () => {
   return (
     <ScrollView>
       <Text style={styles.bookTitle}>All Recipes</Text>
-      <RecipeList recipes={recipes} title="All Recipes" />
+      <RecipeList recipes={recipes} />
+      <Link href="/favorites" style={styles.hyperlink}>
+        Go To Favorites
+      </Link>
     </ScrollView>
   );
 };
