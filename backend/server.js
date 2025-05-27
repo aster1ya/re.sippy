@@ -139,6 +139,7 @@ app.get('/api/search', async (req, res) => {
   }
 })
 
+//create mongo user.
 app.post("/api/register", async (req, res) => {
 
   const { UID } = req.body
@@ -157,6 +158,7 @@ app.post("/api/register", async (req, res) => {
 
 });
 
+//get mongouser by uid
 app.get("/api/user", async (req, res) => {
 
   const { UID } = req.query;
@@ -172,6 +174,7 @@ app.get("/api/user", async (req, res) => {
   }
 })
 
+//add/remove recipe from a mongo user's favorite list.
 app.post("/api/recipe/favorite", async (req, res) => {
   try{
     const { UID, recipeId } = req.body;

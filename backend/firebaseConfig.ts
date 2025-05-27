@@ -20,22 +20,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
+const auth = initializeAuth(app, {
+    persistence:getReactNativePersistence(ReactNativeAsyncStorage)
+  })
 
-// const auth = getAuth(app, {
-//     persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-//   })
-
-const auth = getAuth(app);
-
-//admin setup
-//var admin = require("firebase-admin");
-//
-//var serviceAccount = require("./resippy-1bc93-firebase-adminsdk-fbsvc-85c81c7948.json");
-//
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
+// const auth = getAuth(app);
 
 export { auth }
 module.exports = { auth: auth }

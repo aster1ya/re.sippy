@@ -131,7 +131,7 @@ export const RegisterUser = async (email: string, password: string) => {
       //...
     }
 
-    return { success: true, emailError: "", passwordError: "" };
+    return { success: true, user: user, emailError: "", passwordError: "" };
   } catch (error: any) {
     console.log("create user error");
     console.log(error.code);
@@ -170,6 +170,7 @@ export const RegisterUser = async (email: string, password: string) => {
     });
     return {
       success: false,
+      user: null,
       emailError: emailErrorMessage,
       passwordError: passwordErrorMessage,
     };
