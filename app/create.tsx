@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
+  Alert,
+  Button,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
-  Button,
-  Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
-import axios from "axios";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
-//import styles from "../styles";
+import { useRouter } from "expo-router";
 import { CreateRecipeRequest } from "../controller";
 import styles from "../styles";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
@@ -31,11 +28,11 @@ const CreateRecipe = () => {
   };
 
   const showCreatedRecipeAlert = () => {
-    Alert.alert("success", "Recipe has been successfully created");
+    Alert.alert("success", "Recipe has been successfully created.");
   };
 
   const showFailedToCreateRecipeAlert = () => {
-    Alert.alert("failed", "Recipe not created. Please enter a title");
+    Alert.alert("failed", "Recipe has not been created. Please enter a title.");
   };
 
   const getvalues = () => {
@@ -49,11 +46,11 @@ const CreateRecipe = () => {
       title,
       description,
       ingredients,
-      instructions
+      instructions,
     );
 
     if (success) {
-      console.log("Recipe created: " + recipe.title);
+      console.log("Recipe created: " + recipe.title + ".");
       showCreatedRecipeAlert();
 
       router.replace("/book");
@@ -63,9 +60,11 @@ const CreateRecipe = () => {
       });
     } else {
       showFailedToCreateRecipeAlert();
-      console.log("Recipe not created");
+      console.log("Recipe was not created.");
     }
   };
+
+  const [inputRow, setInputRow] = useState([]);
 
   //render the layout of the recipe creator
   return (
@@ -75,8 +74,9 @@ const CreateRecipe = () => {
           <View>
             <TextInput
               autoCapitalize="words"
-              defaultValue="New Recipe"
+              placeholder="New Recipe"
               inputMode="text"
+              onChangeText={(newText) => setTitle(newText)}
               style={styles.createTitle}
             />
           </View>
@@ -87,65 +87,112 @@ const CreateRecipe = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Author</Text>
                 <TextInput
-                  defaultValue="N/A"
+                  placeholder="You"
                   inputMode="text"
+                  
                   style={styles.infoField}
                 />
               </View>
               <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Category</Text>
+                <Text style={styles.infoLabel}>Type</Text>
                 <TextInput
-                  defaultValue="N/A"
+                  placeholder="None"
                   inputMode="text"
                   style={styles.infoField}
                 />
               </View>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Prep Time</Text>
-                <Text>N/A</Text>
+                <TextInput
+                  placeholder="None"
+                  inputMode="text"
+                  style={styles.infoField}
+                  />
               </View>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Cook Time</Text>
-                <Text>N/A</Text>
+                <TextInput
+                  placeholder="None"
+                  inputMode="text"
+                  style={styles.infoField}
+                />
               </View>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Total Time</Text>
-                <Text>N/A</Text>
+                <TextInput
+                  placeholder="None"
+                  inputMode="text"
+                  style={styles.infoField}
+                />
               </View>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Servings</Text>
-                <Text>N/A</Text>
+                <TextInput
+                  placeholder="0"
+                  inputMode="numeric"
+                  style={styles.infoField}
+                />
               </View>
             </View>
           </View>
 
-          <View style={styles.baseSubContainer}>
-            <Text>Title</Text>
-            <TextInput
-              placeholder="title..."
-              onChangeText={(newText) => setTitle(newText)}
-            />
-
-            <Text>Description</Text>
-            <TextInput
-              placeholder="description..."
-              onChangeText={(newText) => setDescription(newText)}
-            />
-
-            <Text>Ingredients</Text>
-            <TextInput
-              placeholder="ingredients..."
-              onChangeText={(newText) => setIngredients(newText)}
-            />
-
-            <Text>Instructions</Text>
-            <TextInput
-              placeholder="instructions..."
-              onChangeText={(newText) => setInstructions(newText)}
-            />
-
-            <Button title="Create Recipe" onPress={handleCreateRecipe} />
+          <View style={styles.baseContainer}>
+            <View style={styles.baseSubContainer}>
+              <Text style={styles.h1}>Description</Text>
+              <TextInput
+                multiline={true}
+                placeholder="Description"
+                onChangeText={(newText) => setDescription(newText)}
+              />
+            </View>
           </View>
+          
+          <View style={styles.baseContainer}>
+            <View style={styles.baseSubContainer}>
+              <Text style={styles.h1}>Ingredients</Text>
+              <TextInput
+                placeholder="Ingredients"
+                onChangeText={(newText) => setIngredients(newText)}
+              />
+              <Button
+                color="tomato"
+                title="Add New Ingredient"
+              />
+            </View>
+          </View>
+          
+          <View style={styles.baseContainer}>
+            <View style={styles.baseSubContainer}>
+              <Text style={styles.h1}>Instructions</Text>
+              <TextInput
+                placeholder="Instructions"
+                onChangeText={(newText) => setInstructions(newText)}
+              />
+              <Button
+                color="tomato"
+                title="Add New Step"
+              />
+            </View>
+          </View>
+
+          <View style={styles.baseContainer}>
+            <View style={styles.baseSubContainer}>
+              <Text style={styles.h1}>Notes</Text>
+                <TextInput
+                  placeholder="Note"
+                />
+                <Button
+                  color="tomato"
+                  title="Add New Note"
+                />
+            </View>
+          </View>
+
+          <Button
+            color="tomato"
+            title="Create Recipe"
+            onPress={handleCreateRecipe}
+          />
         </View>
       </ScrollView>
     </SafeAreaProvider>

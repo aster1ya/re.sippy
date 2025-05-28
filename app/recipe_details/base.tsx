@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
-    FlatList,
-    SectionList,
     ScrollView,
-    StyleSheet,
     Text,
-    TouchableOpacity,
     View
 } from 'react-native';
-import axios from 'axios';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import axios from 'axios';
 import styles from '../../styles';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 const RecipeBase = () => {
     //set up and establish connection to API to pull recipe data
@@ -140,7 +136,6 @@ const RecipeBase = () => {
                         
                     </View>
                 </View>
-
             </ScrollView>
         </SafeAreaProvider>
     )
