@@ -3,8 +3,6 @@
 //######################################################################################
 
 export default interface IRecipe {
-  _id: String;
-
   title: String;
 
   authorId: String;

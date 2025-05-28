@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { 
+import {
+  Button,
   ScrollView,
   Text,
   View
 } from "react-native";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { useLocalSearchParams } from "expo-router";
-import axios from "axios";
-import styles from '../../styles';
-import IRecipe from "../../types/Recipe";
 import { GetRecipeById } from "../../controller";
+import IRecipe from "../../types/Recipe";
+import styles from '../../styles';
 
 const Details = () => {
   const apiUrl = "http://localhost:5000/api/recipe";
+  const router = useRouter();
   const { id } = useLocalSearchParams();
 
   const [recipe, setRecipe] = useState<IRecipe>();
@@ -24,18 +26,19 @@ const Details = () => {
       setRecipe(recipe);
     }
   };
-
   useEffect(() => {
     fetchRecipe();
   }, []);
+
+  const 
 
   return (
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.baseContainer}>
           <View>
-            <Text style={styles.baseTitle}>{recipe?.title}</Text>
             {/* <Text>Recipe has ID: {id}</Text> */}
+            <Text style={styles.baseTitle}>{recipe?.title}</Text>
           </View>
 
           <View style={styles.baseSubContainer}>
@@ -101,6 +104,12 @@ const Details = () => {
             <Text>{recipe?.notes}</Text>
           </View>
         </View>
+
+        <Button
+          color='tomato'
+          title='Edit Recipe'
+          onPress=
+        />
       </ScrollView>
     </SafeAreaProvider>
   );
