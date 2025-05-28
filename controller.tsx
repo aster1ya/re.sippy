@@ -37,17 +37,11 @@ export const GetRecipeById = async (id: string) => {
 
 //creates recipe. returns if it was successful or not. for create page.
 export const CreateRecipeRequest = async (
-  title: string | null,
-  description: string | null,
-  ingredients: string | null,
-  instructions: string | null
+  recipe : IRecipe | null
 ) => {
   try {
     const response = await axios.post(apiUrl + "/recipes", {
-      title: title,
-      description: description,
-      ingredients: ingredients,
-      instructions: instructions,
+      recipe:recipe
     });
 
     return [response.data.success, response.data.recipe];

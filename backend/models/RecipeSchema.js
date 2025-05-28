@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 //#################################################################################################
 
 const RecipeSchema = new mongoose.Schema({
-    //note: default values aren't applied because recipe creation currently hsa them defined with null. Defaults only applies if undefiend.
+    //note: default values aren't applied because recipe creation currently has them defined with null. Defaults only applies if undefiend.
     title: { type: String, required: true, default: "New Recipe" },
 
     authorId: { type: String, required: false },
@@ -22,10 +22,6 @@ const RecipeSchema = new mongoose.Schema({
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
     tags: { type: [String] },
-
-    //unused fields
-    rating: { type: Number },
-    difficulty: { type: String },
   });
 
 module.exports = mongoose.model('Recipe', RecipeSchema);

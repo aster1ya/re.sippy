@@ -73,16 +73,11 @@ app.get('/api/recipe', async (req, res) => {
 app.post('/api/recipes', async (req, res) => {
   
   //destructures the input (req.query) into useful variables
-  const { title, description, ingredients, instructions } = req.query;
+  const { recipe } = req.query;
 
   //uses those variable to create a new recipe from the Recipe model
     try {
-      const recipe = await Recipe.create({
-        title: title,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions,
-      })
+      const recipe = await Recipe.create(recipe)
       res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
     }
     catch (e) {

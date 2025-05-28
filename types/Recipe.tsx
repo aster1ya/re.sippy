@@ -1,6 +1,6 @@
-//THIS MUST BE IDENTICAL TO backend/models/RecipeSchema BUT WITH ONLY THE TYPES DEFINED
-
-//Should really use 'string' instead of 'String' but im sure its fine
+//######################################################################################
+//THIS MUST BE IDENTICAL TO backend/models/RecipeSchema BUT WITH ONLY THE TYPES DEFINED.
+//######################################################################################
 
 export default interface IRecipe {
   _id: String;
@@ -20,8 +20,4 @@ export default interface IRecipe {
   notes?: String; 
 
   tags: [String];
-
-  //unused fields
-  rating: Number;
-  difficulty: String;
 };
