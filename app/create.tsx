@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -25,8 +24,11 @@ const CreateRecipe = () => {
   const [description, setDescription] = useState<string | null>(null);
   const [ingredients, setIngredients] = useState<string | null>(null);
   const [instructions, setInstructions] = useState<string | null>(null);
+  const [tags, setTags] = useState<string[] | null>(null);
 
   const handleCreateRecipe = () => {
+    //update array here specifically
+    (tagList: React.SetStateAction<string[] | null>) => setTags(tagList);
     UploadRecipe();
   };
 
@@ -42,6 +44,8 @@ const CreateRecipe = () => {
     return [3, 7];
   };
 
+  let tagList: string[] = [];
+
   const [first, second] = getvalues();
 
   const UploadRecipe = async () => {
@@ -49,7 +53,8 @@ const CreateRecipe = () => {
       title,
       description,
       ingredients,
-      instructions
+      instructions,
+      tags
     );
 
     if (success) {
@@ -144,6 +149,17 @@ const CreateRecipe = () => {
               onChangeText={(newText) => setInstructions(newText)}
             />
 
+            <Text>Tags</Text>
+            <BouncyCheckbox text="Savoury" 
+                            textStyle={{ fontSize:14, textDecorationLine: "none" }} 
+                            textContainerStyle={{ marginVertical:5}}
+                            onPress={(isChecked: boolean) => {isChecked?tagList.push('Savoury'):tagList.splice(tagList.indexOf('Savoury'),1),console.log(tagList)}}>
+            </BouncyCheckbox>
+            <BouncyCheckbox text="Sweet" 
+                            textStyle={{ fontSize:14, textDecorationLine: "none" }} 
+                            textContainerStyle={{ marginVertical:5}}
+                            onPress={(isChecked: boolean) => {isChecked?tagList.push('Sweet'):tagList.splice(tagList.indexOf('Sweet'),1),console.log(tagList)}}>
+            </BouncyCheckbox>
             <Button title="Create Recipe" onPress={handleCreateRecipe} />
           </View>
         </View>

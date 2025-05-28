@@ -40,7 +40,8 @@ export const CreateRecipeRequest = async (
   title: string | null,
   description: string | null,
   ingredients: string | null,
-  instructions: string | null
+  instructions: string | null,
+  tags: string[] | null
 ) => {
   try {
     const response = await axios.post(apiUrl + "/recipes", {
@@ -48,6 +49,7 @@ export const CreateRecipeRequest = async (
       description: description,
       ingredients: ingredients,
       instructions: instructions,
+      tags:tags
     });
 
     return [response.data.success, response.data.recipe];
