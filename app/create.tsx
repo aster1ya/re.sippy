@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Alert,
   Button,
@@ -6,40 +6,41 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { CreateRecipeRequest } from '../controller';
-import IRecipe from '@/types/Recipe';
-import styles from '../styles';
+} from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
+import { CreateRecipeRequest } from "../controller";
+import axios from "axios";
+import IRecipe from "@/types/Recipe";
+import styles from "../styles";
 
 const CreateRecipe = () => {
-  const apiUrl = 'http://localhost:5000/api/recipes';
+  const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
   //all these useStates could probably be replaced by a single Recipe class
-  const [title, setTitle] = useState<string>("");
-  const [authorId, setAuthor] = useState<string>("");
-  const [mealType, setType] = useState<string>("");
-  const [prepTime, setPrep] = useState<string>("");
-  const [cookTime, setCook] = useState<string>("");
-  const [totalTime, setTotal] = useState<string>("");
-  const [servings, setServe] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [ingredients, setIngredients] = useState<string>("");
-  const [instructions, setInstructions] = useState<string>("");
-  const [notes, setNotes] = useState<string>("");
+  const [title, setTitle] = useState<String>("");
+  const [authorId, setAuthor] = useState<String>("");
+  const [mealType, setType] = useState<String>("");
+  const [prepTime, setPrep] = useState<String>("");
+  const [cookTime, setCook] = useState<String>("");
+  const [totalTime, setTotal] = useState<String>("");
+  const [servings, setServe] = useState<String>("");
+  const [description, setDescription] = useState<String>("");
+  const [ingredients, setIngredients] = useState<String>("");
+  const [instructions, setInstructions] = useState<String>("");
+  const [notes, setNotes] = useState<String>("");
 
   const handleCreateRecipe = () => {
     UploadRecipe();
   };
 
   const showCreatedRecipeAlert = () => {
-    Alert.alert('success', 'Recipe has been successfully created.');
+    Alert.alert("success", "Recipe has been successfully created.");
   };
 
   const showFailedToCreateRecipeAlert = () => {
-    Alert.alert('failed', 'Recipe has not been created. Please enter a title.');
+    Alert.alert("failed", "Recipe has not been created. Please enter a title.");
   };
 
   const getvalues = () => {
@@ -61,7 +62,7 @@ const CreateRecipe = () => {
       ingredients: ingredients,
       instructions: instructions,
       notes: notes,
-      tags: [''],
+      tags: [""],
     }
     const [success, recipe] = await CreateRecipeRequest(newRecipe);
 

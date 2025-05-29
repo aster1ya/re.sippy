@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
     Alert,
     Button,
@@ -6,34 +6,33 @@ import {
     Text,
     TextInput,
     View
-} from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useLocalSearchParams } from "expo-router";
-import { useRouter } from 'expo-router';
+} from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { GetRecipeById } from '../../controller';
-import CreateRecipe from '../../app/create';
-import IRecipe from '../../types/Recipe';
-import styles from '../../styles';
+import axios from "axios";
+import IRecipe from "@/types/Recipe";
+import styles from "../../styles";
 
 const EditRecipe = () => {
     //establish connection to API to pull recipe data
-    const apiUrl = 'http://localhost:5000/api/recipes';
+    const apiUrl = "http://localhost:5000/api/recipes";
     const router = useRouter();
     const { id } = useLocalSearchParams();
 
     const [recipe, setRecipe] = useState<IRecipe>();
 
-    const [title, setTitle] = useState<string>("");
-    const [authorId, setAuthor] = useState<string>("");
-    const [mealType, setType] = useState<string>("");
-    const [prepTime, setPrep] = useState<string>("");
-    const [cookTime, setCook] = useState<string>("");
-    const [totalTime, setTotal] = useState<string>("");
-    const [servings, setServe] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
-    const [ingredients, setIngredients] = useState<string>("");
-    const [instructions, setInstructions] = useState<string>("");
-    const [notes, setNotes] = useState<string>("");
+    const [title, setTitle] = useState<String>("");
+    const [authorId, setAuthor] = useState<String>("");
+    const [mealType, setType] = useState<String>("");
+    const [prepTime, setPrep] = useState<String>("");
+    const [cookTime, setCook] = useState<String>("");
+    const [totalTime, setTotal] = useState<String>("");
+    const [servings, setServe] = useState<String>("");
+    const [description, setDescription] = useState<String>("");
+    const [ingredients, setIngredients] = useState<String>("");
+    const [instructions, setInstructions] = useState<String>("");
+    const [notes, setNotes] = useState<String>("");
 
     const fetchRecipe = async () => {
         const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
@@ -56,9 +55,9 @@ const EditRecipe = () => {
                 <View style={styles.baseContainer}>
                     <View>
                         <TextInput
-                            autoCapitalize='words'
-                            defaultValue={recipe?.title.toString()}
-                            inputMode='text'
+                            autoCapitalize="words"
+                            defaultValue = {recipe?.title.toString() || "N/A"}
+                            inputMode="text"
                             onChangeText={(newText) => setTitle(newText)}
                             style={styles.createTitle}
                         />
@@ -70,8 +69,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Author</Text>
                                 <TextInput
-                                    defaultValue={recipe?.authorId.toString()}
-                                    inputMode='text'
+                                    defaultValue={recipe?.authorId.toString() || "N/A"}
+                                    inputMode="text"
                                     onChangeText={(newText) => setAuthor(newText)}
                                     style={styles.infoField}
                                 />
@@ -79,8 +78,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Type</Text>
                                 <TextInput
-                                    defaultValue={recipe?.mealType.toString()}
-                                    inputMode='text'
+                                    defaultValue={recipe?.mealType.toString() || "N/A"}
+                                    inputMode="text"
                                     onChangeText={(newText) => setType(newText)}
                                     style={styles.infoField}
                                 />
@@ -88,8 +87,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Prep Time</Text>
                                 <TextInput
-                                    defaultValue={recipe?.prepTime.toString()}
-                                    inputMode='text'
+                                    defaultValue={recipe?.prepTime.toString() || "N/A"}
+                                    inputMode="text"
                                     onChangeText={(newText) => setPrep(newText)}
                                     style={styles.infoField}
                                 />
@@ -97,8 +96,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Cook Time</Text>
                                 <TextInput
-                                    defaultValue={recipe?.cookTime.toString()}
-                                    inputMode='text'
+                                    defaultValue={recipe?.cookTime.toString() || "N/A"}
+                                    inputMode="text"
                                     onChangeText={(newText) => setCook(newText)}
                                     style={styles.infoField}
                                 />
@@ -106,8 +105,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Total Time</Text>
                                 <TextInput
-                                    defaultValue={recipe?.totalTime.toString()}
-                                    inputMode='text'
+                                    defaultValue={recipe?.totalTime.toString() || "N/A"}
+                                    inputMode="text"
                                     onChangeText={(newText) => setTotal(newText)}
                                     style={styles.infoField}
                                 />
@@ -115,8 +114,8 @@ const EditRecipe = () => {
                             <View style={styles.infoSection}>
                                 <Text style={styles.infoLabel}>Servings</Text>
                                 <TextInput
-                                    defaultValue={recipe?.servings.toString()}
-                                    inputMode='numeric'
+                                    defaultValue={recipe?.servings.toString() || "0"}
+                                    inputMode="numeric"
                                     onChangeText={(newText) => setServe(newText)}
                                     style={styles.infoField}
                                 />
@@ -129,12 +128,12 @@ const EditRecipe = () => {
                     <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Description</Text>
                         <TextInput
-                            defaultValue={recipe?.description?.toString()}
+                            defaultValue={recipe?.description?.toString() || "N/A"}
                             onChangeText={(newText) => setDescription(newText)}
                         />
                         <Button
-                            color='tomato'
-                            title='Add New Description'
+                            color="tomato"
+                            title="Add New Description"
                         />
                     </View>
                 </View>
@@ -143,12 +142,12 @@ const EditRecipe = () => {
                     <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Ingredients</Text>
                         <TextInput
-                            defaultValue={recipe?.ingredients?.toString()}
+                            defaultValue={recipe?.ingredients?.toString() || "N/A"}
                             onChangeText={(newText) => setIngredients(newText)}
                         />
                         <Button
-                            color='tomato'
-                            title='Add New Ingredient'
+                            color="tomato"
+                            title="Add New Ingredient"
                         />
                     </View>
                 </View>
@@ -157,12 +156,12 @@ const EditRecipe = () => {
                     <View style={styles.baseSubContainer}>
                         <Text style={styles.h1}>Instructions</Text>
                         <TextInput
-                            defaultValue={recipe?.instructions?.toString()}
+                            defaultValue={recipe?.instructions?.toString() || "N/A"}
                             onChangeText={(newText) => setInstructions(newText)}
                         />
                         <Button
-                            color='tomato'
-                            title='Add New Step'
+                            color="tomato"
+                            title="Add New Step"
                         />
                     </View>
                 </View>
@@ -172,19 +171,19 @@ const EditRecipe = () => {
                         <Text style={styles.h1}>Notes</Text>
                         <Text style={styles.h1}>Instructions</Text>
                         <TextInput
-                            defaultValue={recipe?.notes?.toString()}
+                            defaultValue={recipe?.notes?.toString() || "N/A"}
                             onChangeText={(newText) => setNotes(newText)}
                         />
                         <Button
-                            color='tomato'
-                            title='Add New Note'
+                            color="tomato"
+                            title="Add New Note"
                         />
                     </View>
                 </View>
 
                 <Button
-                    color='tomato'
-                    title='Save Recipe'
+                    color="tomato"
+                    title="Save Recipe"
                 />
             </ScrollView>
         </SafeAreaProvider>

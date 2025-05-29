@@ -5,14 +5,14 @@ import {
   Text,
   View
 } from "react-native";
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { useLocalSearchParams } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { GetRecipeById } from "../../controller";
-import IRecipe from "../../types/Recipe";
-import styles from '../../styles';
+import IRecipe from "@/types/Recipe";
+import styles from "../../styles";
 
 const Details = () => {
+  //establish connection to API to pull recipe data
   const apiUrl = "http://localhost:5000/api/recipe";
   const router = useRouter();
   const { id } = useLocalSearchParams();
@@ -30,7 +30,13 @@ const Details = () => {
     fetchRecipe();
   }, []);
 
-  const 
+  const goToRecipe = (recipeId: string) => {
+    router.replace("/recipe_details/[id]");
+    router.push({
+      pathname: "/recipe_details/edit",
+      params: { id: recipeId },
+    });
+  };
 
   return (
     <SafeAreaProvider>
@@ -106,9 +112,9 @@ const Details = () => {
         </View>
 
         <Button
-          color='tomato'
-          title='Edit Recipe'
-          onPress=
+          color="tomato"
+          title="Edit Recipe"
+          onPress={() => goToRecipe(recipe._id)}
         />
       </ScrollView>
     </SafeAreaProvider>
