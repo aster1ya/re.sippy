@@ -1,51 +1,41 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const cors = require('cors');
+const cors = require("cors");
 
-const mongoUrl = "mongodb+srv://baileythorp04:f8sGmijviZoztIKw@resippycluster.frsxfia.mongodb.net/resippydb?retryWrites=true&w=majority&appName=resippyCluster";
+const app = express();
 const port = 5000;
 
-//middleware to allow special requests to be made
-app.use(cors()); //needed for react native?
-app.use(express.json()); //allows JSON requests to be made 
+const mongoUrl = "mongodb+srv://baileythorp04:f8sGmijviZoztIKw@resippycluster.frsxfia.mongodb.net/resippydb?retryWrites=true&w=majority&appName=resippyCluster";
 
-//Connecting to MongoDB
-mongoose.connect(mongoUrl).then(() => {
-    console.log("database connected.");
-}).catch((e)=>{
-    console.log(e);
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Logging requests
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
 });
 
-//Basic Route (Test)
-app.get('/', (req, res) => {
-    res.send('Hello from backend!');
-  });
-  
-//Start the server
+// Connect to MongoDB
+mongoose.connect(mongoUrl)
+  .then(() => console.log("Database connected."))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
 
-//--- end of startup ---
+// Schemas
+const Recipe = require("./models/RecipeSchema");
+const User = require("./models/UserSchema");
 
-//Gets the exported RecipeDetails model from RecipeSchema.js
-const Recipe = require('./models/RecipeSchema');
+// Routes
+app.get("/", (req, res) => {
+  res.send("Hello from backend!");
+});
 
-const User = require('./models/UserSchema');
-
-
-
-
-// ####
-// #### Here you create GET and POST requests with a chosen url extension to make API calls with
-// ####
-
-
-
-//GET request to get all recipes
-//had to do /api/recipes instead of just /recipes because /recipes is already taken by the page recipes.tsx
-app.get('/api/recipes', async (req, res) => {
+app.get("/api/recipes", async (req, res) => {
   try {
     const recipes = await Recipe.find();
     res.json(recipes);
@@ -54,88 +44,75 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
-app.get('/api/recipe', async (req, res) => {
+app.get("/api/recipe", async (req, res) => {
   try {
-    const id = req.query.recipeId;
-
-    const recipes = await Recipe.find({_id : id});
-    console.log("real recipes:"+recipes)
-    res.json(recipes);
+    const { recipeId } = req.query;
+    const recipe = await Recipe.findById(recipeId);
+    res.json(recipe);
   } catch (err) {
-    console.log("real error: "+err.message)
+    console.error("Error fetching recipe:", err.message);
     res.status(500).json({ message: err.message });
   }
 });
 
+app.post("/api/recipes", async (req, res) => {
+  const { title, description, ingredients, instructions } = req.body;
 
-
-//POST request to create a recipe based on the request
-app.post('/api/recipes', async (req, res) => {
-  
-  //destructures the input (req.query) into useful variables
-  const { title, description, ingredients, instructions } = req.query;
-
-  //uses those variable to create a new recipe from the Recipe model
-    try {
-      const recipe = await Recipe.create({
-        title: title,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions,
-      })
-      res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
-    }
-    catch (e) {
-      res.send({error : e.message, success : false}) // sends an error if fails
-    }
-    });
-
-/*
-    Put something like this in the 'Body' part in Insomnia when testing
-    {
-      "title": "spaghetti",
-      "ingredients": "pasta and other things",
-      "instructions": "put it all together"
-    }
-
-	
-*/
-
-
-
-//search recipes by title, tags, author, or if favorited. You can only put in one of the search types and it'll only search by that.
-app.get('/api/search', async (req, res) => {
-  try{
-    console.log(req.query)
-    const {searchTerm = null, tags = null, userAuthorId = null, userFavoriteIds = null} = req.query
-    let query = {}
-
-
-    //each of the following conditions are added to the final query only if the variable is provided
-    //the final query gets recipes where all conditions are true 
-
-    if(searchTerm){ //recipes' title must contain the search term, case insensitive
-      query["title"] = { $regex: searchTerm, $options: "i" };
-    }
-
-    if(tags){//it must have all tags given
-      const tagsArray = Array.isArray(tags) ? tags : [tags] //turn categores into an array if it isnt already
-      query["tags"] = {$all: tagsArray};
-    }
-
-    if(userAuthorId){ //it recipe must have the given author (UNTESTED)
-      query["authorId"] = userAuthorId;
-    } 
-
-    if(userFavoriteIds){ //its id must be in the list of given favorites (UNTESTED)
-      query["_id"] = { $in: userFavoriteIds }
-    }
-    console.log("query:")
-    console.log(query)
-    const recipes = await Recipe.find(query);
-    res.json(recipes)
-    
-  }catch (e) {
-    res.send("ERROR"+e.message)
+  try {
+    const recipe = await Recipe.create({ title, description, ingredients, instructions });
+    res.json({ recipe, success: true });
+  } catch (err) {
+    res.json({ error: err.message, success: false });
   }
-})
+});
+
+app.delete("/api/recipes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Recipe.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Recipe not found" });
+    }
+
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete recipe", detail: err });
+  }
+});
+
+app.get("/api/search", async (req, res) => {
+  try {
+    const { searchTerm, q, tags, userAuthorId, userFavoriteIds } = req.query;
+
+    let query = {};
+
+    const keyword = q?.trim() || searchTerm?.trim();
+    if (keyword) {
+      query.title = { $regex: keyword, $options: "i" };
+    }
+
+    if (tags) {
+      const tagArray = Array.isArray(tags) ? tags : [tags];
+      query.tags = { $all: tagArray };
+    }
+
+    if (userAuthorId) {
+      query.authorId = userAuthorId;
+    }
+
+    if (userFavoriteIds) {
+      const ids = Array.isArray(userFavoriteIds)
+        ? userFavoriteIds
+        : [userFavoriteIds];
+      query._id = { $in: ids };
+    }
+
+    console.log("Search query:", query);
+    const results = await Recipe.find(query);
+    res.json(results);
+  } catch (err) {
+    console.error("Search error:", err.message);
+    res.status(500).send("Search failed: " + err.message);
+  }
+});

@@ -13,14 +13,13 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-//import styles from "../styles";
 import { CreateRecipeRequest } from "../controller";
 import styles from "../styles";
+
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
-  //All these useStates could probably be replaced by a single Recipe class
   const [title, setTitle] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [ingredients, setIngredients] = useState<string | null>(null);
@@ -38,12 +37,6 @@ const CreateRecipe = () => {
     Alert.alert("failed", "Recipe not created. Please enter a title");
   };
 
-  const getvalues = () => {
-    return [3, 7];
-  };
-
-  const [first, second] = getvalues();
-
   const UploadRecipe = async () => {
     const [success, recipe] = await CreateRecipeRequest(
       title,
@@ -55,7 +48,6 @@ const CreateRecipe = () => {
     if (success) {
       console.log("Recipe created: " + recipe.title);
       showCreatedRecipeAlert();
-
       router.replace("/book");
       router.push({
         pathname: "/recipe_details/[id]",
@@ -67,7 +59,6 @@ const CreateRecipe = () => {
     }
   };
 
-  //render the layout of the recipe creator
   return (
     <SafeAreaProvider>
       <ScrollView>
@@ -75,9 +66,11 @@ const CreateRecipe = () => {
           <View>
             <TextInput
               autoCapitalize="words"
-              defaultValue="New Recipe"
+              placeholder="New Recipe"
+              value={title ?? ""}
               inputMode="text"
               style={styles.createTitle}
+              onChangeText={setTitle}
             />
           </View>
 
@@ -123,25 +116,29 @@ const CreateRecipe = () => {
             <Text>Title</Text>
             <TextInput
               placeholder="title..."
-              onChangeText={(newText) => setTitle(newText)}
+              value={title ?? ""}
+              onChangeText={setTitle}
             />
 
             <Text>Description</Text>
             <TextInput
               placeholder="description..."
-              onChangeText={(newText) => setDescription(newText)}
+              value={description ?? ""}
+              onChangeText={setDescription}
             />
 
             <Text>Ingredients</Text>
             <TextInput
               placeholder="ingredients..."
-              onChangeText={(newText) => setIngredients(newText)}
+              value={ingredients ?? ""}
+              onChangeText={setIngredients}
             />
 
             <Text>Instructions</Text>
             <TextInput
               placeholder="instructions..."
-              onChangeText={(newText) => setInstructions(newText)}
+              value={instructions ?? ""}
+              onChangeText={setInstructions}
             />
 
             <Button title="Create Recipe" onPress={handleCreateRecipe} />
