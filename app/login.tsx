@@ -11,7 +11,6 @@ const Login = () => {
 
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-
   const [loginError, setLoginError] = useState("");
 
   const HandleSubmitLogin = () => {
@@ -24,16 +23,15 @@ const Login = () => {
         const user = userCredential.user;
         console.log("user Logged in with email: ", user.email);
 
-        //show login success alert, then go back to index
+        // ✅ 로그인 성공 후 loggedin.tsx로 이동
         ShowSuccessAlert(email);
-        router.back();
+        router.replace("/loggedin");
       })
       .catch((error) => {
         console.log("Login error");
         console.log(error.code);
         console.log(error.message);
 
-        //handle login errors
         switch (error.code) {
           case "auth/invalid-email":
           case "auth/missing-email":
@@ -42,9 +40,7 @@ const Login = () => {
             setLoginError("Email and password do not match.");
             break;
           default:
-            setLoginError(
-              "Unhandled error: " + error.code + " " + error.message
-            );
+            setLoginError("Unhandled error: " + error.code + " " + error.message);
             break;
         }
       });

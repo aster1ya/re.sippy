@@ -37,7 +37,7 @@ const images = [
 import { auth } from "../backend/firebaseConfig";
 import { User } from "firebase/auth";
 
-const Index = () => {
+const LoggedIn = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
 
   const [recipes, setRecipes] = useState([]);
@@ -110,6 +110,7 @@ const Index = () => {
       .signOut()
       .then(() => {
         console.log("signed out");
+        router.replace("/");
       })
       .catch((error) => {
         console.log("sign out error: ", error.message);
@@ -129,7 +130,7 @@ const Index = () => {
 
       <View style={[styles.indexTopSection, { backgroundColor: "#417023" }]}>
         <Text style={[styles.indexAppName, { color: theme.textColor }]}>re.sippy</Text>
-        <Text style={[styles.indexTagline, { color: theme.subTextColor }]}>Not Logged In</Text>
+        <Text style={[styles.indexTagline, { color: theme.subTextColor }]}>Logged in as {currentUser?.email}</Text>
 
         <View
           style={[
@@ -173,13 +174,8 @@ const Index = () => {
               style={{ marginHorizontal: 6 }}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push("/login")}>
-            <Ionicons
-              name="person-circle-outline"
-              size={32}
-              color={theme.iconColor}
-              style={{ marginHorizontal: 6 }}
-            />
+          <TouchableOpacity>
+            <Button title={"Sign\nout"} onPress={handleSignOut} />
           </TouchableOpacity>
         </View>
       </View>
@@ -202,6 +198,17 @@ const Index = () => {
         ) : (
           <Text style={{ color: theme.subTextColor }}>Loading...</Text>
         )}
+      </View>
+
+      <View style={[styles.indexTabContainer, { backgroundColor: theme.tabBg }]}>
+        <Link href="/book" style={styles.indexTabButton}>
+          <Ionicons name="book" size={24} color={theme.iconColor} />
+          <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>Recipe Book</Text>
+        </Link>
+        <Link href="/create" style={styles.indexTabButton}>
+          <Ionicons name="restaurant" size={24} color={theme.iconColor} />
+          <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>Create Recipe</Text>
+        </Link>
       </View>
     </SafeAreaView>
   );
@@ -229,4 +236,4 @@ const darkTheme = {
   iconColor: "#fff",
 };
 
-export default Index;
+export default LoggedIn;
