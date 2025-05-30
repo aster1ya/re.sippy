@@ -178,10 +178,12 @@ const CreateRecipe = () => {
               placeholder="Ingredients"
               onChangeText={(newText) => setIngredients(newText)}
             />
+            {/* 
             <Button
               color="tomato"
               title="Add New Ingredient"
             />
+            */}
           </View>
         </View>
           
@@ -192,10 +194,12 @@ const CreateRecipe = () => {
               placeholder="Instructions"
               onChangeText={(newText) => setInstructions(newText)}
             />
+            {/* 
             <Button
               color="tomato"
               title="Add New Step"
             />
+            */}
           </View>
         </View>
 
@@ -206,10 +210,12 @@ const CreateRecipe = () => {
                 placeholder="Note"
                 onChangeText={(newText) => setNotes(newText)}
               />
+              {/* 
               <Button
                 color="tomato"
                 title="Add New Note"
               />
+              */}
           </View>
         </View>
 

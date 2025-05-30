@@ -45,8 +45,34 @@ const EditRecipe = () => {
         fetchRecipe();
     }, []);
 
+    const showUpdatedRecipeAlert = () => {
+        Alert.alert("success", "Recipe has been successfully updated.");
+    }
+
+    const showFailedToUpdateAlert = () => {
+        Alert.alert("failed", "Recipe has not been updated. Please try again.");
+    }
+
+    const UploadRecipe = async () => {
+        const newRecipe : IRecipe = {
+          title: title,
+          authorId: authorId,
+          mealType: mealType,
+          prepTime: prepTime,
+          cookTime: cookTime,
+          totalTime: totalTime,
+          servings: servings,
+          description: description,
+          ingredients: ingredients,
+          instructions: instructions,
+          notes: notes,
+          tags: [""],
+        }
+        //
+    }
+
     //for a (potential) function to dynamically add TextInput components
-    const [inputRow, setInputRow] = useState([]);
+    //const [inputRow, setInputRow] = useState([]);
 
     //render the layout of the recipe editor
     return (
@@ -131,10 +157,12 @@ const EditRecipe = () => {
                             defaultValue={recipe?.description?.toString() || "N/A"}
                             onChangeText={(newText) => setDescription(newText)}
                         />
+                        {/* 
                         <Button
                             color="tomato"
                             title="Add New Description"
                         />
+                        */}
                     </View>
                 </View>
 
@@ -145,10 +173,12 @@ const EditRecipe = () => {
                             defaultValue={recipe?.ingredients?.toString() || "N/A"}
                             onChangeText={(newText) => setIngredients(newText)}
                         />
+                        {/*
                         <Button
                             color="tomato"
                             title="Add New Ingredient"
                         />
+                        */}
                     </View>
                 </View>
 
@@ -159,10 +189,12 @@ const EditRecipe = () => {
                             defaultValue={recipe?.instructions?.toString() || "N/A"}
                             onChangeText={(newText) => setInstructions(newText)}
                         />
+                        {/*
                         <Button
                             color="tomato"
                             title="Add New Step"
                         />
+                        */}
                     </View>
                 </View>
 
@@ -174,16 +206,19 @@ const EditRecipe = () => {
                             defaultValue={recipe?.notes?.toString() || "N/A"}
                             onChangeText={(newText) => setNotes(newText)}
                         />
+                        {/*
                         <Button
                             color="tomato"
                             title="Add New Note"
                         />
+                        */}
                     </View>
                 </View>
 
                 <Button
                     color="tomato"
                     title="Save Recipe"
+                    //onPress=
                 />
             </ScrollView>
         </SafeAreaProvider>
