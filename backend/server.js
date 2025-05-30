@@ -58,8 +58,8 @@ app.get('/api/recipe', async (req, res) => {
   try {
     const id = req.query.recipeId;
 
-    const recipes = await Recipe.find({_id : id});
-    res.json(recipes);
+    const recipe = (await Recipe.find({_id : id}))[0];
+    res.json(recipe);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -182,8 +182,11 @@ app.post("/api/recipe/favorite", async (req, res) => {
     
     const user = await User.findOne({ "firebaseUID" : UID })
     const favoriteIds = user.favoriteRecipeIds;
-    
-    console.log("Found user uid:" + user.firebaseUID);
+    if (user == null | user == undefined){
+      console.log("Found user not found");
+      
+    }
+    console.log("Found user uid: " + user.firebaseUID);
 
     const index = user.favoriteRecipeIds.indexOf(recipeId);
     if (index > -1) {

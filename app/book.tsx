@@ -7,6 +7,7 @@ import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
 import styles from "../styles";
+import { auth } from "@/backend/firebaseConfig";
 
 const book = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
@@ -36,9 +37,14 @@ const book = () => {
     <ScrollView>
       <Text style={styles.bookTitle}>All Recipes</Text>
       <RecipeList recipes={recipes} />
-      <Link href="/favorites" style={styles.hyperlink}>
-        Go To Favorites
-      </Link>
+
+      {auth.currentUser ? (
+        <Link href="/favorites" style={styles.hyperlink}>
+          Go To Favorites
+        </Link>
+      ) : (
+        <Text>Login to view favorites</Text>
+      )}
     </ScrollView>
   );
 };

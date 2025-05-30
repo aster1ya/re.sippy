@@ -9,6 +9,7 @@ import {
   CheckIfFavorited,
 } from "../../controller";
 import FavoriteStar from "@/components/FavoriteStar";
+import { auth } from "@/backend/firebaseConfig";
 
 const Details = () => {
   const apiUrl = "http://localhost:5000/api/recipe";
@@ -61,11 +62,15 @@ const Details = () => {
       <Text>Description: {recipe?.description}</Text>
       <Text>Ingredients: {recipe?.ingredients}</Text>
       <Text>Instructions: {recipe?.instructions}</Text>
-      <FavoriteStar
-        recipeId={recipeId}
-        uid={uid}
-        isFavorited={favorited}
-      ></FavoriteStar>
+      {auth.currentUser ? (
+        <FavoriteStar
+          recipeId={recipeId}
+          uid={uid}
+          isFavorited={favorited}
+        ></FavoriteStar>
+      ) : (
+        <Text></Text>
+      )}
     </View>
   );
 };
