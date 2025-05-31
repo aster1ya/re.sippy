@@ -8,11 +8,14 @@ import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
 import { auth } from "../backend/firebaseConfig";
 import styles from "../styles";
+import { useIsFocused } from "@react-navigation/native";
 
 const favorites = () => {
   const [recipeList, setRecipeList] = useState<IRecipe[]>([]);
+  const isFocused = useIsFocused();
 
   const getFavoriteRecipes = async () => {
+    console.log("aaaaaa");
     if (auth.currentUser) {
       const recipes = await SearchRecipes({
         favoriteUserId: auth.currentUser.uid,
@@ -23,13 +26,17 @@ const favorites = () => {
     }
   };
 
-  useFocusEffect(() => {
+  useEffect(() => {
     getFavoriteRecipes();
-  });
+  }, [isFocused]);
 
   return (
     <ScrollView>
-      <RecipeList recipes={recipeList} />
+      {recipeList.length == 0 ? (
+        <Text>You have no favorite recipes</Text>
+      ) : (
+        <RecipeList recipes={recipeList} />
+      )}
     </ScrollView>
   );
 };
