@@ -72,35 +72,19 @@ app.get('/api/recipe', async (req, res) => {
 //POST request to create a recipe based on the request
 app.post('/api/recipes', async (req, res) => {
   
-  //destructures the input (req.query) into useful variables
-  const { title, description, ingredients, instructions } = req.query;
+  try {
+    const { recipe } = req.body;
 
-  //uses those variable to create a new recipe from the Recipe model
-    try {
-      const recipe = await Recipe.create({
-        title: title,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions,
-      })
-      res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
-    }
-    catch (e) {
-      res.send({error : e.message, success : false}) // sends an error if fails
-    }
-    });
+    const mongoRecipe = new Recipe(recipe)
 
-/*
-    Put something like this in the 'Body' part in Insomnia when testing
-    {
-      "title": "spaghetti",
-      "ingredients": "pasta and other things",
-      "instructions": "put it all together"
-    }
-
-	
-*/
-
+    const createdRecipe = await mongoRecipe.save()
+    res.send({recipe : createdRecipe, success : true}) // send a copy of the created recipe after it is created
+  }
+  catch (e) {
+    console.log("recipe creation error: "+e.message)
+    res.send({error : e.message, success : false}) // sends an error if fails
+  }
+  });
 
 
 //search recipes by title, tags, author, or if favorited. You can only put in one of the search types and it'll only search by that.

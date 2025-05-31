@@ -5,20 +5,20 @@ const mongoose = require('mongoose')
 //#################################################################################################
 
 const RecipeSchema = new mongoose.Schema({
-    //note: default values aren't applied because recipe creation currently hsa them defined with null. Defaults only applies if undefiend.
-    title: { type: String, required: true, default: "default recipe title"},
+    //note: default values are currently being handled through the controller, not this or types/IRecipe
+    title: { type: String, required: true},
     description: {type: String, default: "default description" },
-    ingredients: { type: String, default: "default ingredients" },
-    instructions: { type: String, default: "default instructions" },
+    ingredients: { type: String, required: true},
+    instructions: { type: String, required: true},
 
-    authorId: {type: String, required: false },
+    authorId: {type: String, required: true },
 
-    rating: { type: Number },
-    difficulty: { type: String },
-    cookTime: { type: String },
+    rating: { type: Number, default: 3 },
+    difficulty: { type: String, default: "default difficulty"  },
+    cookTime: { type: String, default: "default cook time"  },
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
-    tags: { type: [String] },
+    tags: { type: [String], default: [] },
 
 
 

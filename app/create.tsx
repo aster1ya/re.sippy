@@ -15,47 +15,64 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 //import styles from "../styles";
 import { CreateRecipeRequest } from "../controller";
 import styles from "../styles";
+import { auth } from "@/backend/firebaseConfig";
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
+  //good candidate for code review here ############
+  //the whole deal of passing variables from here to controller could be done better: allow for undefined the whole way? To do that, ditch having IRecipe as the interface when calling CreateRecipeRequest. Just have it be a bunch of variables which may be undefined and have the default values of IRecipe catch the undefined (but you still have to catch null and "" yourself)
+
   //All these useStates could probably be replaced by a single Recipe class
-  const [title, setTitle] = useState<string | null>(null);
-  const [description, setDescription] = useState<string | null>(null);
-  const [ingredients, setIngredients] = useState<string | null>(null);
-  const [instructions, setInstructions] = useState<string | null>(null);
-  const [tags, setTags] = useState<string[] | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [ingredients, setIngredients] = useState<string>("");
+  const [instructions, setInstructions] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [cookTime, setCookTime] = useState<string>("");
+  const [rating, setRating] = useState<number>();
+  const [difficulty, setDifficulty] = useState<string>("");
 
   const handleCreateRecipe = () => {
-    //update array here specifically
-    (tagList: React.SetStateAction<string[] | null>) => setTags(tagList);
     UploadRecipe();
   };
 
   const showCreatedRecipeAlert = () => {
-    Alert.alert("success", "Recipe has been successfully created");
+    Alert.alert("Success", "Recipe has been successfully created");
   };
 
-  const showFailedToCreateRecipeAlert = () => {
-    Alert.alert("failed", "Recipe not created. Please enter a title");
+  const showFailedToCreateRecipeAlert = (message: string) => {
+    Alert.alert("Failed to create recipe", "Recipe not created. " + message);
   };
 
-  const getvalues = () => {
-    return [3, 7];
+  const updateTagList = (checked: boolean, tag: string) => {
+    let newTags = [...tags];
+
+    if (checked) {
+      if (!tags.includes(tag)) {
+        newTags.push(tag);
+        setTags(newTags);
+      }
+    } else {
+      newTags = newTags.filter((item) => item != tag);
+      setTags(newTags);
+    }
   };
-
-  let tagList: string[] = [];
-
-  const [first, second] = getvalues();
 
   const UploadRecipe = async () => {
-    const [success, recipe] = await CreateRecipeRequest(
-      title,
-      description,
-      ingredients,
-      instructions,
-      tags
-    );
+    const authorId = auth.currentUser ? auth.currentUser.uid : "";
+
+    const { success, recipe, missingFields } = await CreateRecipeRequest({
+      title: title,
+      description: description,
+      ingredients: ingredients,
+      instructions: instructions,
+      authorId: authorId,
+      tags: tags,
+      cookTime: cookTime,
+      difficulty: difficulty,
+      rating: rating,
+    });
 
     if (success) {
       console.log("Recipe created: " + recipe.title);
@@ -67,7 +84,13 @@ const CreateRecipe = () => {
         params: { id: recipe._id },
       });
     } else {
-      showFailedToCreateRecipeAlert();
+      if (missingFields.length > 0) {
+        let message =
+          "Please fill the following fields:\n" + missingFields.join(", ");
+        showFailedToCreateRecipeAlert(message);
+      } else {
+        showFailedToCreateRecipeAlert("backend error");
+      }
       console.log("Recipe not created");
     }
   };
@@ -150,16 +173,44 @@ const CreateRecipe = () => {
             />
 
             <Text>Tags</Text>
-            <BouncyCheckbox text="Savoury" 
-                            textStyle={{ fontSize:14, textDecorationLine: "none" }} 
-                            textContainerStyle={{ marginVertical:5}}
-                            onPress={(isChecked: boolean) => {isChecked?tagList.push('Savoury'):tagList.splice(tagList.indexOf('Savoury'),1),console.log(tagList)}}>
-            </BouncyCheckbox>
-            <BouncyCheckbox text="Sweet" 
-                            textStyle={{ fontSize:14, textDecorationLine: "none" }} 
-                            textContainerStyle={{ marginVertical:5}}
-                            onPress={(isChecked: boolean) => {isChecked?tagList.push('Sweet'):tagList.splice(tagList.indexOf('Sweet'),1),console.log(tagList)}}>
-            </BouncyCheckbox>
+            <BouncyCheckbox
+              text="Vegetarian"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Vegetarian")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Vegan"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Vegan")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Gluten Free"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Gluten Free")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Halal"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Halal")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text=" "
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) => updateTagList(isChecked, " ")}
+            ></BouncyCheckbox>
             <Button title="Create Recipe" onPress={handleCreateRecipe} />
           </View>
         </View>

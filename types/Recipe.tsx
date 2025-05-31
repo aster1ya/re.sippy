@@ -3,16 +3,16 @@
 //Should really use 'string' instead of 'String' but im sure its fine
 
 export default interface IRecipe {
-  _id: string;
+  _id?: string;
   title: String;
-  description?: String;
-  ingredients?: String;
+  description: String;
+  ingredients: String;
   instructions?: String;
 
   authorId: string;
 
-  rating: Number;
-  difficulty: String;
-  cookTime: String;
-  tags: [String];
+  rating?: Number;
+  difficulty?: String;
+  cookTime?: String;
+  tags: string[]; //should be string() ?
 }
