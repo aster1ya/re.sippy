@@ -37,18 +37,32 @@ const CreateRecipe = () => {
     UploadRecipe();
   };
 
-  const showCreatedRecipeAlert = () => {
-    Alert.alert("Success", "Recipe has been successfully created");
+  const showCreatedRecipeAlert = (newRecipeId: string) => {
+    Alert.alert("Success", "Recipe has been successfully created.", [
+      {
+        text: "View Recipe",
+        onPress: () => {
+          router.push("/book");
+          router.push({
+            pathname: "/recipe_details/[id]",
+            params: { id: newRecipeId },
+          });
+        },
+      },
+      {
+        text: "OK",
+      },
+    ]);
   };
 
   const showFailedToCreateRecipeAlert = (message: string) => {
     Alert.alert("Failed to create recipe", "Recipe not created. " + message);
   };
 
-  const updateTagList = (checked: boolean, tag: string) => {
+  const updateTagList = (enable: boolean, tag: string) => {
     let newTags = [...tags];
 
-    if (checked) {
+    if (enable) {
       if (!tags.includes(tag)) {
         newTags.push(tag);
         setTags(newTags);
@@ -76,13 +90,8 @@ const CreateRecipe = () => {
 
     if (success) {
       console.log("Recipe created: " + recipe.title);
-      showCreatedRecipeAlert();
-
-      router.replace("/book");
-      router.push({
-        pathname: "/recipe_details/[id]",
-        params: { id: recipe._id },
-      });
+      router.back();
+      showCreatedRecipeAlert(recipe._id);
     } else {
       if (missingFields.length > 0) {
         let message =
@@ -172,6 +181,18 @@ const CreateRecipe = () => {
               onChangeText={(newText) => setInstructions(newText)}
             />
 
+            <Text>CookTime</Text>
+            <TextInput
+              placeholder="cooktime..."
+              onChangeText={(newText) => setCookTime(newText)}
+            />
+
+            <Text>Difficulty</Text>
+            <TextInput
+              placeholder="difficulty..."
+              onChangeText={(newText) => setDifficulty(newText)}
+            />
+
             <Text>Tags</Text>
             <BouncyCheckbox
               text="Vegetarian"
@@ -204,12 +225,6 @@ const CreateRecipe = () => {
               onPress={(isChecked: boolean) =>
                 updateTagList(isChecked, "Halal")
               }
-            ></BouncyCheckbox>
-            <BouncyCheckbox
-              text=" "
-              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
-              textContainerStyle={{ marginVertical: 5 }}
-              onPress={(isChecked: boolean) => updateTagList(isChecked, " ")}
             ></BouncyCheckbox>
             <Button title="Create Recipe" onPress={handleCreateRecipe} />
           </View>
