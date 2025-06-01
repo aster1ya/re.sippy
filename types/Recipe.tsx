@@ -7,18 +7,15 @@ export default interface IRecipe {
   title: string;
 
   authorId: string;
-  mealType: string;
-  prepTime: string;
-  cookTime: string;
-  totalTime: string;
-  servings: string;
+  mealType?: string;
+  prepTime?: string;
+  cookTime?: string;
+  servings?: string;
 
   description?: string;
-  ingredients?: string;
-  instructions?: string;
+  ingredients: string;
+  instructions: string;
   notes?: string;
 
-  cookTime?: string;
   tags: string[];
-
 }

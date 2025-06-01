@@ -21,7 +21,6 @@ const EditRecipe = () => {
   const [mealType, setType] = useState<string>("");
   const [prepTime, setPrep] = useState<string>("");
   const [cookTime, setCook] = useState<string>("");
-  const [totalTime, setTotal] = useState<string>("");
   const [servings, setServe] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [ingredients, setIngredients] = useState<string>("");
@@ -57,7 +56,6 @@ const EditRecipe = () => {
       mealType: mealType,
       prepTime: prepTime,
       cookTime: cookTime,
-      totalTime: totalTime,
       servings: servings,
       description: description,
       ingredients: ingredients,
@@ -132,15 +130,6 @@ const EditRecipe = () => {
                   />
                 </View>
                 <View style={styles.infoSection}>
-                  <Text style={styles.infoLabel}>Total Time</Text>
-                  <TextInput
-                    defaultValue={recipe?.totalTime || "N/A"}
-                    inputMode="text"
-                    onChangeText={(newText) => setTotal(newText)}
-                    style={styles.infoField}
-                  />
-                </View>
-                <View style={styles.infoSection}>
                   <Text style={styles.infoLabel}>Servings</Text>
                   <TextInput
                     defaultValue={recipe?.servings || "0"}
@@ -160,12 +149,6 @@ const EditRecipe = () => {
                 defaultValue={recipe?.description || "N/A"}
                 onChangeText={(newText) => setDescription(newText)}
               />
-              {/* 
-                        <Button
-                            color="tomato"
-                            title="Add New Description"
-                        />
-                        */}
             </View>
           </View>
 
@@ -204,7 +187,6 @@ const EditRecipe = () => {
           <View style={styles.baseContainer}>
             <View style={styles.baseSubContainer}>
               <Text style={styles.h1}>Notes</Text>
-              <Text style={styles.h1}>Instructions</Text>
               <TextInput
                 defaultValue={recipe?.notes || "N/A"}
                 onChangeText={(newText) => setNotes(newText)}

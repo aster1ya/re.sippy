@@ -75,23 +75,6 @@ app.post("/api/recipes", async (req, res) => {
   try {
     const { recipe } = req.body;
 
-    const recipe = await Recipe.create(recipe)
-    res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
-    }
-  catch (e) {
-    res.send({error : e.message, success : false}) // sends an error if fails
-  }
-});
-
-/*
-    Put something like this in the 'Body' part in Insomnia when testing
-    {
-      "title": "spaghetti",
-      "ingredients": "pasta and other things",
-      "instructions": "put it all together"
-    }
-
-
     const mongoRecipe = new Recipe(recipe)
 
     const createdRecipe = await mongoRecipe.save()

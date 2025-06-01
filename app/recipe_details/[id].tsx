@@ -68,11 +68,6 @@ const Details = () => {
               </View>
 
               <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Total Time</Text>
-                <Text>{recipe?.totalTime}</Text>
-              </View>
-
-              <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Servings</Text>
                 <Text>{recipe?.servings}</Text>
               </View>

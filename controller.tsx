@@ -38,36 +38,45 @@ export const GetRecipeById = async (id: string) => {
   }
 };
 
-const TrimAndSetToDefault = (input: string | String, defaultValue: string) => {
-  let output = input.trim();
-  if (!output) {
-    output = defaultValue;
+const TrimOrSetToDefault = (
+  input: string | String | undefined,
+  defaultValue: string
+) => {
+  if (input === undefined) {
+    return defaultValue;
+  } else {
+    let output = input.trim();
+    if (!output) {
+      return defaultValue;
+    }
+    return output;
   }
-  return output;
 };
 
 //creates recipe. returns if it was successful or not. for create page.
 
 export const CreateRecipeRequest = async ({
   title,
+  authorId,
+  mealType,
+  prepTime,
+  cookTime,
+  servings,
   description,
   ingredients,
-  instructions = "default instructions 2",
+  instructions,
+  notes,
   tags,
-  authorId,
-  cookTime = "default cooktime 2",
-  difficulty = "default difficulty 2",
-  rating,
 }: IRecipe) => {
   try {
-    description = TrimAndSetToDefault(description, "default description");
+    mealType = TrimOrSetToDefault(mealType, "default mealType");
+    prepTime = TrimOrSetToDefault(prepTime, "default prepTime");
+    cookTime = TrimOrSetToDefault(cookTime, "default cookTime");
+    servings = TrimOrSetToDefault(servings, "2");
+    description = TrimOrSetToDefault(description, "default description");
+    notes = TrimOrSetToDefault(notes, "default notes");
     if (!tags) {
       tags = [];
-    }
-    cookTime = TrimAndSetToDefault(cookTime, "default cooktime");
-    difficulty = TrimAndSetToDefault(cookTime, "default difficulty");
-    if (!rating) {
-      rating = 3;
     }
 
     //throw error if mandatory field is missing
@@ -94,15 +103,16 @@ export const CreateRecipeRequest = async ({
     }
 
     const recipe: IRecipe = {
-      title: title.trim(),
-      description: description.trim(),
-      ingredients: ingredients.trim(),
-      instructions: instructions?.trim(),
-      tags: tags,
+      title: title,
       authorId: authorId,
-      cookTime: cookTime.trim(),
-      difficulty: difficulty.trim(),
-      rating: rating,
+      mealType: mealType,
+      prepTime: prepTime,
+      cookTime: cookTime,
+      description: description,
+      ingredients: ingredients,
+      instructions: instructions,
+      notes: notes,
+      tags: tags,
     };
 
     const response = await axios.post(apiUrl + "/recipes", { recipe: recipe });

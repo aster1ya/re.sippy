@@ -15,11 +15,10 @@ const RecipeSchema = new mongoose.Schema({
 
     authorId: {type: String, required: true },
       
-    mealType: { type: String, required: false },
-    prepTime: { type: String, required: false },
-    cookTime: { type: String, required: false },
-    totalTime: { type: String, required: false },
-    servings: { type: String, required: true, default: "1" },
+    mealType: { type: String },
+    prepTime: { type: String },
+    cookTime: { type: String },
+    servings: { type: String, default: "1" },
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
     tags: { type: [String], default: [] },
