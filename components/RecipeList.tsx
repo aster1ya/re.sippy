@@ -26,7 +26,12 @@ const RecipeList = ({ recipes, title }: RecipeListProps) => {
             <Text style={styles.header}>{recipe.title}</Text>
             <Button
               title="View Recipe"
-              onPress={() => goToRecipe(recipe._id)}
+              onPress={() =>
+                goToRecipe(
+                  recipe._id ||
+                    "recipe.id will never be undefined so this is just for error suppression"
+                )
+              }
             />
           </View>
           <Text>{recipe.description}</Text>

@@ -1,18 +1,24 @@
-//THIS MUST BE IDENTICAL TO backend/models/RecipeSchema BUT WITH ONLY THE TYPES DEFINED
-
-//Should really use 'string' instead of 'String' but im sure its fine
+//######################################################################################
+//THIS MUST BE IDENTICAL TO backend/models/RecipeSchema BUT WITH ONLY THE TYPES DEFINED.
+//######################################################################################
 
 export default interface IRecipe {
   _id?: string;
-  title: String;
-  description: String;
-  ingredients: String;
-  instructions?: String;
+  title: string;
 
   authorId: string;
+  mealType: string;
+  prepTime: string;
+  cookTime: string;
+  totalTime: string;
+  servings: string;
 
-  rating?: Number;
-  difficulty?: String;
-  cookTime?: String;
-  tags: string[]; //should be string() ?
+  description?: string;
+  ingredients?: string;
+  instructions?: string;
+  notes?: string;
+
+  cookTime?: string;
+  tags: string[];
+
 }

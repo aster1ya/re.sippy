@@ -26,7 +26,10 @@ export const GetRecipeById = async (id: string) => {
         recipeId: id,
       },
     });
+
     const recipe = response.data[0];
+    console.log("controller recipe: ");
+    console.log(recipe);
     return recipe;
   } catch (error) {
     console.log("failed to get recipe by id");
@@ -44,6 +47,7 @@ const TrimAndSetToDefault = (input: string | String, defaultValue: string) => {
 };
 
 //creates recipe. returns if it was successful or not. for create page.
+
 export const CreateRecipeRequest = async ({
   title,
   description,
