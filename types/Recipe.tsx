@@ -18,5 +18,7 @@ export default interface IRecipe {
   instructions?: string;
   notes?: string;
 
-  tags: [string];
+  cookTime?: string;
+  tags: string[];
+
 }

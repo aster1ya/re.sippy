@@ -38,18 +38,84 @@ export const GetRecipeById = async (id: string) => {
   }
 };
 
-//creates recipe. returns if it was successful or not. for create page.
-export const CreateRecipeRequest = async (recipe: IRecipe | null) => {
-  try {
-    const response = await axios.post(apiUrl + "/recipes", {
-      recipe: recipe,
-    });
+const TrimAndSetToDefault = (input: string | String, defaultValue: string) => {
+  let output = input.trim();
+  if (!output) {
+    output = defaultValue;
+  }
+  return output;
+};
 
-    return [response.data.success, response.data.recipe];
+//creates recipe. returns if it was successful or not. for create page.
+
+export const CreateRecipeRequest = async ({
+  title,
+  description,
+  ingredients,
+  instructions = "default instructions 2",
+  tags,
+  authorId,
+  cookTime = "default cooktime 2",
+  difficulty = "default difficulty 2",
+  rating,
+}: IRecipe) => {
+  try {
+    description = TrimAndSetToDefault(description, "default description");
+    if (!tags) {
+      tags = [];
+    }
+    cookTime = TrimAndSetToDefault(cookTime, "default cooktime");
+    difficulty = TrimAndSetToDefault(cookTime, "default difficulty");
+    if (!rating) {
+      rating = 3;
+    }
+
+    //throw error if mandatory field is missing
+    title = title.trim();
+    ingredients = ingredients.trim();
+    instructions = instructions.trim();
+
+    let missingFields = [];
+    if (!title) {
+      missingFields.push("Title");
+    }
+    if (!ingredients) {
+      missingFields.push("Ingredients");
+    }
+    if (!instructions) {
+      missingFields.push("Instructions");
+    }
+    if (!authorId) {
+      missingFields.push("AuthorId (oops you aint logged in)");
+    }
+
+    if (missingFields.length > 0) {
+      return { success: false, recipe: null, missingFields: missingFields };
+    }
+
+    const recipe: IRecipe = {
+      title: title.trim(),
+      description: description.trim(),
+      ingredients: ingredients.trim(),
+      instructions: instructions?.trim(),
+      tags: tags,
+      authorId: authorId,
+      cookTime: cookTime.trim(),
+      difficulty: difficulty.trim(),
+      rating: rating,
+    };
+
+    const response = await axios.post(apiUrl + "/recipes", { recipe: recipe });
+
+    return {
+      success: response.data.success,
+      recipe: response.data.recipe,
+      missingFields: [],
+    };
   } catch (error) {
     console.log("failed to create recipe");
     console.log(error);
-    return [false, null];
+    return { success: false, recipe: null, missingFields: [] };
   }
 };
 

@@ -5,23 +5,24 @@ const mongoose = require("mongoose")
 //#################################################################################################
 
 const RecipeSchema = new mongoose.Schema({
-    //note: default values aren't applied because recipe creation currently has them defined with null. Defaults only applies if undefiend.
-    title: { type: String, required: true, default: "New Recipe" },
 
-    authorId: { type: String, required: false },
+    //note: default values are currently being handled through the controller, not this or types/IRecipe
+    title: { type: String, required: true},
+    description: {type: String, default: "default description" },
+    ingredients: { type: String, required: true},
+    instructions: { type: String, required: true},
+    notes: { type: String, default: "No Notes Available" },
+
+    authorId: {type: String, required: true },
+      
     mealType: { type: String, required: false },
     prepTime: { type: String, required: false },
     cookTime: { type: String, required: false },
     totalTime: { type: String, required: false },
     servings: { type: String, required: true, default: "1" },
 
-    description: { type: String, default: "No Description Available" },
-    ingredients: { type: String, default: "No Ingredients Available" },
-    instructions: { type: String, default: "No Instructions Available" },
-    notes: { type: String, default: "No Notes Available" },
-
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
-    tags: { type: [String] },
+    tags: { type: [String], default: [] },
   });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

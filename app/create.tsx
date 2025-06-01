@@ -14,43 +14,74 @@ import axios from "axios";
 import IRecipe from "@/types/Recipe";
 import styles from "../styles";
 
+import { auth } from "@/backend/firebaseConfig";
 const CreateRecipe = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
+
+  //good candidate for code review here ############
+  //the whole deal of passing variables from here to controller could be done better: allow for undefined the whole way? To do that, ditch having IRecipe as the interface when calling CreateRecipeRequest. Just have it be a bunch of variables which may be undefined and have the default values of IRecipe catch the undefined (but you still have to catch null and "" yourself)
+        
   //all these useStates could probably be replaced by a single Recipe class
-  const [title, setTitle] = useState<String>("");
-  const [authorId, setAuthor] = useState<String>("");
-  const [mealType, setType] = useState<String>("");
-  const [prepTime, setPrep] = useState<String>("");
-  const [cookTime, setCook] = useState<String>("");
-  const [totalTime, setTotal] = useState<String>("");
-  const [servings, setServe] = useState<String>("");
-  const [description, setDescription] = useState<String>("");
-  const [ingredients, setIngredients] = useState<String>("");
-  const [instructions, setInstructions] = useState<String>("");
-  const [notes, setNotes] = useState<String>("");
+  const [title, setTitle] = useState<string>("");
+  const [authorId, setAuthor] = useState<string>("");
+  const [mealType, setType] = useState<string>("");
+  const [prepTime, setPrep] = useState<string>("");
+  const [cookTime, setCook] = useState<string>("");
+  const [totalTime, setTotal] = useState<string>("");
+  const [servings, setServe] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [ingredients, setIngredients] = useState<string>("");
+  const [instructions, setInstructions] = useState<string>("");
+  const [notes, setNotes] = useState<string>("");
 
   const handleCreateRecipe = () => {
     UploadRecipe();
   };
 
-  const showCreatedRecipeAlert = () => {
-    Alert.alert("success", "Recipe has been successfully created.");
+
+  const showCreatedRecipeAlert = (newRecipeId: string) => {
+    Alert.alert("Success", "Recipe has been successfully created.", [
+      {
+        text: "View Recipe",
+        onPress: () => {
+          router.push("/book");
+          router.push({
+            pathname: "/recipe_details/[id]",
+            params: { id: newRecipeId },
+          });
+        },
+      },
+      {
+        text: "OK",
+      },
+    ]);
   };
 
-  const showFailedToCreateRecipeAlert = () => {
-    Alert.alert("failed", "Recipe has not been created. Please enter a title.");
+  const showFailedToCreateRecipeAlert = (message: string) => {
+    Alert.alert("Failed to create recipe", "Recipe not created. " + message);
   };
 
-  const getvalues = () => {
-    return [3, 7];
-  };
+  const updateTagList = (enable: boolean, tag: string) => {
+    let newTags = [...tags];
 
-  const [first, second] = getvalues();
+    if (enable) {
+      if (!tags.includes(tag)) {
+        newTags.push(tag);
+        setTags(newTags);
+      }
+    } else {
+      newTags = newTags.filter((item) => item != tag);
+      setTags(newTags);
+    }
+  };
 
   const UploadRecipe = async () => {
-    const newRecipe : IRecipe = {
+    
+    const authorId = auth.currentUser ? auth.currentUser.uid : "";
+
+    const { success, recipe, missingFields } = await CreateRecipeRequest({
       title: title,
       authorId: authorId,
       mealType: mealType,
@@ -63,21 +94,22 @@ const CreateRecipe = () => {
       instructions: instructions,
       notes: notes,
       tags: [""],
-    }
-    const [success, recipe] = await CreateRecipeRequest(newRecipe);
+      
+    });
 
     if (success) {
-      console.log("Recipe created: " + recipe.title + ".");
-      showCreatedRecipeAlert();
-
-      router.replace("/book");
-      router.push({
-        pathname: "/recipe_details/[id]",
-        params: { id: recipe._id },
-      });
+      console.log("Recipe created: " + recipe.title);
+      router.back();
+      showCreatedRecipeAlert(recipe._id);
     } else {
-      showFailedToCreateRecipeAlert();
-      console.log("Recipe was not created.");
+      if (missingFields.length > 0) {
+        let message =
+          "Please fill the following fields:\n" + missingFields.join(", ");
+        showFailedToCreateRecipeAlert(message);
+      } else {
+        showFailedToCreateRecipeAlert("backend error");
+      }
+      console.log("Recipe not created");
     }
   };
 
@@ -194,14 +226,10 @@ const CreateRecipe = () => {
               placeholder="Instructions"
               onChangeText={(newText) => setInstructions(newText)}
             />
-            {/* 
-            <Button
-              color="tomato"
-              title="Add New Step"
-            />
-            */}
+
           </View>
         </View>
+
 
         <View style={styles.baseContainer}>
           <View style={styles.baseSubContainer}>
@@ -210,14 +238,49 @@ const CreateRecipe = () => {
                 placeholder="Note"
                 onChangeText={(newText) => setNotes(newText)}
               />
-              {/* 
-              <Button
-                color="tomato"
-                title="Add New Note"
-              />
-              */}
           </View>
         </View>
+
+            <Text>CookTime</Text>
+            <TextInput
+              placeholder="cooktime..."
+              onChangeText={(newText) => setCookTime(newText)}
+            />
+
+            <Text>Tags</Text>
+            <BouncyCheckbox
+              text="Vegetarian"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Vegetarian")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Vegan"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Vegan")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Gluten Free"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Gluten Free")
+              }
+            ></BouncyCheckbox>
+            <BouncyCheckbox
+              text="Halal"
+              textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+              textContainerStyle={{ marginVertical: 5 }}
+              onPress={(isChecked: boolean) =>
+                updateTagList(isChecked, "Halal")
+              }
+            ></BouncyCheckbox>
+            <Button title="Create Recipe" onPress={handleCreateRecipe} />
 
         <Button
           color="tomato"

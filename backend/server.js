@@ -70,12 +70,11 @@ app.get("/api/recipe", async (req, res) => {
 
 //POST request to create a recipe based on the request
 app.post("/api/recipes", async (req, res) => {
-  
+ 
   //destructures the input (req.query) into useful variables
-  const { recipe } = req.query;
-
-  //uses those variable to create a new recipe from the Recipe model
   try {
+    const { recipe } = req.body;
+
     const recipe = await Recipe.create(recipe)
     res.send({recipe : recipe, success : true}) // send a copy of the created recipe after it is created
     }
@@ -92,9 +91,17 @@ app.post("/api/recipes", async (req, res) => {
       "instructions": "put it all together"
     }
 
-	
-*/
 
+    const mongoRecipe = new Recipe(recipe)
+
+    const createdRecipe = await mongoRecipe.save()
+    res.send({recipe : createdRecipe, success : true}) // send a copy of the created recipe after it is created
+  }
+  catch (e) {
+    console.log("recipe creation error: "+e.message)
+    res.send({error : e.message, success : false}) // sends an error if fails
+  }
+  });
 
 //POST request to update a recipe based on the request
 app.post("/api/recipe", async (req, res) => {
