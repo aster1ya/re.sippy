@@ -9,7 +9,7 @@ import styles from "../styles";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import { auth } from "@/backend/firebaseConfig";
-import RecipeInput from "@/components/RecipeInput";
+import RecipeInput from "../components/RecipeInput";
 const CreateRecipe = () => {
   const router = useRouter();
 
@@ -37,12 +37,14 @@ const CreateRecipe = () => {
 
   //render the layout of the recipe creator
   return (
-    <View>
-      <RecipeInput
-        successAlertHandler={showCreatedRecipeAlert}
-        failAlertHandler={showFailedToCreateRecipeAlert}
-      />
-    </View>
+    <SafeAreaProvider>
+      <View>
+        <RecipeInput
+          successAlertHandler={showCreatedRecipeAlert}
+          failAlertHandler={showFailedToCreateRecipeAlert}
+        />
+      </View>
+    </SafeAreaProvider>
   );
 };
 

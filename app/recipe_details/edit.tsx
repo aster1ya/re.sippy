@@ -6,203 +6,35 @@ import { CreateRecipeRequest, GetRecipeById } from "../../controller";
 import axios from "axios";
 import IRecipe from "@/types/Recipe";
 import styles from "../../styles";
+import RecipeInput from "@/components/RecipeInput";
 
 const EditRecipe = () => {
   //establish connection to API to pull recipe data
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
-  const [recipe, setRecipe] = useState<IRecipe>();
-  const [recipeId, setRecipeId] = useState<string>("");
-
-  const [title, setTitle] = useState<string>("");
-  const [mealType, setMealType] = useState<string | undefined>("");
-  const [prepTime, setPrepTime] = useState<string | undefined>("");
-  const [cookTime, setCookTime] = useState<string | undefined>("");
-  const [servings, setServings] = useState<string | undefined>("");
-  const [description, setDescription] = useState<string | undefined>("");
-  const [ingredients, setIngredients] = useState<string>("");
-  const [instructions, setInstructions] = useState<string>("");
-  const [authorId, setAuthorId] = useState<string>("");
-  const [notes, setNotes] = useState<string | undefined>("");
-  const [tags, setTags] = useState<string[]>([]);
-
-  const fetchRecipe = async () => {
-    console.log(id);
-    const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
-    const recipe = await GetRecipeById(idStr);
-    console.log("edit recipe: " + recipe);
-    if (recipe) {
-      setRecipe(recipe);
-      setExistingVariables(recipe);
-    }
-  };
-
-  const setExistingVariables = (recipe: IRecipe) => {
-    setRecipeId(recipe._id || "asd");
-    setAuthorId(recipe.authorId);
-    setTitle(recipe.title);
-    setMealType(recipe.mealType);
-    setPrepTime(recipe.prepTime);
-    setCookTime(recipe.cookTime);
-    setServings(recipe.servings);
-    setDescription(recipe.description);
-    setIngredients(recipe.ingredients);
-    setInstructions(recipe.instructions);
-    setAuthorId(recipe.authorId);
-    setNotes(recipe.notes);
-    setTags(recipe.tags);
-  };
-  useEffect(() => {
-    fetchRecipe();
-  }, []);
-
-  const showUpdatedRecipeAlert = () => {
-    Alert.alert("success", "Recipe has been successfully updated.");
-  };
-
-  const showFailedToUpdateAlert = (m: string) => {
-    Alert.alert("failed", "Recipe has not been updated. " + m);
-  };
-
-  const UploadRecipe = async () => {
-    const { success, recipe, missingFields } = await CreateRecipeRequest(
+  const showUpdatedRecipeAlert = (newRecipeId: string) => {
+    Alert.alert("Success", "Recipe has been successfully updated.", [
       {
-        _id: recipeId,
-        title: title,
-        authorId: authorId,
-        mealType: mealType,
-        prepTime: prepTime,
-        cookTime: cookTime,
-        servings: servings,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions,
-        notes: notes,
-        tags: tags,
+        text: "OK",
       },
-      true //isUpdate
-    );
-
-    if (success) {
-      console.log("Recipe created: " + recipe.title);
-      router.back();
-      showUpdatedRecipeAlert();
-    } else {
-      if (missingFields.length > 0) {
-        let message =
-          "Please fill the following fields:\n" + missingFields.join(", ");
-        showFailedToUpdateAlert(message);
-      } else {
-        showFailedToUpdateAlert("unknown error");
-      }
-      console.log("Recipe not created");
-    }
+    ]);
   };
 
-  //for a (potential) function to dynamically add TextInput components
-  //const [inputRow, setInputRow] = useState([]);
+  const showFailedToUpdateAlert = (message: string) => {
+    Alert.alert("Failed to update recipe", "Recipe not update. " + message);
+  };
 
-  //render the layout of the recipe editor
   return (
     <SafeAreaProvider>
-      <ScrollView>
-        <View style={styles.baseContainer}>
-          <View>
-            <TextInput
-              autoCapitalize="words"
-              defaultValue={recipe?.title || "N/A"}
-              inputMode="text"
-              onChangeText={(newText) => setTitle(newText)}
-              style={styles.createTitle}
-            />
-          </View>
-
-          <View style={styles.baseSubContainer}>
-            <Text style={styles.h1}>Information</Text>
-            <View style={styles.infoGrid}>
-              <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Type</Text>
-                <TextInput
-                  defaultValue={recipe?.mealType || "N/A"}
-                  inputMode="text"
-                  onChangeText={(newText) => setMealType(newText)}
-                  style={styles.infoField}
-                />
-              </View>
-              <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Prep Time</Text>
-                <TextInput
-                  defaultValue={recipe?.prepTime || "N/A"}
-                  inputMode="text"
-                  onChangeText={(newText) => setPrepTime(newText)}
-                  style={styles.infoField}
-                />
-              </View>
-              <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Cook Time</Text>
-                <TextInput
-                  defaultValue={recipe?.cookTime || "N/A"}
-                  inputMode="text"
-                  onChangeText={(newText) => setCookTime(newText)}
-                  style={styles.infoField}
-                />
-              </View>
-              <View style={styles.infoSection}>
-                <Text style={styles.infoLabel}>Servings</Text>
-                <TextInput
-                  defaultValue={recipe?.servings || "0"}
-                  inputMode="numeric"
-                  onChangeText={(newText) => setServings(newText)}
-                  style={styles.infoField}
-                />
-              </View>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.baseContainer}>
-          <View style={styles.baseSubContainer}>
-            <Text style={styles.h1}>Description</Text>
-            <TextInput
-              defaultValue={recipe?.description || "N/A"}
-              onChangeText={(newText) => setDescription(newText)}
-            />
-          </View>
-        </View>
-
-        <View style={styles.baseContainer}>
-          <View style={styles.baseSubContainer}>
-            <Text style={styles.h1}>Ingredients</Text>
-            <TextInput
-              defaultValue={recipe?.ingredients || "N/A"}
-              onChangeText={(newText) => setIngredients(newText)}
-            />
-          </View>
-        </View>
-
-        <View style={styles.baseContainer}>
-          <View style={styles.baseSubContainer}>
-            <Text style={styles.h1}>Instructions</Text>
-            <TextInput
-              defaultValue={recipe?.instructions || "N/A"}
-              onChangeText={(newText) => setInstructions(newText)}
-            />
-          </View>
-        </View>
-
-        <View style={styles.baseContainer}>
-          <View style={styles.baseSubContainer}>
-            <Text style={styles.h1}>Notes</Text>
-            <TextInput
-              defaultValue={recipe?.notes || "N/A"}
-              onChangeText={(newText) => setNotes(newText)}
-            />
-          </View>
-        </View>
-
-        <Button color="tomato" title="Save Recipe" onPress={UploadRecipe} />
-      </ScrollView>
+      <View>
+        <RecipeInput
+          isEditing={true}
+          existingRecipeId={Array.isArray(id) ? id[0] : id}
+          failAlertHandler={showFailedToUpdateAlert}
+          successAlertHandler={showUpdatedRecipeAlert}
+        />
+      </View>
     </SafeAreaProvider>
   );
 };
