@@ -1,37 +1,34 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  ScrollView,
-  Text,
-  View
-} from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { GetRecipeById } from "../../controller";
 import IRecipe from "@/types/Recipe";
 import styles from "../../styles";
+import { useIsFocused } from "@react-navigation/native";
 
 const Details = () => {
-  //establish connection to API to pull recipe data
-  const apiUrl = "http://localhost:5000/api/recipe";
+  const isFocused = useIsFocused();
   const router = useRouter();
   const { id } = useLocalSearchParams();
-
   const [recipe, setRecipe] = useState<IRecipe>();
 
   const fetchRecipe = async () => {
-    const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
+    console.log("id test");
+    console.log("id: " + id);
+    const idStr = Array.isArray(id) ? id[0] : id;
     const recipe = await GetRecipeById(idStr);
     if (recipe) {
       setRecipe(recipe);
     }
   };
   useEffect(() => {
-    fetchRecipe();
-  }, []);
+    if (isFocused) {
+      fetchRecipe();
+    }
+  }, [isFocused]);
 
   const goToRecipe = (recipeId: string) => {
-    router.replace("/recipe_details/[id]");
     router.push({
       pathname: "/recipe_details/edit",
       params: { id: recipeId },
@@ -114,7 +111,7 @@ const Details = () => {
         <Button
           color="tomato"
           title="Edit Recipe"
-          onPress={() => goToRecipe(recipe._id)}
+          onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
         />
       </ScrollView>
     </SafeAreaProvider>

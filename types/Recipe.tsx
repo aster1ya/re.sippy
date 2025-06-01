@@ -3,19 +3,20 @@
 //######################################################################################
 
 export default interface IRecipe {
-  title: String;
+  _id?: string;
+  title: string;
 
-  authorId: String;
-  mealType: String;
-  prepTime: String;
-  cookTime: String;
-  totalTime: String;
-  servings: String;
+  authorId: string;
+  mealType: string;
+  prepTime: string;
+  cookTime: string;
+  totalTime: string;
+  servings: string;
 
-  description?: String;
-  ingredients?: String;
-  instructions?: String;
-  notes?: String; 
+  description?: string;
+  ingredients?: string;
+  instructions?: string;
+  notes?: string;
 
-  tags: [String];
-};
+  tags: [string];
+}
