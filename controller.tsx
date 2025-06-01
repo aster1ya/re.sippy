@@ -55,19 +55,23 @@ const TrimOrSetToDefault = (
 
 //creates recipe. returns if it was successful or not. for create page.
 
-export const CreateRecipeRequest = async ({
-  title,
-  authorId,
-  mealType,
-  prepTime,
-  cookTime,
-  servings,
-  description,
-  ingredients,
-  instructions,
-  notes,
-  tags,
-}: IRecipe) => {
+export const CreateRecipeRequest = async (
+  {
+    _id,
+    title,
+    authorId,
+    mealType,
+    prepTime,
+    cookTime,
+    servings,
+    description,
+    ingredients,
+    instructions,
+    notes,
+    tags,
+  }: IRecipe,
+  isUpdate: boolean = false
+) => {
   try {
     mealType = TrimOrSetToDefault(mealType, "default mealType");
     prepTime = TrimOrSetToDefault(prepTime, "default prepTime");
@@ -103,6 +107,7 @@ export const CreateRecipeRequest = async ({
     }
 
     const recipe: IRecipe = {
+      _id: _id,
       title: title,
       authorId: authorId,
       mealType: mealType,
@@ -115,7 +120,10 @@ export const CreateRecipeRequest = async ({
       tags: tags,
     };
 
-    const response = await axios.post(apiUrl + "/recipes", { recipe: recipe });
+    const response = await axios.post(apiUrl + "/recipes", {
+      recipe: recipe,
+      isUpdate: isUpdate,
+    });
 
     return {
       success: response.data.success,

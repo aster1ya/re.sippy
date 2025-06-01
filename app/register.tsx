@@ -10,8 +10,6 @@ import React, { useState, useEffect } from "react";
 import styles from "../styles";
 
 const Register = () => {
-  const apiUrl = "http://localhost:5000/api";
-
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 

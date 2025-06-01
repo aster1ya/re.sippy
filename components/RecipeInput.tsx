@@ -1,21 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { CreateRecipeRequest, GetRecipeById } from "../../controller";
+import { useRouter } from "expo-router";
+import { CreateRecipeRequest } from "../controller";
 import axios from "axios";
 import IRecipe from "@/types/Recipe";
-import styles from "../../styles";
+import styles from "../styles";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-const EditRecipe = () => {
-  //establish connection to API to pull recipe data
+import { auth } from "@/backend/firebaseConfig";
+
+type RecipeInputProps = {
+  //recipe ??
+  successAlertHandler: (newRecipeId: string) => void;
+  failAlertHandler: (message: string) => void;
+};
+
+const RecipeInput = ({
+  successAlertHandler,
+  failAlertHandler,
+}: RecipeInputProps) => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
 
-  const [recipe, setRecipe] = useState<IRecipe>();
-  const [recipeId, setRecipeId] = useState<string>("");
+  //good candidate for code review here ############
+  //the whole deal of passing variables from here to controller could be done better: allow for undefined the whole way? To do that, ditch having IRecipe as the interface when calling CreateRecipeRequest. Just have it be a bunch of variables which may be undefined and have the default values of IRecipe catch the undefined (but you still have to catch null and "" yourself)
 
+  //all these useStates could probably be replaced by a single Recipe class
   const [title, setTitle] = useState<string>("");
+  const [authorId, setAuthorId] = useState<string>("");
   const [mealType, setMealType] = useState<string | undefined>("");
   const [prepTime, setPrepTime] = useState<string | undefined>("");
   const [cookTime, setCookTime] = useState<string | undefined>("");
@@ -23,87 +35,61 @@ const EditRecipe = () => {
   const [description, setDescription] = useState<string | undefined>("");
   const [ingredients, setIngredients] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
-  const [authorId, setAuthorId] = useState<string>("");
   const [notes, setNotes] = useState<string | undefined>("");
   const [tags, setTags] = useState<string[]>([]);
 
-  const fetchRecipe = async () => {
-    console.log(id);
-    const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
-    const recipe = await GetRecipeById(idStr);
-    console.log("edit recipe: " + recipe);
-    if (recipe) {
-      setRecipe(recipe);
-      setExistingVariables(recipe);
+  const handleCreateRecipe = () => {
+    UploadRecipe();
+  };
+
+  const updateTagList = (enable: boolean, tag: string) => {
+    let newTags = [...tags];
+
+    if (enable) {
+      if (!tags.includes(tag)) {
+        newTags.push(tag);
+        setTags(newTags);
+      }
+    } else {
+      newTags = newTags.filter((item) => item != tag);
+      setTags(newTags);
     }
   };
 
-  const setExistingVariables = (recipe: IRecipe) => {
-    setRecipeId(recipe._id || "asd");
-    setAuthorId(recipe.authorId);
-    setTitle(recipe.title);
-    setMealType(recipe.mealType);
-    setPrepTime(recipe.prepTime);
-    setCookTime(recipe.cookTime);
-    setServings(recipe.servings);
-    setDescription(recipe.description);
-    setIngredients(recipe.ingredients);
-    setInstructions(recipe.instructions);
-    setAuthorId(recipe.authorId);
-    setNotes(recipe.notes);
-    setTags(recipe.tags);
-  };
-  useEffect(() => {
-    fetchRecipe();
-  }, []);
-
-  const showUpdatedRecipeAlert = () => {
-    Alert.alert("success", "Recipe has been successfully updated.");
-  };
-
-  const showFailedToUpdateAlert = (m: string) => {
-    Alert.alert("failed", "Recipe has not been updated. " + m);
-  };
-
   const UploadRecipe = async () => {
-    const { success, recipe, missingFields } = await CreateRecipeRequest(
-      {
-        _id: recipeId,
-        title: title,
-        authorId: authorId,
-        mealType: mealType,
-        prepTime: prepTime,
-        cookTime: cookTime,
-        servings: servings,
-        description: description,
-        ingredients: ingredients,
-        instructions: instructions,
-        notes: notes,
-        tags: tags,
-      },
-      true //isUpdate
-    );
+    const authorId = auth.currentUser ? auth.currentUser.uid : "";
+
+    const { success, recipe, missingFields } = await CreateRecipeRequest({
+      title: title,
+      authorId: authorId,
+      mealType: mealType,
+      prepTime: prepTime,
+      cookTime: cookTime,
+      servings: servings,
+      description: description,
+      ingredients: ingredients,
+      instructions: instructions,
+      notes: notes,
+      tags: tags,
+    });
 
     if (success) {
       console.log("Recipe created: " + recipe.title);
       router.back();
-      showUpdatedRecipeAlert();
+      successAlertHandler(recipe._id);
     } else {
       if (missingFields.length > 0) {
         let message =
           "Please fill the following fields:\n" + missingFields.join(", ");
-        showFailedToUpdateAlert(message);
+        failAlertHandler(message);
       } else {
-        showFailedToUpdateAlert("unknown error");
+        failAlertHandler("backend error");
       }
       console.log("Recipe not created");
     }
   };
 
-  //for a (potential) function to dynamically add TextInput components
-  //const [inputRow, setInputRow] = useState([]);
-
-  //render the layout of the recipe editor
+  //render the layout of the recipe creator
   return (
     <SafeAreaProvider>
       <ScrollView>
@@ -111,7 +97,7 @@ const EditRecipe = () => {
           <View>
             <TextInput
               autoCapitalize="words"
-              defaultValue={recipe?.title || "N/A"}
+              placeholder="New Recipe"
               inputMode="text"
               onChangeText={(newText) => setTitle(newText)}
               style={styles.createTitle}
@@ -124,7 +110,7 @@ const EditRecipe = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Type</Text>
                 <TextInput
-                  defaultValue={recipe?.mealType || "N/A"}
+                  placeholder="None"
                   inputMode="text"
                   onChangeText={(newText) => setMealType(newText)}
                   style={styles.infoField}
@@ -133,7 +119,7 @@ const EditRecipe = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Prep Time</Text>
                 <TextInput
-                  defaultValue={recipe?.prepTime || "N/A"}
+                  placeholder="None"
                   inputMode="text"
                   onChangeText={(newText) => setPrepTime(newText)}
                   style={styles.infoField}
@@ -142,7 +128,7 @@ const EditRecipe = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Cook Time</Text>
                 <TextInput
-                  defaultValue={recipe?.cookTime || "N/A"}
+                  placeholder="None"
                   inputMode="text"
                   onChangeText={(newText) => setCookTime(newText)}
                   style={styles.infoField}
@@ -151,7 +137,7 @@ const EditRecipe = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Servings</Text>
                 <TextInput
-                  defaultValue={recipe?.servings || "0"}
+                  placeholder="0"
                   inputMode="numeric"
                   onChangeText={(newText) => setServings(newText)}
                   style={styles.infoField}
@@ -165,7 +151,8 @@ const EditRecipe = () => {
           <View style={styles.baseSubContainer}>
             <Text style={styles.h1}>Description</Text>
             <TextInput
-              defaultValue={recipe?.description || "N/A"}
+              multiline={true}
+              placeholder="Description"
               onChangeText={(newText) => setDescription(newText)}
             />
           </View>
@@ -175,9 +162,15 @@ const EditRecipe = () => {
           <View style={styles.baseSubContainer}>
             <Text style={styles.h1}>Ingredients</Text>
             <TextInput
-              defaultValue={recipe?.ingredients || "N/A"}
+              placeholder="Ingredients"
               onChangeText={(newText) => setIngredients(newText)}
             />
+            {/* 
+            <Button
+              color="tomato"
+              title="Add New Ingredient"
+            />
+            */}
           </View>
         </View>
 
@@ -185,7 +178,7 @@ const EditRecipe = () => {
           <View style={styles.baseSubContainer}>
             <Text style={styles.h1}>Instructions</Text>
             <TextInput
-              defaultValue={recipe?.instructions || "N/A"}
+              placeholder="Instructions"
               onChangeText={(newText) => setInstructions(newText)}
             />
           </View>
@@ -195,16 +188,60 @@ const EditRecipe = () => {
           <View style={styles.baseSubContainer}>
             <Text style={styles.h1}>Notes</Text>
             <TextInput
-              defaultValue={recipe?.notes || "N/A"}
+              placeholder="Note"
               onChangeText={(newText) => setNotes(newText)}
             />
           </View>
         </View>
 
-        <Button color="tomato" title="Save Recipe" onPress={UploadRecipe} />
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Notes</Text>
+            <TextInput
+              placeholder="Cook time"
+              onChangeText={(newText) => setCookTime(newText)}
+            />
+          </View>
+        </View>
+
+        <Text>Tags</Text>
+        <BouncyCheckbox
+          text="Vegetarian"
+          textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+          textContainerStyle={{ marginVertical: 5 }}
+          onPress={(isChecked: boolean) =>
+            updateTagList(isChecked, "Vegetarian")
+          }
+        ></BouncyCheckbox>
+        <BouncyCheckbox
+          text="Vegan"
+          textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+          textContainerStyle={{ marginVertical: 5 }}
+          onPress={(isChecked: boolean) => updateTagList(isChecked, "Vegan")}
+        ></BouncyCheckbox>
+        <BouncyCheckbox
+          text="Gluten Free"
+          textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+          textContainerStyle={{ marginVertical: 5 }}
+          onPress={(isChecked: boolean) =>
+            updateTagList(isChecked, "Gluten Free")
+          }
+        ></BouncyCheckbox>
+        <BouncyCheckbox
+          text="Halal"
+          textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+          textContainerStyle={{ marginVertical: 5 }}
+          onPress={(isChecked: boolean) => updateTagList(isChecked, "Halal")}
+        ></BouncyCheckbox>
+
+        <Button
+          color="tomato"
+          title="Create Recipe"
+          onPress={handleCreateRecipe}
+        />
       </ScrollView>
     </SafeAreaProvider>
   );
 };
 
-export default EditRecipe;
+export default RecipeInput;

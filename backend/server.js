@@ -59,7 +59,7 @@ app.get("/api/recipe", async (req, res) => {
     const id = req.query.recipeId;
 
     const recipes = await Recipe.find({_id : id});
-    console.log("real recipes:"+recipes)
+    //console.log("real recipes:"+recipes)
     res.json(recipes);
   } catch (err) {
     console.log("real error: "+err.message)
@@ -73,9 +73,13 @@ app.post("/api/recipes", async (req, res) => {
  
   //destructures the input (req.query) into useful variables
   try {
-    const { recipe } = req.body;
+    const { recipe, isUpdate } = req.body;
 
     const mongoRecipe = new Recipe(recipe)
+
+    if(isUpdate){
+      mongoRecipe.isNew = false;
+    }
 
     const createdRecipe = await mongoRecipe.save()
     res.send({recipe : createdRecipe, success : true}) // send a copy of the created recipe after it is created
