@@ -5,12 +5,12 @@ describe('Player', function() {
   let player;
   let song;
 
-  beforeEach(function() {
+  beforeEach(() => {
     player = new Player();
     song = new Song();
   });
 
-  it('should be able to play a Song', function() {
+  it('should be able to play a Song', () => {
     player.play(song);
     expect(player.currentlyPlayingSong).toEqual(song);
 
@@ -18,7 +18,7 @@ describe('Player', function() {
     expect(player).toBePlaying(song);
   });
 
-  describe('when song has been paused', function() {
+  describe('when song has been paused',() => {
     beforeEach(function() {
       player.play(song);
       player.pause();

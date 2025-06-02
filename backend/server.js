@@ -37,7 +37,7 @@ const User = require("./models/UserSchema");
 
 
 
-
+//get all recipes
 app.get("/api/recipes", async (req, res) => {
   try {
     const recipes = await Recipe.find();
@@ -47,8 +47,10 @@ app.get("/api/recipes", async (req, res) => {
   }
 });
 
+//get one recipe by Id
 app.get("/api/recipe", async (req, res) => {
   try {
+
 
     const { recipeId } = req.query;
     const recipe = await Recipe.findById(recipeId);
@@ -59,9 +61,76 @@ app.get("/api/recipe", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+	
 
 
-//POST request to create a recipe based on the request
+//create mongo user.
+app.post("/api/register", async (req, res) => {
+
+  const { UID } = req.body
+
+  try {
+      const user = await User.create({
+        firebaseUID : UID,
+      })
+      console.log("mongo user created successfully")
+      res.send({user : user, success : true}) // send a copy of the created user after it is created
+    }
+    catch (e) {
+      console.log("error creating mongo user: " + e)
+      res.send({error : e.message, success : false}) // sends an error if fails
+    }
+
+});
+
+//get mongo user by uid
+app.get("/api/user", async (req, res) => {
+
+  const { UID } = req.query;
+
+  try {
+    const query = { firebaseUID : UID };
+    const user = await User.findOne(query);
+    
+    res.send({user : user, success : true}) 
+  }
+  catch (e) {
+    res.send({error : e.message, success : false}) 
+  }
+})
+
+//add/remove recipe from a mongo user's favorite list.
+app.post("/api/recipe/favorite", async (req, res) => {
+  try{
+    const { UID, recipeId } = req.body;
+    let didFavorite;
+    
+    const user = await User.findOne({ "firebaseUID" : UID })
+    const favoriteIds = user.favoriteRecipeIds;
+    if (user == null | user == undefined){
+      console.log("Found user not found");
+      
+    }
+    console.log("Found user uid: " + user.firebaseUID);
+
+    const index = user.favoriteRecipeIds.indexOf(recipeId);
+    if (index > -1) {
+      user.favoriteRecipeIds.splice(index, 1);
+      didFavorite = false;
+    } else {
+      user.favoriteRecipeIds.push(recipeId);
+      didFavorite = true;
+    }
+    
+    user.save();
+    res.send({success: true, favorited: didFavorite})
+  } catch (error) {
+    res.send({error : error.message, success : false}) 
+  }
+    
+  })
+
+//create recipe with inputs
 app.post("/api/recipes", async (req, res) => {
  
   try {
@@ -72,7 +141,6 @@ app.post("/api/recipes", async (req, res) => {
     if(isUpdate){
       mongoRecipe.isNew = false;
     }
-
     const createdRecipe = await mongoRecipe.save()
     res.send({recipe : createdRecipe, success : true}) // send a copy of the created recipe after it is created
   }
@@ -82,6 +150,8 @@ app.post("/api/recipes", async (req, res) => {
   }
   });
 
+
+//delete recipe with Id
 app.delete("/api/recipes/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -97,7 +167,7 @@ app.delete("/api/recipes/:id", async (req, res) => {
   }
 });
 
-
+//search for recipes with various search conditions
 app.get("/api/search", async (req, res) => {
   try {
     const { searchTerm, q, tags, userAuthorId, userFavoriteIds } = req.query;

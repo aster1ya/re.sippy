@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
+  ActivityIndicator,
   StyleSheet,
-  ScrollView,
   Text,
   View,
+  ScrollView,
   Button,
   Alert,
 } from "react-native";
+import {
+  GetRecipeById,
+  GetCurrentUID,
+  CheckIfFavorited,
+} from "../../controller";
+import FavoriteStar from "@/components/FavoriteStar";
+import { auth } from "@/backend/firebaseConfig";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
 import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
 
-import { GetRecipeById } from "../../controller";
 import IRecipe from "@/types/Recipe";
 import styles from "../../styles";
 import { useIsFocused } from "@react-navigation/native";
@@ -20,7 +28,13 @@ const Details = () => {
   const isFocused = useIsFocused();
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const recipeId = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
+
   const [recipe, setRecipe] = useState<IRecipe>();
+  const [favorited, setFavorited] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const uid = GetCurrentUID();
 
   const fetchRecipe = async () => {
     console.log("id test");
@@ -28,10 +42,18 @@ const Details = () => {
 
     const idStr = Array.isArray(id) ? id[0] : id;
     const recipe = await GetRecipeById(idStr);
+
     if (recipe) {
       setRecipe(recipe);
     }
   };
+
+  const fetchFavorited = async () => {
+    const { favorited } = await CheckIfFavorited(uid, recipeId);
+    setFavorited(favorited);
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (isFocused) {
       fetchRecipe();
@@ -69,6 +91,19 @@ const Details = () => {
       ]
     );
   };
+
+  useEffect(() => {
+    fetchFavorited();
+  });
+
+  if (loading)
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#417023"
+        style={{ marginTop: 40 }}
+      />
+    );
 
   return (
     <SafeAreaProvider>

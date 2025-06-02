@@ -5,10 +5,9 @@ import { useRouter } from "expo-router";
 
 type RecipeListProps = {
   recipes: IRecipe[];
-  title: string;
 };
 
-const RecipeList = ({ recipes, title }: RecipeListProps) => {
+const RecipeList = ({ recipes }: RecipeListProps) => {
   const router = useRouter();
 
   const goToRecipe = (recipeId: string) => {
@@ -20,23 +19,27 @@ const RecipeList = ({ recipes, title }: RecipeListProps) => {
 
   return (
     <View style={styles.container}>
-      {recipes.map((recipe, index) => (
-        <View key={index} style={styles.recipePreview}>
-          <View style={styles.row}>
-            <Text style={styles.header}>{recipe.title}</Text>
-            <Button
-              title="View Recipe"
-              onPress={() =>
-                goToRecipe(
-                  recipe._id ||
-                    "recipe.id will never be undefined so this is just for error suppression"
-                )
-              }
-            />
+      {recipes && recipes != undefined ? (
+        recipes.map((recipe, index) => (
+          <View key={index} style={styles.recipePreview}>
+            <View style={styles.row}>
+              <Text style={styles.header}>{recipe.title}</Text>
+              <Button
+                title="View Recipe"
+                onPress={() =>
+                  goToRecipe(
+                    recipe._id ||
+                      "recipe.id will never be undefined so this is just for error suppression"
+                  )
+                }
+              />
+            </View>
+            <Text>{recipe.description}</Text>
           </View>
-          <Text>{recipe.description}</Text>
-        </View>
-      ))}
+        ))
+      ) : (
+        <Text>No Recipes</Text>
+      )}
     </View>
   );
 };

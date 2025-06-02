@@ -7,6 +7,7 @@ import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
 import styles from "../styles";
+import { auth } from "@/backend/firebaseConfig";
 import { useIsFocused } from "@react-navigation/native";
 
 const book = () => {
@@ -37,7 +38,15 @@ const book = () => {
   return (
     <ScrollView>
       <Text style={styles.bookTitle}>All Recipes</Text>
-      <RecipeList recipes={recipes} title="All Recipes" />
+      <RecipeList recipes={recipes} />
+
+      {auth.currentUser ? (
+        <Link href="/favorites" style={styles.hyperlink}>
+          Go To Favorites
+        </Link>
+      ) : (
+        <Text>Login to view favorites</Text>
+      )}
     </ScrollView>
   );
 };
