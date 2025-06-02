@@ -9,32 +9,52 @@ import {
   SafeAreaView,
   ActivityIndicator,
   TouchableOpacity,
-  Platform,
-  StatusBar,
+  TextInput,
 } from "react-native";
 import axios from "axios";
 import styles from "../styles";
+import { Ionicons } from "@expo/vector-icons";
 
-interface Recipe {
+// Example theme object, adjust as needed or import from your theme file
+const theme = {
+  placeholderColor: "#ccc",
+  textColor: "#fff",
+};
+
+interface MealDBRecipe {
   idMeal: string;
   strMeal: string;
   strMealThumb: string;
+}
+
+interface DBRecipe {
+  _id: string;
+  title: string;
+  image: string;
 }
 
 const SearchScreen = () => {
   const { q } = useLocalSearchParams();
   const router = useRouter();
 
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [mealDbResults, setMealDbResults] = useState<MealDBRecipe[]>([]);
+  const [dbResults, setDbResults] = useState<DBRecipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchText, setSearchText] = useState("");
 
   const fetchResults = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
+
+      const mealRes = await axios.get(
         `https://www.themealdb.com/api/json/v1/1/search.php?s=${q}`
       );
-      setRecipes(response.data.meals || []);
+      setMealDbResults(mealRes.data.meals || []);
+
+      const dbRes = await axios.get(
+        `http://localhost:5000/api/search?q=${q}`
+      );
+      setDbResults(dbRes.data || []);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
@@ -48,32 +68,63 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView style={styles.searchSafeArea}>
+      <View style={{ flexDirection: "row", alignItems: "center", margin: 10 }}>
+        <Ionicons
+          name="search"
+          size={20}
+          color={theme.placeholderColor}
+          style={styles.indexSearchIconInline}
+        />
+        <TextInput
+          style={[styles.indexSearchBar, { color: theme.textColor }]}
+          placeholder="Search recipes..."
+          placeholderTextColor={theme.placeholderColor}
+          value={searchText}
+          onChangeText={setSearchText}
+          onSubmitEditing={() => {
+            if (searchText.trim()) {
+              router.push(
+                `/search?q=${encodeURIComponent(searchText.trim())}`
+              );
+            }
+          }}
+        />
+      </View>
+
       <View style={styles.searchContainer}>
         <Text style={styles.searchTitle}>Search Results for "{q}"</Text>
 
         {loading ? (
           <ActivityIndicator size="large" color="#417023" />
-        ) : recipes.length === 0 ? (
+        ) : mealDbResults.length === 0 && dbResults.length === 0 ? (
           <Text style={styles.searchNoResult}>No results found.</Text>
         ) : (
           <FlatList
-            data={recipes}
-            keyExtractor={(item) => item.idMeal}
-            renderItem={({ item }) => (
+            data={[...dbResults, ...mealDbResults]}
+            keyExtractor={(item: any) => item._id || item.idMeal}
+            renderItem={({ item }: { item: DBRecipe | MealDBRecipe }) => {
+              const isDb = "_id" in item;
+
+              return (
                 <TouchableOpacity
                   onPress={() =>
                     router.push({
-                      pathname: "/details",
-                      params: { id: item.idMeal },
+                      pathname: isDb ? "/recipe_details/[id]" : "/details",
+                      params: { id: isDb ? item._id : item.idMeal },
                     })
                   }
                   style={styles.searchMealCard}
                 >
-                  <Image source={{ uri: item.strMealThumb }} style={styles.searchMealImage} />
-                  <Text style={styles.searchMealName}>{item.strMeal}</Text>
+                  <Image
+                    source={{ uri: isDb ? item.image : item.strMealThumb }}
+                    style={styles.searchMealImage}
+                  />
+                  <Text style={styles.searchMealName}>
+                    {isDb ? item.title : item.strMeal}
+                  </Text>
                 </TouchableOpacity>
-              )}
-              
+              );
+            }}
           />
         )}
       </View>

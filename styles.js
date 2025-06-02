@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+
 //man, removing duplicate entries is gonna take ages
 
 const styles = StyleSheet.create({
@@ -321,6 +322,11 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
 
+  checkboxTextStyle: {
+    fontSize:14, 
+    textDecorationLine: 'none'
+  },
+  
   hyperlink: {
     color: 'blue',
     textDecorationLine: 'underline',

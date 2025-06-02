@@ -102,6 +102,8 @@ const Index = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
+
+      console.log("auth updated: ", user?.email);
     });
 
     return unsubscribe;

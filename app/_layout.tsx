@@ -7,7 +7,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen //this hides the header of every screen in the (drawer) folder
-        name="(drawers)"
+        name="index"
         options={{
           headerShown: false,
         }}
