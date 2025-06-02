@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { StyleSheet, Text, View, Button, Alert } from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import axios from "axios";
+import IRecipe from "../../types/Recipe";
+
 import { GetRecipeById } from "../../controller";
 import IRecipe from "@/types/Recipe";
 import styles from "../../styles";
@@ -16,6 +21,7 @@ const Details = () => {
   const fetchRecipe = async () => {
     console.log("id test");
     console.log("id: " + id);
+
     const idStr = Array.isArray(id) ? id[0] : id;
     const recipe = await GetRecipeById(idStr);
     if (recipe) {
@@ -35,7 +41,29 @@ const Details = () => {
     });
   };
 
+  const handleDelete = async () => {
+    const idStr = Array.isArray(id) ? id[0] : id;
+    Alert.alert("Delete Recipe", "Are you sure you want to delete this recipe?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await axios.delete(`http://localhost:5000/api/recipes/${idStr}`);
+            Alert.alert("Deleted!", "Recipe successfully deleted.");
+            router.back();
+          } catch (error) {
+            console.error("Delete failed:", error);
+            Alert.alert("Error", "Could not delete recipe.");
+          }
+        },
+      },
+    ]);
+  };
+
   return (
+
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.baseContainer}>
@@ -110,7 +138,36 @@ const Details = () => {
         />
       </ScrollView>
     </SafeAreaProvider>
+
+    <View style={localStyles.container}>
+      <Text style={localStyles.heading}>Details</Text>
+      <Text>Recipe ID: {recipe?._id}</Text>
+      <Text>Title: {recipe?.title}</Text>
+      <Text>Description: {recipe?.description}</Text>
+      <Text>Ingredients: {recipe?.ingredients}</Text>
+      <Text>Instructions: {recipe?.instructions}</Text>
+
+      <View style={localStyles.buttonWrapper}>
+        <Button title="Delete" color="red" onPress={handleDelete} />
+      </View>
+    </View>
+
   );
 };
 
 export default Details;
+
+const localStyles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  heading: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  buttonWrapper: {
+    marginTop: 30,
+  },
+});
+

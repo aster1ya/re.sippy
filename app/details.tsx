@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -8,23 +8,25 @@ import {
   StyleSheet,
   ActivityIndicator,
   SafeAreaView,
-  Platform,
-  StatusBar,
+  Button,
+  Alert,
 } from "react-native";
 import axios from "axios";
 import styles from "../styles";
 
 const RecipeDetail = () => {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
+
   interface Meal {
     strMealThumb: string;
     strMeal: string;
     strCategory: string;
     strArea: string;
     strInstructions: string;
-    [key: string]: string | null; // To handle dynamic ingredient and measure keys
+    [key: string]: string | null;
   }
-  
+
   const [meal, setMeal] = useState<Meal | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +45,26 @@ const RecipeDetail = () => {
     fetchMeal();
   }, [id]);
 
+  const handleDelete = async () => {
+    Alert.alert("Delete Recipe", "Are you sure you want to delete this recipe?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await axios.delete(`http://localhost:5000/api/recipes/${id}`);
+            Alert.alert("Deleted!", "Recipe successfully deleted.");
+            router.back();
+          } catch (error) {
+            console.error("Delete failed:", error);
+            Alert.alert("Error", "Could not delete recipe.");
+          }
+        },
+      },
+    ]);
+  };
+
   if (loading) return <ActivityIndicator size="large" color="#417023" style={{ marginTop: 40 }} />;
 
   if (!meal) return <Text style={{ color: "#fff", margin: 20 }}>Recipe not found.</Text>;
@@ -59,17 +81,18 @@ const RecipeDetail = () => {
 
         <Text style={styles.detailSection}>Ingredients</Text>
         {Array.from({ length: 20 }, (_, i) => {
-          const ingredient = meal[`strIngredient${i + 1}`];
-          const measure = meal[`strMeasure${i + 1}`];
+        const ingredient = meal[`strIngredient${i + 1}`];
+        const measure = meal[`strMeasure${i + 1}`];
           if (ingredient) {
             return (
-              <Text key={i} style={styles.recipeIngredients}>
-                - {ingredient} {measure}
-              </Text>
-            );
-          }
-          return null;
-        })}
+        <Text key={i} style={styles.recipeIngredients}>
+        - {ingredient} {measure}
+        </Text>
+        );
+      }
+      return null;
+})}
+
       </ScrollView>
     </SafeAreaView>
   );

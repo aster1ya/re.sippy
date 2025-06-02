@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Link, useRouter } from "expo-router";
+import { Link, useFocusEffect, useRouter } from "expo-router";
 import Card from "./card";
 import axios from "axios";
 import { GetAllRecipes, SearchRecipes } from "../controller";
@@ -20,9 +20,9 @@ const book = () => {
       setRecipes(allRecipes);
     }
   };
-  useEffect(() => {
+  useFocusEffect(() => {
     fetchAllRecipes();
-  }, []);
+  });
 
   const goToRecipe = (recipeId: string) => {
     router.push({
@@ -37,6 +37,9 @@ const book = () => {
       <RecipeList recipes={recipes} title="All Recipes" />
     </ScrollView>
   );
+
+
+
 };
 
 export default book;
