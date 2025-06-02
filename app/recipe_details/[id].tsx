@@ -108,6 +108,15 @@ const Details = () => {
   return (
     <SafeAreaProvider>
       <ScrollView>
+        {auth.currentUser ? (
+          <FavoriteStar
+            recipeId={recipeId}
+            uid={uid}
+            isFavorited={favorited}
+          ></FavoriteStar>
+        ) : (
+          <Text></Text>
+        )}
         <View style={styles.baseContainer}>
           <View>
             <Text style={styles.baseTitle}>{recipe?.title}</Text>

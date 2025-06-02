@@ -111,7 +111,6 @@ app.post("/api/recipe/favorite", async (req, res) => {
       console.log("Found user not found");
       
     }
-    console.log("Found user uid: " + user.firebaseUID);
 
     const index = user.favoriteRecipeIds.indexOf(recipeId);
     if (index > -1) {
@@ -170,7 +169,7 @@ app.delete("/api/recipes/:id", async (req, res) => {
 //search for recipes with various search conditions
 app.get("/api/search", async (req, res) => {
   try {
-    const { searchTerm, q, tags, userAuthorId, userFavoriteIds } = req.query;
+    const { searchTerm, q, tags, userAuthorId, userIdForFavorites } = req.query;
 
     let query = {};
 
@@ -188,11 +187,10 @@ app.get("/api/search", async (req, res) => {
       query.authorId = userAuthorId;
     }
 
-    if (userFavoriteIds) {
-      const ids = Array.isArray(userFavoriteIds)
-        ? userFavoriteIds
-        : [userFavoriteIds];
-      query._id = { $in: ids };
+    if (userIdForFavorites) {
+      const mongoUser = await User.findOne({firebaseUID : userIdForFavorites})
+      const favRecipeIds = mongoUser.favoriteRecipeIds
+      query._id = { $in: favRecipeIds };
     }
 
     console.log("Search query:", query);

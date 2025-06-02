@@ -225,7 +225,7 @@ export const RegisterUser = async (email: string, password: string) => {
       case "auth/missing-email":
         emailErrorMessage = "Email must be in correct format.";
         break;
-      case "auth/email-already-exists":
+      case "auth/email-already-in-use":
         emailErrorMessage = "Email is already in use";
         break;
       case "auth/password-does-not-meet-requirements":
@@ -240,8 +240,9 @@ export const RegisterUser = async (email: string, password: string) => {
     }
 
     //only get one error code at a time, so checking for password validation separately
-    validatePassword(auth, password).then((status) => {
+    await validatePassword(auth, password).then((status) => {
       if (!status.isValid) {
+        console.log("status: " + status.isValid);
         passwordErrorMessage = "Password must be at least 6 characters.";
       } else {
         passwordErrorMessage = "";

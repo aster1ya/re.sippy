@@ -5,7 +5,7 @@ import {
 import { auth } from "../backend/firebaseConfig";
 import { RegisterUser } from "../controller";
 
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 import styles from "../styles";
@@ -25,7 +25,11 @@ const Register = () => {
       passwordInput
     );
     if (success) {
-      router.replace("/login");
+      Alert.alert(
+        "Account Registered",
+        "Account successfully created and logged in."
+      );
+      router.back();
     } else {
       setEmailError(emailError);
       setPasswordError(passwordError);

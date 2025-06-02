@@ -51,9 +51,7 @@ const SearchScreen = () => {
       );
       setMealDbResults(mealRes.data.meals || []);
 
-      const dbRes = await axios.get(
-        `http://localhost:5000/api/search?q=${q}`
-      );
+      const dbRes = await axios.get(`http://localhost:5000/api/search?q=${q}`);
       setDbResults(dbRes.data || []);
     } catch (error) {
       console.error("Error fetching recipes:", error);
@@ -83,7 +81,7 @@ const SearchScreen = () => {
           onChangeText={setSearchText}
           onSubmitEditing={() => {
             if (searchText.trim()) {
-              router.push(
+              router.replace(
                 `/search?q=${encodeURIComponent(searchText.trim())}`
               );
             }
