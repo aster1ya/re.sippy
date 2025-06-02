@@ -1,42 +1,213 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Button,
+  Alert,
+} from "react-native";
+import {
+  GetRecipeById,
+  GetCurrentUID,
+  CheckIfFavorited,
+} from "../../controller";
+import FavoriteStar from "@/components/FavoriteStar";
+import { auth } from "@/backend/firebaseConfig";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
-import IRecipe from "../../types/Recipe";
-import { GetRecipeById } from "../../controller";
+
+import IRecipe from "@/types/Recipe";
+import styles from "../../styles";
+import { useIsFocused } from "@react-navigation/native";
 
 const Details = () => {
-  const apiUrl = "http://localhost:5000/api/recipe";
-
+  const isFocused = useIsFocused();
+  const router = useRouter();
   const { id } = useLocalSearchParams();
+  const recipeId = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
 
   const [recipe, setRecipe] = useState<IRecipe>();
+  const [favorited, setFavorited] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const uid = GetCurrentUID();
 
   const fetchRecipe = async () => {
-    const idStr = Array.isArray(id) ? id[0] : id; //handle if multiple IDs are given, take the first one
+    console.log("id test");
+    console.log("id: " + id);
+
+    const idStr = Array.isArray(id) ? id[0] : id;
     const recipe = await GetRecipeById(idStr);
+
     if (recipe) {
       setRecipe(recipe);
     }
   };
 
+  const fetchFavorited = async () => {
+    const { favorited } = await CheckIfFavorited(uid, recipeId);
+    setFavorited(favorited);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    fetchRecipe();
-  }, []);
+    if (isFocused) {
+      fetchRecipe();
+    }
+  }, [isFocused]);
+
+  const goToRecipe = (recipeId: string) => {
+    router.push({
+      pathname: "/recipe_details/edit",
+      params: { id: recipeId },
+    });
+  };
+
+  const handleDelete = async () => {
+    const idStr = Array.isArray(id) ? id[0] : id;
+    Alert.alert(
+      "Delete Recipe",
+      "Are you sure you want to delete this recipe?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await axios.delete(`http://localhost:5000/api/recipes/${idStr}`);
+              Alert.alert("Deleted!", "Recipe successfully deleted.");
+              router.back();
+            } catch (error) {
+              console.error("Delete failed:", error);
+              Alert.alert("Error", "Could not delete recipe.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  useEffect(() => {
+    fetchFavorited();
+  });
+
+  if (loading)
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#417023"
+        style={{ marginTop: 40 }}
+      />
+    );
 
   return (
-    <View>
-      <Text>Details</Text>
-      {/* <Text>Recipe has ID: {id}</Text> */}
-      <Text>Recipe has ID: {recipe?._id}</Text>
-      <Text>Title: {recipe?.title}</Text>
-      <Text>Description: {recipe?.description}</Text>
-      <Text>Ingredients: {recipe?.ingredients}</Text>
-      <Text>Instructions: {recipe?.instructions}</Text>
-    </View>
+    <SafeAreaProvider>
+      <ScrollView>
+        {auth.currentUser ? (
+          <FavoriteStar
+            recipeId={recipeId}
+            uid={uid}
+            isFavorited={favorited}
+          ></FavoriteStar>
+        ) : (
+          <Text></Text>
+        )}
+        <View style={styles.baseContainer}>
+          <View>
+            <Text style={styles.baseTitle}>{recipe?.title}</Text>
+          </View>
+
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Information</Text>
+            <View style={styles.infoGrid}>
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Author</Text>
+                <Text>{recipe?.authorId}</Text>
+              </View>
+
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Type</Text>
+                <Text>{recipe?.mealType}</Text>
+              </View>
+
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Prep Time</Text>
+                <Text>{recipe?.prepTime}</Text>
+              </View>
+
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Cook Time</Text>
+                <Text>{recipe?.cookTime}</Text>
+              </View>
+
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Servings</Text>
+                <Text>{recipe?.servings}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Description</Text>
+            <Text>{recipe?.description}</Text>
+          </View>
+        </View>
+
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Ingredients</Text>
+            <Text>{recipe?.ingredients}</Text>
+          </View>
+        </View>
+
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Instructions</Text>
+            <Text>{recipe?.instructions}</Text>
+          </View>
+        </View>
+
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Notes</Text>
+            <Text>{recipe?.notes}</Text>
+          </View>
+        </View>
+
+        <Button
+          color="tomato"
+          title="Edit Recipe"
+          onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
+        />
+
+        {/*need to make delete and edit buttons only visible if recipe.authorID ==auth.currentuser.uid */}
+        <View style={localStyles.buttonWrapper}>
+          <Button title="Delete" color="red" onPress={handleDelete} />
+        </View>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 
 export default Details;
 
-const styles = StyleSheet.create({});
+const localStyles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  heading: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 15,
+  },
+  buttonWrapper: {
+    marginTop: 30,
+  },
+});

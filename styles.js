@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'none'
   },
   
-  authLink: {
+  hyperlink: {
     color: 'blue',
     textDecorationLine: 'underline',
   },

@@ -1,7 +1,15 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../backend/firebaseConfig";
 
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 import styles from "../styles";
@@ -71,9 +79,11 @@ const Login = () => {
 
       <Button title="login" onPress={HandleSubmitLogin} />
       <Text>{"\n"}</Text>
-      <Link href="/register" style={styles.authLink}>
-        Don't have an account? Create one here.
-      </Link>
+      <TouchableOpacity onPress={() => router.replace("/register")}>
+        <Text style={styles.hyperlink}>
+          Don't have an account? Create one here.
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
