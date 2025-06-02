@@ -18,7 +18,7 @@ type RecipeInputProps = {
 };
 
 const RecipeInput = ({
-  existingRecipeId = "error suppression",
+  existingRecipeId = undefined,
   isEditing = false,
   successAlertHandler,
   failAlertHandler,
@@ -50,9 +50,13 @@ const RecipeInput = ({
   }, []);
 
   const fetchRecipe = async () => {
-    const recipe = await GetRecipeById(existingRecipeId);
-    if (recipe) {
-      setExistingVariables(recipe);
+    if (existingRecipeId) {
+      const recipe = await GetRecipeById(existingRecipeId);
+      if (recipe) {
+        setExistingVariables(recipe);
+      }
+    } else {
+      console.log("existing recipe id to edit not provided");
     }
   };
 
@@ -92,13 +96,14 @@ const RecipeInput = ({
   };
 
   const UploadRecipe = async () => {
-    const authorId = auth.currentUser ? auth.currentUser.uid : "";
+    let currentUid = auth.currentUser ? auth.currentUser.uid : "";
+    let newAuthorId = isEditing ? authorId : currentUid;
 
     const { success, recipe, missingFields } = await CreateRecipeRequest(
       {
         _id: existingRecipeId,
         title: title,
-        authorId: authorId,
+        authorId: newAuthorId,
         mealType: mealType,
         prepTime: prepTime,
         cookTime: cookTime,

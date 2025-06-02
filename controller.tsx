@@ -9,7 +9,7 @@ const apiUrl = "http://localhost:5000/api";
 export const GetAllRecipes = async () => {
   try {
     const response = await axios.get(apiUrl + "/recipes");
-    console.log("success");
+    console.log("successfully got all recipes");
     return response.data;
   } catch (error) {
     console.log("failed to get all recipes");
@@ -27,7 +27,7 @@ export const GetRecipeById = async (id: string) => {
       },
     });
 
-    const recipe = response.data[0];
+    const recipe = response.data;
     console.log("controller recipe: ");
     console.log(recipe);
     return recipe;

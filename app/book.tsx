@@ -7,10 +7,11 @@ import { GetAllRecipes, SearchRecipes } from "../controller";
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
 import styles from "../styles";
+import { useIsFocused } from "@react-navigation/native";
 
 const book = () => {
   const router = useRouter();
-
+  const isFocused = useIsFocused();
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
 
   //get recipes and set them if request is successful.
@@ -20,9 +21,11 @@ const book = () => {
       setRecipes(allRecipes);
     }
   };
-  useFocusEffect(() => {
-    fetchAllRecipes();
-  });
+  useEffect(() => {
+    if (isFocused) {
+      fetchAllRecipes();
+    }
+  }, [isFocused]);
 
   const goToRecipe = (recipeId: string) => {
     router.push({
@@ -37,9 +40,6 @@ const book = () => {
       <RecipeList recipes={recipes} title="All Recipes" />
     </ScrollView>
   );
-
-
-
 };
 
 export default book;

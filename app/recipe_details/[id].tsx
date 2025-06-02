@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
-import { StyleSheet, Text, View, Button, Alert } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  Button,
+  Alert,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
-import IRecipe from "../../types/Recipe";
 
 import { GetRecipeById } from "../../controller";
 import IRecipe from "@/types/Recipe";
@@ -43,32 +47,34 @@ const Details = () => {
 
   const handleDelete = async () => {
     const idStr = Array.isArray(id) ? id[0] : id;
-    Alert.alert("Delete Recipe", "Are you sure you want to delete this recipe?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await axios.delete(`http://localhost:5000/api/recipes/${idStr}`);
-            Alert.alert("Deleted!", "Recipe successfully deleted.");
-            router.back();
-          } catch (error) {
-            console.error("Delete failed:", error);
-            Alert.alert("Error", "Could not delete recipe.");
-          }
+    Alert.alert(
+      "Delete Recipe",
+      "Are you sure you want to delete this recipe?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await axios.delete(`http://localhost:5000/api/recipes/${idStr}`);
+              Alert.alert("Deleted!", "Recipe successfully deleted.");
+              router.back();
+            } catch (error) {
+              console.error("Delete failed:", error);
+              Alert.alert("Error", "Could not delete recipe.");
+            }
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   return (
-
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.baseContainer}>
           <View>
-            {/* <Text>Recipe has ID: {id}</Text> */}
             <Text style={styles.baseTitle}>{recipe?.title}</Text>
           </View>
 
@@ -136,22 +142,13 @@ const Details = () => {
           title="Edit Recipe"
           onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
         />
+
+        {/*need to make delete and edit buttons only visible if recipe.authorID ==auth.currentuser.uid */}
+        <View style={localStyles.buttonWrapper}>
+          <Button title="Delete" color="red" onPress={handleDelete} />
+        </View>
       </ScrollView>
     </SafeAreaProvider>
-
-    <View style={localStyles.container}>
-      <Text style={localStyles.heading}>Details</Text>
-      <Text>Recipe ID: {recipe?._id}</Text>
-      <Text>Title: {recipe?.title}</Text>
-      <Text>Description: {recipe?.description}</Text>
-      <Text>Ingredients: {recipe?.ingredients}</Text>
-      <Text>Instructions: {recipe?.instructions}</Text>
-
-      <View style={localStyles.buttonWrapper}>
-        <Button title="Delete" color="red" onPress={handleDelete} />
-      </View>
-    </View>
-
   );
 };
 
@@ -170,4 +167,3 @@ const localStyles = StyleSheet.create({
     marginTop: 30,
   },
 });
-
