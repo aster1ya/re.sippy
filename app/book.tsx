@@ -9,7 +9,6 @@ import RecipeList from "../components/RecipeList";
 import styles from "../styles";
 
 const book = () => {
-  const apiUrl = "http://localhost:5000/api/recipes";
   const router = useRouter();
 
   const [recipes, setRecipes] = useState<IRecipe[]>([]);

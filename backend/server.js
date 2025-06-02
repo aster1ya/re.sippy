@@ -11,29 +11,32 @@ const mongoUrl = "mongodb+srv://baileythorp04:f8sGmijviZoztIKw@resippycluster.fr
 app.use(cors());
 app.use(express.json());
 
-// Logging requests
-app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.url}`);
-  next();
-});
-
 // Connect to MongoDB
 mongoose.connect(mongoUrl)
   .then(() => console.log("Database connected."))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+
+//Basic Route (Test)
+app.get('/', (req, res) => {
+    res.send("Hello from backend!");
+  });
+  
+//Start the server
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
 
-// Schemas
+//--- end of startup ---
+
+//Gets the exported RecipeDetails model from RecipeSchema.js
 const Recipe = require("./models/RecipeSchema");
+
 const User = require("./models/UserSchema");
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("Hello from backend!");
-});
+
+
+
 
 app.get("/api/recipes", async (req, res) => {
   try {
@@ -46,25 +49,38 @@ app.get("/api/recipes", async (req, res) => {
 
 app.get("/api/recipe", async (req, res) => {
   try {
+
     const { recipeId } = req.query;
     const recipe = await Recipe.findById(recipeId);
     res.json(recipe);
+
   } catch (err) {
     console.error("Error fetching recipe:", err.message);
     res.status(500).json({ message: err.message });
   }
 });
 
-app.post("/api/recipes", async (req, res) => {
-  const { title, description, ingredients, instructions } = req.body;
 
+//POST request to create a recipe based on the request
+app.post("/api/recipes", async (req, res) => {
+ 
   try {
-    const recipe = await Recipe.create({ title, description, ingredients, instructions });
-    res.json({ recipe, success: true });
-  } catch (err) {
-    res.json({ error: err.message, success: false });
+    const { recipe, isUpdate } = req.body;
+
+    const mongoRecipe = new Recipe(recipe)
+
+    if(isUpdate){
+      mongoRecipe.isNew = false;
+    }
+
+    const createdRecipe = await mongoRecipe.save()
+    res.send({recipe : createdRecipe, success : true}) // send a copy of the created recipe after it is created
   }
-});
+  catch (e) {
+    console.log("recipe creation error: "+e.message)
+    res.send({error : e.message, success : false}) // sends an error if fails
+  }
+  });
 
 app.delete("/api/recipes/:id", async (req, res) => {
   try {
@@ -80,6 +96,7 @@ app.delete("/api/recipes/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete recipe", detail: err });
   }
 });
+
 
 app.get("/api/search", async (req, res) => {
   try {
