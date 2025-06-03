@@ -1,16 +1,22 @@
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Link, useFocusEffect, useRouter } from "expo-router";
-import Card from "./card";
-import axios from "axios";
+import { 
+  Button,
+  Text, 
+  ScrollView,
+  View, 
+} from "react-native";
 import { GetAllRecipes, SearchRecipes } from "../controller";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
+
+import { auth } from "@/backend/firebaseConfig";
+import { useRouter } from "expo-router";
+
 import IRecipe from "../types/Recipe";
 import RecipeList from "../components/RecipeList";
 import styles from "../styles";
-import { auth } from "@/backend/firebaseConfig";
-import { useIsFocused } from "@react-navigation/native";
 
-const book = () => {
+const Book = () => {
   const router = useRouter();
   const isFocused = useIsFocused();
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
@@ -35,20 +41,44 @@ const book = () => {
     });
   };
 
-  return (
-    <ScrollView>
-      <Text style={styles.bookTitle}>All Recipes</Text>
-      <RecipeList recipes={recipes} />
+  const goToFavorites = () => {
+    router.push({
+      pathname: "/favorites",
+    })
+  }
 
-      {auth.currentUser ? (
-        <Link href="/favorites" style={styles.hyperlink}>
-          Go To Favorites
-        </Link>
-      ) : (
-        <Text>Login to view favorites</Text>
-      )}
-    </ScrollView>
+  const goToLogin = () => {
+    router.push({
+      pathname: "/login",
+    })
+  }
+
+  return (
+    <SafeAreaProvider>
+      <ScrollView>
+        <View style={styles.bookContainer}>
+          <Text style={styles.bookTitle}>All Recipes</Text>
+          <RecipeList recipes={recipes}/>
+        </View>
+
+        <View style={styles.longButton}>
+          {auth.currentUser ? (
+            <Button
+              color="tomato"
+              title="Go to Favorites"
+              onPress={goToFavorites}
+            />
+          ) : (
+            <Button
+              color="tomato"
+              title="Login to View Favorites"
+              onPress={goToLogin}
+            />
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 
-export default book;
+export default Book;

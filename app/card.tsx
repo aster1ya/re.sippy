@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { 
+  Text, 
+  View 
+} from "react-native";
 import recipes from "./(drawers)/recipes";
 
 function Card({ recipes }) {
@@ -12,4 +15,5 @@ function Card({ recipes }) {
     </View>
   );
 }
+
 export default Card;
