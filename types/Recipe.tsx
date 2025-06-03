@@ -5,11 +5,13 @@
 export default interface IRecipe {
   _id?: string;
   title: string;
-
+  
   authorId: string;
+  author: string;
   mealType?: string;
   prepTime?: string;
   cookTime?: string;
+  totalTime?: string;
   servings?: string;
 
   description?: string;
