@@ -1,21 +1,26 @@
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Link, useFocusEffect, useRouter } from "expo-router";
-import Card from "./card";
-import axios from "axios";
+import {
+  Button, 
+  Text,
+  ScrollView,
+  View,
+} from "react-native";
 import { ToggleFavorite, SearchRecipes } from "../controller";
-import IRecipe from "../types/Recipe";
-import RecipeList from "../components/RecipeList";
-import { auth } from "../backend/firebaseConfig";
-import styles from "../styles";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
-const favorites = () => {
+import { auth } from "../backend/firebaseConfig";
+
+import IRecipe from "../types/Recipe";
+import RecipeList from "../components/RecipeList";
+import styles from "../styles";
+
+const Favorites = () => {
   const [recipeList, setRecipeList] = useState<IRecipe[]>([]);
   const isFocused = useIsFocused();
 
   const getFavoriteRecipes = async () => {
-    console.log("aaaaaa");
+    console.log("******");
     if (auth.currentUser) {
       const recipes = await SearchRecipes({
         favoriteUserId: auth.currentUser.uid,
@@ -31,14 +36,18 @@ const favorites = () => {
   }, [isFocused]);
 
   return (
-    <ScrollView>
-      {recipeList.length == 0 ? (
-        <Text>You have no favorite recipes</Text>
-      ) : (
-        <RecipeList recipes={recipeList} />
-      )}
-    </ScrollView>
+    <SafeAreaProvider>
+      <ScrollView>
+        <View style={styles.bookContainer}>
+          {recipeList.length == 0 ? (
+            <Text>You have no favorited recipes.</Text>
+          ) : (
+            <RecipeList recipes={recipeList}/>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 };
 
-export default favorites;
+export default Favorites;
