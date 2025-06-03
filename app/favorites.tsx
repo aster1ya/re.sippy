@@ -39,6 +39,7 @@ const Favorites = () => {
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.bookContainer}>
+          <Text style={styles.bookTitle}>Your Favorites</Text>
           {recipeList.length == 0 ? (
             <Text>You have no favorited recipes.</Text>
           ) : (
