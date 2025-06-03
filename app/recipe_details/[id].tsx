@@ -57,6 +57,12 @@ const Details = () => {
   useEffect(() => {
     if (isFocused) {
       fetchRecipe();
+
+      if (auth.currentUser) {
+        fetchFavorited();
+      } else {
+        setLoading(false);
+      }
     }
   }, [isFocused]);
 
@@ -91,10 +97,6 @@ const Details = () => {
       ]
     );
   };
-
-  useEffect(() => {
-    fetchFavorited();
-  });
 
   if (loading)
     return (
