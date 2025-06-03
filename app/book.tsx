@@ -61,21 +61,23 @@ const Book = () => {
           <RecipeList recipes={recipes}/>
         </View>
 
-        <View style={styles.longButton}>
           {auth.currentUser ? (
-            <Button
-              color="tomato"
-              title="Go to Favorites"
-              onPress={goToFavorites}
-            />
+            <View style={styles.longButton}>
+              <Button
+                color="tomato"
+                title="Go to Favorites"
+                onPress={goToFavorites}
+              />
+            </View>
           ) : (
-            <Button
-              color="tomato"
-              title="Login to View Favorites"
-              onPress={goToLogin}
-            />
+            <View style={styles.longButton}>
+              <Button
+                color="tomato"
+                title="Login to View Favorites"
+                onPress={goToLogin}
+              />
+            </View>
           )}
-        </View>
       </ScrollView>
     </SafeAreaProvider>
   );
