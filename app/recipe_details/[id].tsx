@@ -189,10 +189,12 @@ const Details = () => {
           onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
         />
 
-        {/*need to make delete and edit buttons only visible if recipe.authorID ==auth.currentuser.uid */}
-        <View style={localStyles.buttonWrapper}>
-          <Button title="Delete" color="red" onPress={handleDelete} />
-        </View>
+        {/* Show the Delete button only if the authorId matches the logged-in user's uid. */}
+        {auth.currentUser && recipe?.authorId === auth.currentUser.uid && (
+          <View style={localStyles.buttonWrapper}>
+            <Button title="Delete" color="red" onPress={handleDelete} />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaProvider>
   );
