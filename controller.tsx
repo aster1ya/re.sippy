@@ -67,9 +67,11 @@ export const CreateRecipeRequest = async (
     _id,
     title,
     authorId,
+    author,
     mealType,
     prepTime,
     cookTime,
+    totalTime,
     servings,
     description,
     ingredients,
@@ -80,12 +82,12 @@ export const CreateRecipeRequest = async (
   isUpdate: boolean = false
 ) => {
   try {
-    mealType = TrimOrSetToDefault(mealType, "default mealType");
-    prepTime = TrimOrSetToDefault(prepTime, "default prepTime");
-    cookTime = TrimOrSetToDefault(cookTime, "default cookTime");
-    servings = TrimOrSetToDefault(servings, "2");
-    description = TrimOrSetToDefault(description, "default description");
-    notes = TrimOrSetToDefault(notes, "default notes");
+    mealType = TrimOrSetToDefault(mealType, "N/A");
+    prepTime = TrimOrSetToDefault(prepTime, "N/A");
+    cookTime = TrimOrSetToDefault(cookTime, "N/A");
+    servings = TrimOrSetToDefault(servings, "1");
+    description = TrimOrSetToDefault(description, "No Description Provided");
+    notes = TrimOrSetToDefault(notes, "No Notes Provided");
     if (!tags) {
       tags = [];
     }
@@ -106,7 +108,7 @@ export const CreateRecipeRequest = async (
       missingFields.push("Instructions");
     }
     if (!authorId) {
-      missingFields.push("AuthorId (oops you aint logged in)");
+      missingFields.push("AuthorId (Log In Required)");
     }
 
     if (missingFields.length > 0) {
@@ -117,9 +119,11 @@ export const CreateRecipeRequest = async (
       _id: _id,
       title: title,
       authorId: authorId,
+      author: author,
       mealType: mealType,
       prepTime: prepTime,
       cookTime: cookTime,
+      totalTime: totalTime,
       description: description,
       ingredients: ingredients,
       instructions: instructions,

@@ -7,7 +7,7 @@ export default interface IRecipe {
   title: string;
   
   authorId: string;
-  author: string;
+  author?: string;
   mealType?: string;
   prepTime?: string;
   cookTime?: string;
