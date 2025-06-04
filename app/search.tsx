@@ -116,9 +116,11 @@ const SearchScreen = () => {
         {/* End of tag filter buttons */}
 
         <View style={styles.bookContainer}>
-          <Text style={styles.bookTitle}>
-            Search Results for "{searchText}"
-          </Text>
+          {searchText === "" ? (
+            <Text style={styles.bookTitle}>Showing all recipes </Text>
+          ) : (
+            <Text style={styles.bookTitle}>Results for "{searchText}"</Text>
+          )}
 
           {loading ? (
             <ActivityIndicator size="large" color="#417023" />
