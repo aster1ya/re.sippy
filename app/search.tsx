@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import axios from "axios";
 import styles from "../styles";
@@ -35,9 +36,7 @@ const SearchScreen = () => {
   // Added: handleTagToggle function
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) =>
-      prev.includes(tag)
-        ? prev.filter((t) => t !== tag)
-        : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   };
 
@@ -55,9 +54,9 @@ const SearchScreen = () => {
   };
 
   useEffect(() => {
-    if (searchText) {
-      fetchResults();
-    }
+    //if (searchText) {
+    fetchResults();
+    //}
   }, [searchText]);
 
   useEffect(() => {
@@ -74,74 +73,62 @@ const SearchScreen = () => {
 
   return (
     <SafeAreaView style={styles.searchSafeArea}>
-      <CustomSearchBar
-        searchHandler={(searchInput) => {
-          setSearchText(searchInput);
-        }}
-      />
-      {/* Added: Tag filter buttons */}
-      <View style={{ flexDirection: "row", flexWrap: "wrap", marginVertical: 10 }}>
-        {TAGS.map((tag) => (
-          <TouchableOpacity
-            key={tag}
-            style={{
-              backgroundColor: selectedTags.includes(tag) ? "#4CAF50" : "#E0E0E0",
-              borderRadius: 20,
-              paddingVertical: 6,
-              paddingHorizontal: 14,
-              margin: 4,
-            }}
-            onPress={() => handleTagToggle(tag)}
-          >
-            <Text style={{ color: selectedTags.includes(tag) ? "#fff" : "#333" }}>
-              {tag}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      {/* End of tag filter buttons */}
+      <ScrollView>
+        <CustomSearchBar
+          searchHandler={(searchInput) => {
+            setSearchText(searchInput);
+          }}
+        />
+        {/* Added: Tag filter buttons */}
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            marginVertical: 10,
+            alignSelf: "center",
+          }}
+        >
+          {TAGS.map((tag) => (
+            <TouchableOpacity
+              key={tag}
+              style={{
+                backgroundColor: selectedTags.includes(tag)
+                  ? "tomato"
+                  : "#F0F0F0",
+                borderRadius: 20,
+                paddingVertical: 6,
+                paddingHorizontal: 14,
+                margin: 4,
 
-      <View style={styles.searchContainer}>
-        <Text style={styles.searchTitle}>Search Results for "{q}"</Text>
+                borderWidth: 1,
+                borderColor: selectedTags.includes(tag) ? "tomato" : "#808080",
+              }}
+              onPress={() => handleTagToggle(tag)}
+            >
+              <Text
+                style={{ color: selectedTags.includes(tag) ? "#fff" : "#333" }}
+              >
+                {tag}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        {/* End of tag filter buttons */}
 
-        {loading ? (
-          <ActivityIndicator size="large" color="#417023" />
-        ) : filteredRecipes.length === 0 ? (
-          <Text style={styles.searchNoResult}>No results found.</Text>
-        ) : (
-          <RecipeList recipes={filteredRecipes} />
+        <View style={styles.bookContainer}>
+          <Text style={styles.bookTitle}>
+            Search Results for "{searchText}"
+          </Text>
 
-          /* ### old search list ###
-          <FlatList
-            data={[...dbResults, ...mealDbResults]}
-            keyExtractor={(item: any) => item._id || item.idMeal}
-            renderItem={({ item }: { item: DBRecipe | MealDBRecipe }) => {
-              const isDb = "_id" in item;
-
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push({
-                      pathname: isDb ? "/recipe_details/[id]" : "/details",
-                      params: { id: isDb ? item._id : item.idMeal },
-                    })
-                  }
-                  style={styles.searchMealCard}
-                >
-                  <Image
-                    source={{ uri: isDb ? item.image : item.strMealThumb }}
-                    style={styles.searchMealImage}
-                  />
-                  <Text style={styles.searchMealName}>
-                    {isDb ? item.title : item.strMeal}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-          />
-          */
-        )}
-      </View>
+          {loading ? (
+            <ActivityIndicator size="large" color="#417023" />
+          ) : filteredRecipes.length === -1 ? (
+            <Text style={styles.searchNoResult}>No results found.</Text>
+          ) : (
+            <RecipeList recipes={filteredRecipes} />
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -20,7 +20,7 @@ const SearchBar = ({ searchHandler }: SearchBarProps) => {
   const [searchText, setSearchText] = useState<string>("");
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", margin: 10 }}>
+    <View style={{ alignItems: "center", margin: 10, flex: 1 }}>
       <View
         style={[
           styles.indexSearchBarContainer,
@@ -40,9 +40,9 @@ const SearchBar = ({ searchHandler }: SearchBarProps) => {
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={() => {
-            if (searchText.trim()) {
-              searchHandler(searchText);
-            }
+            // if (searchText.trim()) {
+            searchHandler(searchText.trim());
+            // }
           }}
         />
       </View>
@@ -53,7 +53,7 @@ const SearchBar = ({ searchHandler }: SearchBarProps) => {
 export default SearchBar;
 
 const theme = {
-  placeholderColor: "#ccc",
-  textColor: "#fff",
-  inputBg: "#444",
+  placeholderColor: "#707070",
+  textColor: "#000000",
+  inputBg: "#E8E8E8",
 };

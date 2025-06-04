@@ -100,8 +100,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     paddingHorizontal: 10,
-    width: 280,
-    marginRight: 10,
+    marginRight: 0,
+    borderWidth: 1,
   },
 
   indexSearchBar: {
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
 
   searchSafeArea: {
     flex: 1,
-    backgroundColor: '#1c1c1c',
+    //backgroundColor: '#1c1c1c',
   },
 
   searchContainer: {
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
 
   searchNoResult: {
-    color: '#ccc',
+    //color: '#ccc',
     fontSize: 16,
     marginTop: 40,
     textAlign: 'center',
@@ -334,6 +334,16 @@ const styles = StyleSheet.create({
 
   authError: {
     color: 'red',
+  },
+  
+  bookContainer: {
+    backgroundColor:'lightsalmon',
+    borderColor:'lightsalmon',
+    borderRadius:10,
+    borderWidth:2.5,
+    flex:1,
+    margin:10,
+    padding:10,
   },
 });
 
