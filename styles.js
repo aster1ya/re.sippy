@@ -14,149 +14,117 @@ const styles = StyleSheet.create({
   },
 
   layoutContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    padding:20,
   },
 
   layoutTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-
-  button: {
-    backgroundColor: '#4CAF50', // Green background for the button
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 25, // Makes the button round-squared
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 5, // For shadow effect on Android
-  },
-
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginVertical: 20,
-  },
-
-  buttonText: {
-    color: '#fff', // White text
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-
-  indexAppName: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-
-  indexTagline: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 5,
+    fontSize:24,
+    fontWeight:'bold',
+    marginBottom:20,
   },
 
   indexSafeArea: {
-    flex: 1,
+    backgroundColor:'lightsalmon',
+    flex:1,
   },
 
   indexContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    backgroundColor:'whitesmoke',
+    borderColor:'whitesmoke',
+    borderRadius:10,
+    borderWidth:2.5,
+    flex:1,
+    margin:10,
   },
 
-  indexTopSection: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+  indexHeader: {
+    backgroundColor:'whitesmoke',
+    borderColor:'whitesmoke',
+    borderRadius:10,
+    borderWidth:2.5,
+    margin:10,
+    padding:20,
+  },
+
+  indexUserStatus: {
+    fontSize:14,
+    textAlign:'center',
+    margin:5,
+    paddingTop:10,
+    paddingBottom:5,
+  },
+  
+  indexAppTitle: {
+    fontSize:60,
+    fontWeight:'bold',
+    alignSelf:'center',
+    margin:15,
+    paddingTop:25,
+  },
+
+  indexWelcome: {
+    alignSelf:'center',
+    fontSize:20,
+    fontWeight:'bold',
+    margin:15,
+    paddingVertical:25,
   },
 
   indexTopRowInline: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 10,
-  },
-
-  indexSectionHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    marginVertical:5,
+    marginRight:10,
   },
 
   indexSearchBarContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 25,
-    paddingHorizontal: 10,
-    width: 280,
-    marginRight: 10,
+    flexDirection:'row',
+    alignItems:'center',
+    borderRadius:25,
+    paddingHorizontal:10,
+    width:280,
+    marginRight:5,
   },
 
   indexSearchBar: {
-    flex: 1,
-    height: 40,
-    paddingHorizontal: 10,
+    flex:1,
+    height:40,
+    paddingHorizontal:10,
   },
 
   indexSearchIconInline: {
-    marginRight: 5,
-  },
-
-  indexRecipeImage: {
-    width: 380,
-    height: 270,
-    borderRadius: 20,
-    resizeMode: 'cover',
-    marginBottom: 10,
-  },
-
-  indexRecipeTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-  indexRecipeInfo: {
-    fontSize: 14,
-    marginTop: 4,
-    marginBottom: 10,
-    textAlign: 'center',
+    marginRight:5,
   },
 
   indexTabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#444',
+    backgroundColor:'whitesmoke',
+    borderColor:'whitesmoke',
+    borderRadius:10,
+    borderWidth:2.5,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    margin:10,
+    padding:15,
   },
 
   indexTabButton: {
-    alignItems: 'center',
+    backgroundColor:'tomato',
+    flexDirection:'row',
+    padding:5,
+  },
+
+  indexTabIcon: {
+    margin:2.5,
   },
 
   indexTabLabel: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-
-  menuContainer: {
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center',
-  },
-
-  menuTitle: {
-    fontSize: 24, 
-    marginBottom: 20,
+    color:'white',
+    fontWeight:'bold',
+    padding:5,
   },
 
   searchSafeArea: {
@@ -212,9 +180,9 @@ const styles = StyleSheet.create({
   },
 
   bookTitle: {
-    fontSize: 30,
-    alignSelf: 'center',
-    margin: 15,
+    fontSize:30,
+    alignSelf:'center',
+    margin:15,
   },
 
   baseContainer: {
@@ -330,15 +298,10 @@ const styles = StyleSheet.create({
     color: '#eee',
     marginBottom: 2,
   },
-
-  checkboxTextStyle: {
-    fontSize:14, 
-    textDecorationLine: 'none'
-  },
   
   hyperlink: {
-    color: 'blue',
-    textDecorationLine: 'underline',
+    color:'tomato',
+    textDecorationLine:'underline',
   },
 
   authError: {
