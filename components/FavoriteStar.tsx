@@ -22,7 +22,7 @@ const FavoriteStar = ({ isFavorited, uid, recipeId }: FavoriteStarProps) => {
       <TouchableOpacity onPress={handleToggleRecipe}>
         <AntDesign
           name={highlightStar ? "star" : "staro"}
-          size={64}
+          size={48}
           color={"#f0be1d"}
         />
       </TouchableOpacity>

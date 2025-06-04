@@ -14,7 +14,6 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
@@ -36,6 +35,7 @@ const images = [
 
 import { auth } from "../backend/firebaseConfig";
 import { User } from "firebase/auth";
+import CustomSearchBar from "../components/CustomSearchBar";
 
 const Index = () => {
   const apiUrl = "http://localhost:5000/api/recipes";
@@ -153,35 +153,13 @@ const Index = () => {
         <Text style={[styles.indexTagline, { color: theme.subTextColor }]}>
           {currentUser ? "Logged in as " + currentUser?.email : "Not Logged In"}
         </Text>
-
         <View style={styles.indexTopRowInline}>
-          <View
-            style={[
-              styles.indexSearchBarContainer,
-              { backgroundColor: theme.inputBg },
-            ]}
-          >
-            <Ionicons
-              name="search"
-              size={20}
-              color={theme.placeholderColor}
-              style={styles.indexSearchIconInline}
-            />
-            <TextInput
-              style={[styles.indexSearchBar, { color: theme.textColor }]}
-              placeholder="Search recipes..."
-              placeholderTextColor={theme.placeholderColor}
-              value={searchText}
-              onChangeText={setSearchText}
-              onSubmitEditing={() => {
-                if (searchText.trim()) {
-                  router.push(
-                    `/search?q=${encodeURIComponent(searchText.trim())}`
-                  );
-                }
-              }}
-            />
-          </View>
+          <CustomSearchBar
+            searchHandler={(searchTerm) => {
+              router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+            }}
+          />
+
           <TouchableOpacity onPress={() => setIsDarkMode((prev) => !prev)}>
             <Ionicons
               name="moon"

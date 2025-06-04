@@ -1,8 +1,5 @@
 import { StyleSheet } from "react-native";
 
-
-//man, removing duplicate entries is gonna take ages
-
 const styles = StyleSheet.create({
   h1: {
     fontSize:26,
@@ -162,12 +159,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  bookTitle: {
-    fontSize: 30,
-    alignSelf: 'center',
-    margin: 15,
-  },
-
   searchSafeArea: {
     flex: 1,
     backgroundColor: '#1c1c1c',
@@ -210,6 +201,22 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
+  bookContainer: {
+    backgroundColor:'lightsalmon',
+    borderColor:'lightsalmon',
+    borderRadius:10,
+    borderWidth:2.5,
+    flex:1,
+    margin:10,
+    padding:10,
+  },
+
+  bookTitle: {
+    fontSize: 30,
+    alignSelf: 'center',
+    margin: 15,
+  },
+
   baseContainer: {
     backgroundColor:'lightsalmon',
     borderColor:'lightsalmon',
@@ -217,6 +224,14 @@ const styles = StyleSheet.create({
     borderWidth:2.5,
     flex:1,
     margin:10,
+    padding:10,
+  },
+
+  baseSubContainer: {
+    backgroundColor:'whitesmoke',
+    borderColor:'whitesmoke',
+    borderRadius:5,
+    borderWidth:5,
     padding:10,
   },
 
@@ -230,16 +245,14 @@ const styles = StyleSheet.create({
     textAlign:'center',
   },
 
-  baseSubContainer: {
-    backgroundColor:'whitesmoke',
-    borderColor:'whitesmoke',
-    borderRadius:5,
-    borderWidth:5,
-    padding:10,
-  },
-
   baseChecklist: {
     padding:5,
+  },
+
+  favButton: {
+    alignItems:'center',
+    margin:5,
+    paddingTop:5,
   },
 
   infoGrid: {
@@ -261,16 +274,12 @@ const styles = StyleSheet.create({
     fontWeight:'bold',
   },
 
-  createTitle: {
-    flex: 1,
-    flexDirection: 'row',
-    fontSize: 30,
-    paddingBottom: 20,
-    textAlign: 'center',
-  },
-
   infoField: {
     marginTop: -10,
+  },
+
+  longButton: {
+    margin:10,
   },
 
   detailSafeArea: {
