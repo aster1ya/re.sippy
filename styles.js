@@ -249,55 +249,6 @@ const styles = StyleSheet.create({
   longButton: {
     margin:10,
   },
-
-  detailSafeArea: {
-    flex: 1,
-    backgroundColor: '#1c1c1c',
-  },
-
-  detailContainer: {
-    padding: 20,
-  },
-
-  detailTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 5,
-  },
-
-  detailSection: {
-    fontSize: 18,
-    color: '#fff',
-    marginTop: 20,
-    marginBottom: 8,
-    fontWeight: '600',
-  },
-
-  detailCategory: {
-    fontSize: 14,
-    color: '#ccc',
-    marginBottom: 20,   
-  },
-
-  recipeImage: {
-    width: '100%',
-    height: 240,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-
-  recipeInstructions: {
-    fontSize: 14,
-    color: '#ddd',
-    lineHeight: 22,
-  },
-
-  recipeIngredients: {
-    fontSize: 14,
-    color: '#eee',
-    marginBottom: 2,
-  },
   
   hyperlink: {
     color:'tomato',
