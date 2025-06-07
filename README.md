@@ -1,87 +1,42 @@
-# Getting Started
+# 🍳 re.sippy 🍳
+re.sippy is an Expo-based recipe book app for Android, built with Javascript and React Native. This was created over the course of a 12-week long semester for a second year university assignment.
 
-Here is a guide to clone the repo and launch the app on your phone. Way below this is the premade readme content.
+## Installation
+1. [Install git](https://git-scm.com/).
+2. [Install NodeJS](https://nodejs.org/en).
+3. To clone the repository:
 
-Installing things you need
-- Install nodejs from nodejs.org if you don't already have it. Use command `node -v` to check if you already have it installed
-- Install git from the website if you don't already have it.
-
-To clone the repo (get it from github onto your device)
-- Open VSCode in whatever folder you want it to be.
-- Log in to github with the profile icon in the bottom left.
+- Open [Visual Studio Code](https://code.visualstudio.com/).
+- Open a new Terminal inside VSCode (`Ctrl+Shift+`\`).
 - Run the command `git clone https://github.com/aster1ya/re.sippy.git`.
-- Navigate into the folder it just made with `cd re.sippy`.
-- Then run these two commands: `npm install expo` and `npm install https://github.com/aster1ya/re.sippy.git` to install dependencies that have been gitignored. Now you can launch the app. 
+- Navigate into the created folder wth `cd re.sippy`.
+- Run the following commands, `npm install expo` and `npm install https://github.com/aster1ya/re.sippy.git`, to install the missing dependencies that were exlcuded through the .gitignore file.
 
-To launch the app on your phone wirelessly (Cant do at AUT):
-- You need to download the Expo Go app.
-- Do the command `npx expo start`
+4. To launch the app on your phone:
+
+> **DISCLAIMER** These methods require you to have the app [Expo Go (SDK 52)](https://expo.dev/go) installed on your Android device.
+
+**via wireless**
+- Run the command `npx expo start`.
 - Scan the QR code with the Expo Go app.
 
-To open the app over cable:
-- Have developer mode and USB debugging enabled on your phone (google it)
-- Run the command `npx expo start --localhost --android` and it just opens.
+**via wired**
+- Enable Developer Mode (`Settings > About phone > Software information`, then tap `Build number` repeatedly to unlock).
+- Enable USB debugging in Developer Options (`Settings > Developer options`, then scroll down to `Debugging` section).
+- Run the command `npx expo start --localhost --android` with the device awake to allow debugging authorization.
 
-**(NEW) - To make the backend database work**
-- Run command `adb reverse tcp:5000 tcp:5000`. You only need to do this once, but you may need to do it again when you re-open VSCode.
-- When testing the app, you have to make have server.js in the backend folder running in another terminal. Do this with `node backend/server.js` Make sure you know what directory you are in.
+5. To access the backend database:
 
-Troubleshooting. Don't worry about this if everything is working fine. (These fixes worked for me ¯\\\_(ツ)\_/¯ )
-- If trying an `npm expo` command gives an error something along the lines of "doesn't have permissions to run scripts":
-   - press CTRL+P and search for settings.json.
-   - add `"args": ["-ExecutionPolicy", "Bypass"]` inside `"PowerShell"` just below "source" and "icon". 
-   - If you cant do that, youll have to create a new profile by doing CTRL+SHIFT+P and selecting `Create New Terminal (With Profile)` 
-- If trying to deploy the app over cable gives an error mentioning 'adb' or 'Android SDK', install android studio from their website, it'll download everything you need and put it in the right places.
+> **DISCLAIMER** This method STRICTLY requires that the app is opened on your Android device via the wired method above.
 
+- Run command `adb reverse tcp:5000 tcp:5000` in a terminal in VSCode.
+- Run the command `node backend/server.js` in another terminal WITHIN the directory of the app's files.
 
+## Troubleshooting
+### My 'npm expo' command is throwing permission errors!
+- Press `CTRL+P` and search for settings.json.
+- Add `"args": ["-ExecutionPolicy", "Bypass"]` inside `"PowerShell"` JUST below "source" and "icon". 
+- If you cannot do that, you'll need to a new profile (`CTRL+SHIFT+P`) and selecting `Create New Terminal (With Profile)`.
 
-# Welcome to your Expo app 👋
-
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
-
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### The app won't run because of an 'Android SDK' or 'adb' issue!
+- Install [Android Studio](https://developer.android.com/studio) to download everything required and in the right place.
