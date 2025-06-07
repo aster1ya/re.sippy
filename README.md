@@ -14,7 +14,8 @@ re.sippy is an Expo-based recipe book app for Android, built with Javascript and
 
 4. To launch the app on your phone:
 
-> **DISCLAIMER** These methods require you to have the app [Expo Go (SDK 52)](https://expo.dev/go) installed on your Android device.
+> **DISCLAIMER**
+> These methods require you to have the app [Expo Go (SDK 52)](https://expo.dev/go) installed on your Android device.
 
 **via wireless**
 - Run the command `npx expo start`.
@@ -27,7 +28,8 @@ re.sippy is an Expo-based recipe book app for Android, built with Javascript and
 
 5. To access the backend database:
 
-> **DISCLAIMER** This method STRICTLY requires that the app is opened on your Android device via the wired method above.
+> **DISCLAIMER**
+> This method STRICTLY requires that the app is opened on your Android device via the wired method above.
 
 - Run command `adb reverse tcp:5000 tcp:5000` in a terminal in VSCode.
 - Run the command `node backend/server.js` in another terminal WITHIN the directory of the app's files.
