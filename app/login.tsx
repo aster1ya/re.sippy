@@ -69,12 +69,12 @@ const Login = () => {
         <Text style={styles.h1}>Login to your account</Text>
 
         <TextInput style={styles.authInput}
-          placeholder="email"
+          placeholder="Email"
           keyboardType="email-address"
           onChangeText={(newText) => setEmailInput(newText)}
         />
         <TextInput style={styles.authInput}
-          placeholder="password"
+          placeholder="Password"
           onChangeText={(newText) => setPasswordInput(newText)}
           secureTextEntry
         />

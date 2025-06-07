@@ -42,7 +42,7 @@ const Register = () => {
         <Text style={styles.h1}>Register your account</Text>
 
         <TextInput style={styles.authInput}
-          placeholder="email"
+          placeholder="Email"
           keyboardType="email-address"
           onChangeText={(newText) => setEmailInput(newText)}
         />
@@ -51,7 +51,7 @@ const Register = () => {
         </Text>
 
         <TextInput style={styles.authInput}
-          placeholder="password"
+          placeholder="Password"
           onChangeText={(newText) => setPasswordInput(newText)}
         />
         <Text style={styles.authError} className="text-danger">
