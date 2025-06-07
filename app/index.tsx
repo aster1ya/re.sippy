@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   StatusBar,
@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { 
+  SearchRecipes, 
+  GetRecipeById,
+} from "../controller";
 import CustomSearchBar from "../components/CustomSearchBar";
-import { SearchRecipes, GetRecipeById } from "../controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 

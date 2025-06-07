@@ -3,10 +3,10 @@ import {
   Alert,  
   View 
 } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useLocalSearchParams, useRouter } from "expo-router";
-  
 import RecipeInput from "@/components/RecipeInput";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 const EditRecipe = () => {
   //establish connection to API to pull recipe data

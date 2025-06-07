@@ -1,18 +1,17 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../backend/firebaseConfig";
-
+import React, { useEffect, useState} from "react";
 import {
-  StyleSheet,
-  View,
+  Alert,
+  Button,
+  ScrollView,
   Text,
   TextInput,
-  Button,
-  Alert,
-  TouchableOpacity,
-  ScrollView
+  View,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
-import React, { useState, useEffect } from "react";
+
+import { auth } from "../backend/firebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "expo-router";
+
 import styles from "../styles";
 
 const Login = () => {
@@ -68,23 +67,31 @@ const Login = () => {
         style={styles.baseContainer}>
         <Text style={styles.h1}>Login to your account</Text>
 
-        <TextInput style={styles.authInput}
+        <TextInput
           placeholder="Email"
           keyboardType="email-address"
+          style={styles.authInput}
           onChangeText={(newText) => setEmailInput(newText)}
         />
-        <TextInput style={styles.authInput}
+        <TextInput
           placeholder="Password"
           onChangeText={(newText) => setPasswordInput(newText)}
+          style={styles.authInput}
           secureTextEntry
         />
         <Text style={styles.authError}>{loginError}</Text>
 
-        <Button title="login" onPress={HandleSubmitLogin}
-                color="tomato" />
+        <Button 
+          title="login" 
+          color="tomato"
+          onPress={HandleSubmitLogin}
+        />
         <Text/>
-        <Button title="Don't have an account? Create one here." onPress={() => router.replace("/register")}
-                color="tomato"/>
+        <Button 
+          title="Don't have an account? Create one here."
+          color="tomato"
+          onPress={() => router.replace("/register")}
+        />
       </View>
     </ScrollView>
   );

@@ -5,7 +5,10 @@ import {
   ScrollView,
   View, 
 } from "react-native";
-import { GetAllRecipes, SearchRecipes } from "../controller";
+import { 
+  GetAllRecipes, 
+  SearchRecipes,
+} from "../controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useIsFocused } from "@react-navigation/native";
 
@@ -64,16 +67,16 @@ const Book = () => {
           {auth.currentUser ? (
             <View style={styles.longButton}>
               <Button
-                color="tomato"
                 title="Go to Favorites"
+                color="tomato"
                 onPress={goToFavorites}
               />
             </View>
           ) : (
             <View style={styles.longButton}>
               <Button
-                color="tomato"
                 title="Login to View Favorites"
+                color="tomato"
                 onPress={goToLogin}
               />
             </View>

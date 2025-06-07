@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -100,8 +100,8 @@ const Details = () => {
   if (loading)
     return (
       <ActivityIndicator
-        size="large"
         color="#417023"
+        size="large"
         style={{ marginTop: 40 }}
       />
     );
@@ -207,8 +207,8 @@ const Details = () => {
         {auth.currentUser?.uid === recipe?.authorId ? (
           <View style={styles.longButton}>
             <Button
-              color="tomato"
               title="Edit Recipe"
+              color="tomato"
               onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
             />
           </View>
@@ -219,8 +219,8 @@ const Details = () => {
         {auth.currentUser?.uid === recipe?.authorId ? (
           <View style={styles.longButton}>
             <Button 
+              title="Delete"
               color="red"
-              title="Delete" 
               onPress={handleDelete}/>
           </View>
         ) : (

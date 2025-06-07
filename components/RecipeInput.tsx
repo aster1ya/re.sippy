@@ -315,7 +315,11 @@ const RecipeInput = ({
       </View>
 
       <View style={styles.longButton}>
-        <Button color="tomato" title="Save Recipe" onPress={handleCreateRecipe}/>
+        <Button
+          title="Save Recipe"
+          color="tomato" 
+          onPress={handleCreateRecipe}
+        />
       </View>
     </ScrollView>      
   );

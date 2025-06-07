@@ -1,6 +1,12 @@
-import { Text, StyleSheet, View, Button, TouchableOpacity } from "react-native";
 import React, { Component, useState } from "react";
-import { ToggleFavorite } from "@/controller";
+import { 
+  Button,
+  StyleSheet,
+  Text, 
+  TouchableOpacity, View, } from "react-native";
+import { 
+  ToggleFavorite,
+} from "@/controller";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 type FavoriteStarProps = {
@@ -22,8 +28,8 @@ const FavoriteStar = ({ isFavorited, uid, recipeId }: FavoriteStarProps) => {
       <TouchableOpacity onPress={handleToggleRecipe}>
         <AntDesign
           name={highlightStar ? "star" : "staro"}
-          size={48}
           color={"#f0be1d"}
+          size={48}
         />
       </TouchableOpacity>
     </View>

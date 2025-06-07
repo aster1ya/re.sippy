@@ -1,16 +1,18 @@
-import {
-  Text,
-  StyleSheet,
-  View,
-  Button,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
 import React, { Component, useState } from "react";
-import { ToggleFavorite } from "@/controller";
+import {
+  Button,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { 
+  ToggleFavorite,
+} from "@/controller";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import styles from "../styles";
 import { Ionicons } from "@expo/vector-icons";
+
+import styles from "../styles";
 
 type SearchBarProps = {
   searchHandler(searchTerm: string): void;
@@ -34,8 +36,7 @@ const SearchBar = ({ searchHandler }: SearchBarProps) => {
           style={styles.indexSearchIconInline}
         />
         <TextInput
-          style={[styles.indexSearchBar, { color: theme.textColor }]}
-          placeholder="Search recipes..."
+          placeholder="Search Recipes..."
           placeholderTextColor={theme.placeholderColor}
           value={searchText}
           onChangeText={setSearchText}
@@ -44,6 +45,7 @@ const SearchBar = ({ searchHandler }: SearchBarProps) => {
               searchHandler(searchText);
             }
           }}
+          style={[styles.indexSearchBar, { color: theme.textColor }]}
         />
       </View>
     </View>

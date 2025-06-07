@@ -1,23 +1,21 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
-  TouchableOpacity,
-  TextInput,
+  SafeAreaView,
+  Text,
+  View,
 } from "react-native";
-import axios from "axios";
-import styles from "../styles";
-import { Ionicons } from "@expo/vector-icons";
-import RecipeList from "@/components/RecipeList";
+import { 
+  SearchRecipes,
+} from "@/controller";
 import CustomSearchBar from "@/components/CustomSearchBar";
+
+import axios from "axios";
+import { useLocalSearchParams, useRouter } from "expo-router";
+
 import IRecipe from "@/types/Recipe";
-import { SearchRecipes } from "@/controller";
+import RecipeList from "@/components/RecipeList";
+import styles from "../styles";
 
 const SearchScreen = () => {
   const { q } = useLocalSearchParams();
@@ -66,36 +64,6 @@ const SearchScreen = () => {
           <Text style={styles.searchNoResult}>No results found.</Text>
         ) : (
           <RecipeList recipes={dbResults} />
-
-          /* ### old search list ###
-          <FlatList
-            data={[...dbResults, ...mealDbResults]}
-            keyExtractor={(item: any) => item._id || item.idMeal}
-            renderItem={({ item }: { item: DBRecipe | MealDBRecipe }) => {
-              const isDb = "_id" in item;
-
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push({
-                      pathname: isDb ? "/recipe_details/[id]" : "/details",
-                      params: { id: isDb ? item._id : item.idMeal },
-                    })
-                  }
-                  style={styles.searchMealCard}
-                >
-                  <Image
-                    source={{ uri: isDb ? item.image : item.strMealThumb }}
-                    style={styles.searchMealImage}
-                  />
-                  <Text style={styles.searchMealName}>
-                    {isDb ? item.title : item.strMeal}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-          />
-          */
         )}
       </View>
     </SafeAreaView>
