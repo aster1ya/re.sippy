@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
@@ -62,29 +63,30 @@ const Login = () => {
     Alert.alert("Logged in", "Successfully logged in with " + loggedInEmail);
 
   return (
-    <View>
-      <Text>Login to your account</Text>
+    <ScrollView>
+      <View
+        style={styles.baseContainer}>
+        <Text style={styles.h1}>Login to your account</Text>
 
-      <TextInput
-        placeholder="email"
-        keyboardType="email-address"
-        onChangeText={(newText) => setEmailInput(newText)}
-      />
-      <TextInput
-        placeholder="password"
-        onChangeText={(newText) => setPasswordInput(newText)}
-        secureTextEntry
-      />
-      <Text style={styles.authError}>{loginError}</Text>
+        <TextInput style={styles.authInput}
+          placeholder="email"
+          keyboardType="email-address"
+          onChangeText={(newText) => setEmailInput(newText)}
+        />
+        <TextInput style={styles.authInput}
+          placeholder="password"
+          onChangeText={(newText) => setPasswordInput(newText)}
+          secureTextEntry
+        />
+        <Text style={styles.authError}>{loginError}</Text>
 
-      <Button title="login" onPress={HandleSubmitLogin} />
-      <Text>{"\n"}</Text>
-      <TouchableOpacity onPress={() => router.replace("/register")}>
-        <Text style={styles.hyperlink}>
-          Don't have an account? Create one here.
-        </Text>
-      </TouchableOpacity>
-    </View>
+        <Button title="login" onPress={HandleSubmitLogin}
+                color="tomato" />
+        <Text/>
+        <Button title="Don't have an account? Create one here." onPress={() => router.replace("/register")}
+                color="tomato"/>
+      </View>
+    </ScrollView>
   );
 };
 

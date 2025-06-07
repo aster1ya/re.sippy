@@ -5,7 +5,7 @@ import {
 import { auth } from "../backend/firebaseConfig";
 import { RegisterUser } from "../controller";
 
-import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, Button, Alert, ScrollView } from "react-native";
 import { Link, useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 import styles from "../styles";
@@ -37,32 +37,34 @@ const Register = () => {
   };
 
   return (
-    <View>
-      <Text>Register your account</Text>
+    <ScrollView>
+      <View style={styles.baseContainer}>
+        <Text style={styles.h1}>Register your account</Text>
 
-      <TextInput
-        placeholder="email"
-        keyboardType="email-address"
-        onChangeText={(newText) => setEmailInput(newText)}
-      />
-      <Text style={styles.authError} className="text-danger">
-        {emailError}
-      </Text>
+        <TextInput style={styles.authInput}
+          placeholder="email"
+          keyboardType="email-address"
+          onChangeText={(newText) => setEmailInput(newText)}
+        />
+        <Text style={styles.authError} className="text-danger">
+          {emailError}
+        </Text>
 
-      <TextInput
-        placeholder="password"
-        onChangeText={(newText) => setPasswordInput(newText)}
-      />
-      <Text style={styles.authError} className="text-danger">
-        {passwordError}
-      </Text>
+        <TextInput style={styles.authInput}
+          placeholder="password"
+          onChangeText={(newText) => setPasswordInput(newText)}
+        />
+        <Text style={styles.authError} className="text-danger">
+          {passwordError}
+        </Text>
 
-      <Button title="register" onPress={HandleSubmitRegister} />
-
-      <Link href="/login" style={styles.hyperlink}>
-        {"\n"}Already have an account? login instead.
-      </Link>
-    </View>
+        <Button title="register" onPress={HandleSubmitRegister}
+                color="tomato"/>
+        <Text/>
+        <Button title="Already have an account? Login here." onPress={() => router.replace("/login")}
+                color="tomato"/>
+      </View>
+    </ScrollView>
   );
 };
 

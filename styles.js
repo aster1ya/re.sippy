@@ -307,6 +307,16 @@ const styles = StyleSheet.create({
   authError: {
     color: 'red',
   },
+
+  authInput: {
+    backgroundColor:'whitesmoke',
+    borderColor:'whitesmoke',
+    borderRadius:5,
+    borderWidth:5,
+    padding:5,
+    marginTop:5,
+    marginBottom:2
+  }
 });
 
 export default styles;
