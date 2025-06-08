@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Button, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link, useFocusEffect, useRouter } from "expo-router";
 import Card from "./card";
@@ -37,6 +37,22 @@ const book = () => {
 
   return (
     <ScrollView>
+      {/* All Recipes and Done List Buttons */}
+      <View style={{ flexDirection: "row", justifyContent: "space-around", marginVertical: 10 }}>
+        <TouchableOpacity
+          style={{ padding: 10, backgroundColor: "#ccc", borderRadius: 10 }}
+          onPress={fetchAllRecipes}
+        >
+          <Text>All Recipes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ padding: 10, backgroundColor: "#ccc", borderRadius: 10 }}
+          onPress={() => router.push("/donelist")}
+        >
+          <Text>Done List</Text>
+        </TouchableOpacity>
+      </View>
+
       <Text style={styles.bookTitle}>All Recipes</Text>
       <RecipeList recipes={recipes} />
 

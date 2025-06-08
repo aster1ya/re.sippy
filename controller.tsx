@@ -310,3 +310,44 @@ export const GetCurrentUID = () => {
     return "";
   }
 };
+
+// recipe - MARK AS DONE
+export const MarkRecipeAsDone = async (recipeId: string, uid: string) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/api/recipes/${recipeId}/markDone`,
+      { uid }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error in MarkRecipeAsDone:", error);
+    return { success: false, message: "Could not mark recipe as done." };
+  }
+};
+
+// recipe - REMOVE FROM DONE LIST
+export const RemoveFromDoneList = async (recipeId: string, uid: string) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/api/recipes/${recipeId}/removeFromDone`,
+      { uid }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error removing from done list:", error);
+    return { success: false, message: "Could not remove recipe from done list." };
+  }
+};
+
+
+export const GetDoneRecipes = async (uid: string) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/recipes/done/${uid}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching done recipes:", error);
+    return [];
+  }
+};

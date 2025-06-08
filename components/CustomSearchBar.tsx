@@ -7,7 +7,7 @@ import {
   TextInput,
 } from "react-native";
 import React, { Component, useState } from "react";
-import { ToggleFavorite } from "@/controller";
+//import { ToggleFavorite } from "@/controller";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import styles from "../styles";
 import { Ionicons } from "@expo/vector-icons";

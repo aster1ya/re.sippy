@@ -102,7 +102,6 @@ const Index = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-
       console.log("auth updated: ", user?.email);
     });
 
@@ -226,6 +225,14 @@ const Index = () => {
             Create Recipe
           </Text>
         </Link>
+        {currentUser && (
+          <Link href="/profile" style={styles.indexTabButton}>
+            <Ionicons name="person" size={24} color={theme.iconColor} />
+            <Text style={[styles.indexTabLabel, { color: theme.textColor }]}>
+              Profile
+            </Text>
+          </Link>
+        )}
       </View>
     </SafeAreaView>
   );

@@ -22,6 +22,8 @@ const RecipeSchema = new mongoose.Schema({
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.
     tags: { type: [String], default: [] },
+
+    done: { type: [String], default: [] },  // to take care of Mark as Done feature
   });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

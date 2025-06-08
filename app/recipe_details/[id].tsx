@@ -12,6 +12,7 @@ import {
   GetRecipeById,
   GetCurrentUID,
   CheckIfFavorited,
+  MarkRecipeAsDone,
 } from "../../controller";
 import FavoriteStar from "@/components/FavoriteStar";
 import { auth } from "@/backend/firebaseConfig";
@@ -98,6 +99,23 @@ const Details = () => {
     );
   };
 
+  // ✅ Mark as Done Handler (추가된 부분)
+  const handleMarkAsDone = async () => {
+    try {
+      const idStr = Array.isArray(id) ? id[0] : id;
+      const result = await MarkRecipeAsDone(idStr, uid);
+      
+      if (result.success) {
+        Alert.alert("Done!", "Recipe has been added to your Done List.");
+      } else {
+        Alert.alert("Error", result.message);
+      }
+    } catch (error) {
+      console.error("Mark as Done failed:", error);
+      Alert.alert("Error", "Could not mark as done.");
+    }
+  };
+
   if (loading)
     return (
       <ActivityIndicator
@@ -182,6 +200,17 @@ const Details = () => {
             <Text>{recipe?.notes}</Text>
           </View>
         </View>
+
+        {/* ✅ Mark as Done 버튼 - Edit Recipe 위에 추가 */}
+        {auth.currentUser && (
+          <View style={localStyles.buttonWrapper}>
+            <Button
+              title="Mark as Done"
+              color="#62C370"
+              onPress={handleMarkAsDone}
+            />
+          </View>
+        )}
 
         <Button
           color="tomato"

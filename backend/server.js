@@ -201,3 +201,69 @@ app.get("/api/search", async (req, res) => {
     res.status(500).send("Search failed: " + err.message);
   }
 });
+
+// MARK AS DONE for specific user (Post)
+app.post("/api/recipes/:id/markDone", async (req, res) => {
+  const recipeId = req.params.id;
+  const { uid } = req.body;
+
+  if (!uid) {
+    return res.status(400).json({ success: false, message: "User ID required." });
+  }
+
+  try {
+    const result = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $addToSet: { done: uid } }, // ensures uid is only added once
+      { new: true }
+    );
+    if (!result) {
+      return res.status(404).json({ success: false, message: "Recipe not found." });
+    }
+
+    res.json({ success: true, message: "Recipe marked as done." });
+  } catch (err) {
+    console.error("Error marking as done:", err);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
+
+// MARK AS DONE for specific user (Get)
+app.get("/api/recipes/done/:uid", async (req, res) => {
+  const { uid } = req.params;
+  try {
+    const recipes = await Recipe.find({ done: uid });
+    res.json(recipes);
+  } catch (err) {
+    console.error("Error fetching done recipes:", err);
+    res.status(500).json({ message: "Server error." });
+  }
+});
+
+// REMOVE FROM DONE for specific user (Post)
+app.post("/api/recipes/:id/removeFromDone", async (req, res) => {
+  const recipeId = req.params.id;
+  const { uid } = req.body;
+
+  if (!uid) {
+    return res.status(400).json({ success: false, message: "User ID required." });
+  }
+
+  try {
+    const result = await Recipe.findByIdAndUpdate(
+      recipeId,
+      { $pull: { done: uid } }, // removes uid from the done array
+      { new: true }
+    );
+    
+    if (!result) {
+      return res.status(404).json({ success: false, message: "Recipe not found." });
+    }
+
+    res.json({ success: true, message: "Recipe removed from done list." });
+  } catch (err) {
+    console.error("Error removing from done list:", err);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
+

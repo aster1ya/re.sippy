@@ -18,4 +18,5 @@ export default interface IRecipe {
   notes?: string;
 
   tags: string[];
+  done?: string[];  // Array of user IDs who have marked this recipe as done
 }
