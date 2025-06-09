@@ -7,17 +7,19 @@ const mongoose = require("mongoose")
 const RecipeSchema = new mongoose.Schema({
 
     //note: default values are currently being handled through the controller, not this or types/IRecipe
-    title: { type: String, required: true},
-    description: {type: String, default: "default description" },
-    ingredients: { type: String, required: true},
-    instructions: { type: String, required: true},
+    title: { type: String, required: true },
+    description: {type: String, default: "No Description Available" },
+    ingredients: { type: String, required: true },
+    instructions: { type: String, required: true },
     notes: { type: String, default: "No Notes Available" },
 
-    authorId: {type: String, required: true },
+    authorId: { type: String, required: true },
+    author: { type: String, default: "User" },
       
     mealType: { type: String },
     prepTime: { type: String },
     cookTime: { type: String },
+    totalTime: { type: String },
     servings: { type: String, default: "1" },
 
     //when creating recipes with categories elsewhere, make sure to have a consistent list of categories somewhere.

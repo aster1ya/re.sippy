@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, ScrollView, Text, TextInput, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
-import { CreateRecipeRequest, GetRecipeById } from "../controller";
-import axios from "axios";
-import IRecipe from "@/types/Recipe";
-import styles from "../styles";
+import { 
+  Button, 
+  ScrollView, 
+  Text, 
+  TextInput, 
+  View, 
+} from "react-native";
+import { 
+  CreateRecipeRequest, 
+  GetRecipeById 
+} from "../controller";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import { auth } from "@/backend/firebaseConfig";
+import { useRouter } from "expo-router";
+
+import IRecipe from "@/types/Recipe";
+import styles from "../styles";
 
 type RecipeInputProps = {
   existingRecipeId?: string;
@@ -31,9 +39,11 @@ const RecipeInput = ({
   //all these useStates could probably be replaced by a single Recipe class
   const [title, setTitle] = useState<string>("");
   const [authorId, setAuthorId] = useState<string>("");
+  const [author, setAuthor] = useState<string | undefined>("");
   const [mealType, setMealType] = useState<string | undefined>("");
   const [prepTime, setPrepTime] = useState<string | undefined>("");
   const [cookTime, setCookTime] = useState<string | undefined>("");
+  const [totalTime, setTotalTime] = useState<string | undefined>("");
   const [servings, setServings] = useState<string | undefined>("");
   const [description, setDescription] = useState<string | undefined>("");
   const [ingredients, setIngredients] = useState<string>("");
@@ -62,15 +72,16 @@ const RecipeInput = ({
 
   const setExistingVariables = (recipe: IRecipe) => {
     setAuthorId(recipe.authorId);
+    setAuthor(recipe.author);
     setTitle(recipe.title);
     setMealType(recipe.mealType);
     setPrepTime(recipe.prepTime);
     setCookTime(recipe.cookTime);
+    setTotalTime(recipe.totalTime);
     setServings(recipe.servings);
     setDescription(recipe.description);
     setIngredients(recipe.ingredients);
     setInstructions(recipe.instructions);
-    setAuthorId(recipe.authorId);
     setNotes(recipe.notes);
     setTags(recipe.tags);
   };
@@ -104,9 +115,11 @@ const RecipeInput = ({
         _id: existingRecipeId,
         title: title,
         authorId: newAuthorId,
+        author: author,
         mealType: mealType,
         prepTime: prepTime,
         cookTime: cookTime,
+        totalTime: totalTime,
         servings: servings,
         description: description,
         ingredients: ingredients,
@@ -144,13 +157,23 @@ const RecipeInput = ({
             inputMode="text"
             defaultValue={title}
             onChangeText={(newText) => setTitle(newText)}
-            style={styles.createTitle}
+            style={styles.baseTitle}
           />
         </View>
 
         <View style={styles.baseSubContainer}>
           <Text style={styles.h1}>Information</Text>
           <View style={styles.infoGrid}>
+            <View style={styles.infoSection}>
+              <Text style={styles.infoLabel}>Author</Text>
+              <TextInput
+                placeholder="You"
+                  inputMode="text"
+                  defaultValue={author}
+                  onChangeText={(newText) => setAuthor(newText)}
+                  style={styles.infoField}
+              />
+            </View>
             <View style={styles.infoSection}>
               <Text style={styles.infoLabel}>Type</Text>
               <TextInput
@@ -178,6 +201,16 @@ const RecipeInput = ({
                 inputMode="text"
                 defaultValue={cookTime}
                 onChangeText={(newText) => setCookTime(newText)}
+                style={styles.infoField}
+              />
+            </View>
+            <View style={styles.infoSection}>
+              <Text style={styles.infoLabel}>Total Time</Text>
+              <TextInput
+                placeholder="None"
+                inputMode="text"
+                defaultValue={totalTime}
+                onChangeText={(newText) => setTotalTime(newText)}
                 style={styles.infoField}
               />
             </View>
@@ -211,6 +244,7 @@ const RecipeInput = ({
         <View style={styles.baseSubContainer}>
           <Text style={styles.h1}>Ingredients</Text>
           <TextInput
+            multiline={true}
             placeholder="Ingredients"
             defaultValue={ingredients}
             onChangeText={(newText) => setIngredients(newText)}
@@ -222,6 +256,7 @@ const RecipeInput = ({
         <View style={styles.baseSubContainer}>
           <Text style={styles.h1}>Instructions</Text>
           <TextInput
+            multiline={true}
             placeholder="Instructions"
             defaultValue={instructions}
             onChangeText={(newText) => setInstructions(newText)}
@@ -233,6 +268,7 @@ const RecipeInput = ({
         <View style={styles.baseSubContainer}>
           <Text style={styles.h1}>Notes</Text>
           <TextInput
+            multiline={true}
             placeholder="Note"
             defaultValue={notes}
             onChangeText={(newText) => setNotes(newText)}
@@ -240,40 +276,52 @@ const RecipeInput = ({
         </View>
       </View>
 
-      <Text>Tags</Text>
-      <BouncyCheckbox
-        text="Vegetarian"
-        isChecked={tags.includes("Vegetarian")}
-        textStyle={{ fontSize: 14, textDecorationLine: "none" }}
-        textContainerStyle={{ marginVertical: 5 }}
-        onPress={(isChecked: boolean) => updateTagList(isChecked, "Vegetarian")}
-      ></BouncyCheckbox>
-      <BouncyCheckbox
-        text="Vegan"
-        isChecked={tags.includes("Vegan")}
-        textStyle={{ fontSize: 14, textDecorationLine: "none" }}
-        textContainerStyle={{ marginVertical: 5 }}
-        onPress={(isChecked: boolean) => updateTagList(isChecked, "Vegan")}
-      ></BouncyCheckbox>
-      <BouncyCheckbox
-        text="Gluten Free"
-        isChecked={tags.includes("Gluten Free")}
-        textStyle={{ fontSize: 14, textDecorationLine: "none" }}
-        textContainerStyle={{ marginVertical: 5 }}
-        onPress={(isChecked: boolean) =>
-          updateTagList(isChecked, "Gluten Free")
-        }
-      ></BouncyCheckbox>
-      <BouncyCheckbox
-        text="Halal"
-        isChecked={tags.includes("Halal")}
-        textStyle={{ fontSize: 14, textDecorationLine: "none" }}
-        textContainerStyle={{ marginVertical: 5 }}
-        onPress={(isChecked: boolean) => updateTagList(isChecked, "Halal")}
-      ></BouncyCheckbox>
+      <View style={styles.baseContainer}>
+        <View style={styles.baseSubContainer}>
+          <Text style={styles.h1}>Tags</Text>
+          <BouncyCheckbox
+            text="Vegetarian"
+            isChecked={tags.includes("Vegetarian")}
+            textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+            textContainerStyle={{ marginVertical: 5 }}
+            onPress={(isChecked: boolean) => updateTagList(isChecked, "Vegetarian")}
+            style={styles.baseChecklist}
+          />
+          <BouncyCheckbox
+            text="Vegan"
+            isChecked={tags.includes("Vegan")}
+            textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+            textContainerStyle={{ marginVertical: 5 }}
+            onPress={(isChecked: boolean) => updateTagList(isChecked, "Vegan")}
+            style={styles.baseChecklist}
+          />
+          <BouncyCheckbox
+            text="Gluten Free"
+            isChecked={tags.includes("Gluten Free")}
+            textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+            textContainerStyle={{ marginVertical: 5 }}
+            onPress={(isChecked: boolean) => updateTagList(isChecked, "Gluten Free")}
+            style={styles.baseChecklist}
+          />
+          <BouncyCheckbox
+            text="Halal"
+            isChecked={tags.includes("Halal")}
+            textStyle={{ fontSize: 14, textDecorationLine: "none" }}
+            textContainerStyle={{ marginVertical: 5 }}
+            onPress={(isChecked: boolean) => updateTagList(isChecked, "Halal")}
+            style={styles.baseChecklist}
+          />
+        </View>
+      </View>
 
-      <Button color="tomato" title="Save Recipe" onPress={handleCreateRecipe} />
-    </ScrollView>
+      <View style={styles.longButton}>
+        <Button
+          title="Save Recipe"
+          color="tomato" 
+          onPress={handleCreateRecipe}
+        />
+      </View>
+    </ScrollView>      
   );
 };
 

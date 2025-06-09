@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  StyleSheet,
+  Alert,
+  Button,
+  ScrollView,
   Text,
   View,
-  ScrollView,
-  Button,
-  Alert,
 } from "react-native";
 import {
-  GetRecipeById,
-  GetCurrentUID,
   CheckIfFavorited,
+  GetCurrentUID,
+  GetRecipeById,
 } from "../../controller";
 import FavoriteStar from "@/components/FavoriteStar";
-import { auth } from "@/backend/firebaseConfig";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useIsFocused } from "@react-navigation/native";
 
-import { useLocalSearchParams, useRouter } from "expo-router";
 import axios from "axios";
+import { auth } from "@/backend/firebaseConfig";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 import IRecipe from "@/types/Recipe";
 import styles from "../../styles";
-import { useIsFocused } from "@react-navigation/native";
 
 const Details = () => {
   const isFocused = useIsFocused();
@@ -101,8 +100,8 @@ const Details = () => {
   if (loading)
     return (
       <ActivityIndicator
-        size="large"
         color="#417023"
+        size="large"
         style={{ marginTop: 40 }}
       />
     );
@@ -110,15 +109,17 @@ const Details = () => {
   return (
     <SafeAreaProvider>
       <ScrollView>
-        {auth.currentUser ? (
-          <FavoriteStar
-            recipeId={recipeId}
-            uid={uid}
-            isFavorited={favorited}
-          ></FavoriteStar>
-        ) : (
-          <Text></Text>
-        )}
+        <View style={styles.favButton}>
+          {auth.currentUser ? (
+            <FavoriteStar
+              recipeId={recipeId}
+              uid={uid}
+              isFavorited={favorited}
+            ></FavoriteStar>
+          ) : (
+            <View></View>
+          )}
+        </View>
         <View style={styles.baseContainer}>
           <View>
             <Text style={styles.baseTitle}>{recipe?.title}</Text>
@@ -129,7 +130,7 @@ const Details = () => {
             <View style={styles.infoGrid}>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Author</Text>
-                <Text>{recipe?.authorId}</Text>
+                <Text>{recipe?.author}</Text>
               </View>
 
               <View style={styles.infoSection}>
@@ -145,6 +146,11 @@ const Details = () => {
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Cook Time</Text>
                 <Text>{recipe?.cookTime}</Text>
+              </View>
+
+              <View style={styles.infoSection}>
+                <Text style={styles.infoLabel}>Total Time</Text>
+                <Text>{recipe?.totalTime}</Text>
               </View>
 
               <View style={styles.infoSection}>
@@ -183,17 +189,43 @@ const Details = () => {
           </View>
         </View>
 
-        <Button
-          color="tomato"
-          title="Edit Recipe"
-          onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
-        />
-
-        {/* Show the Delete button only if the authorId matches the logged-in user's uid. */}
-        {auth.currentUser && recipe?.authorId === auth.currentUser.uid && (
-          <View style={localStyles.buttonWrapper}>
-            <Button title="Delete" color="red" onPress={handleDelete} />
+        <View style={styles.baseContainer}>
+          <View style={styles.baseSubContainer}>
+            <Text style={styles.h1}>Tags</Text>
+            {recipe?.tags.length ? (
+              <View>
+                {recipe?.tags.map(item => (
+                  <Text>{item.toString()}</Text>
+                ))}
+              </View>
+            ) : (
+              <Text>No Tags Available</Text>
+            )}
           </View>
+        </View>
+        
+        {/*Show the Edit Recipe and Delete button ONLY if the authorId matches the logged-in user's uId.*/}
+        {auth.currentUser?.uid === recipe?.authorId ? (
+          <View style={styles.longButton}>
+            <Button
+              title="Edit Recipe"
+              color="tomato"
+              onPress={() => goToRecipe(Array.isArray(id) ? id[0] : id)}
+            />
+          </View>
+        ) : (
+          <View></View>
+        )}
+
+        {auth.currentUser?.uid === recipe?.authorId ? (
+          <View style={styles.longButton}>
+            <Button 
+              title="Delete"
+              color="red"
+              onPress={handleDelete}/>
+          </View>
+        ) : (
+          <View></View>
         )}
       </ScrollView>
     </SafeAreaProvider>
@@ -201,17 +233,3 @@ const Details = () => {
 };
 
 export default Details;
-
-const localStyles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  buttonWrapper: {
-    marginTop: 30,
-  },
-});

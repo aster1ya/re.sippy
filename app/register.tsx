@@ -1,13 +1,17 @@
-import {
-  createUserWithEmailAndPassword,
-  validatePassword,
-} from "firebase/auth";
-import { auth } from "../backend/firebaseConfig";
-import { RegisterUser } from "../controller";
+import React, { useEffect, useState } from "react";
+import { 
+  Alert,
+  Button,
+  ScrollView,
+  Text, 
+  TextInput, 
+  View, } from "react-native";
+  import { RegisterUser } from "../controller";
 
-import { StyleSheet, Text, View, TextInput, Button, Alert } from "react-native";
-import { Link, useRouter } from "expo-router";
-import React, { useState, useEffect } from "react";
+import { auth } from "../backend/firebaseConfig";
+import { createUserWithEmailAndPassword, validatePassword } from "firebase/auth";
+import { useRouter } from "expo-router";
+
 import styles from "../styles";
 
 const Register = () => {
@@ -37,32 +41,44 @@ const Register = () => {
   };
 
   return (
-    <View>
-      <Text>Register your account</Text>
+    <ScrollView>
+      <View style={styles.baseContainer}>
+        <Text style={styles.h1}>Register your account</Text>
 
-      <TextInput
-        placeholder="email"
-        keyboardType="email-address"
-        onChangeText={(newText) => setEmailInput(newText)}
-      />
-      <Text style={styles.authError} className="text-danger">
-        {emailError}
-      </Text>
+        <TextInput
+          placeholder="Email"
+          keyboardType="email-address"
+          style={styles.authInput}
+          onChangeText={(newText) => setEmailInput(newText)}
+        />
+        <Text 
+          className="text-danger"
+          style={styles.authError}>
+          {emailError}
+        </Text>
 
-      <TextInput
-        placeholder="password"
-        onChangeText={(newText) => setPasswordInput(newText)}
-      />
-      <Text style={styles.authError} className="text-danger">
-        {passwordError}
-      </Text>
+        <TextInput
+          placeholder="Password"
+          style={styles.authInput}
+          onChangeText={(newText) => setPasswordInput(newText)}
+        />
+        <Text 
+          className="text-danger"
+          style={styles.authError}>
+          {passwordError}
+        </Text>
 
-      <Button title="register" onPress={HandleSubmitRegister} />
-
-      <Link href="/login" style={styles.hyperlink}>
-        {"\n"}Already have an account? login instead.
-      </Link>
-    </View>
+        <Button 
+          title="register"
+          color="tomato"
+          onPress={HandleSubmitRegister}/>
+        <Text/>
+        <Button 
+          title="Already have an account? Login here."
+          color="tomato"
+          onPress={() => router.replace("/login")}/>
+      </View>
+    </ScrollView>
   );
 };
 

@@ -1,7 +1,14 @@
-import { Text, StyleSheet, View, Button } from "react-native";
 import React, { Component } from "react";
-import IRecipe from "../types/Recipe";
+import { 
+  Button,
+  StyleSheet, 
+  Text,
+  View,
+} from "react-native";
+
 import { useRouter } from "expo-router";
+
+import IRecipe from "../types/Recipe";
 
 type RecipeListProps = {
   recipes: IRecipe[];
@@ -18,20 +25,20 @@ const RecipeList = ({ recipes }: RecipeListProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.listContainer}>
       {recipes && recipes != undefined ? (
         recipes.map((recipe, index) => (
           <View key={index} style={styles.recipePreview}>
             <View style={styles.row}>
               <Text style={styles.header}>{recipe.title}</Text>
               <Button
+                color="tomato"
                 title="View Recipe"
                 onPress={() =>
                   goToRecipe(
                     recipe._id ||
                       "recipe.id will never be undefined so this is just for error suppression"
-                  )
-                }
+                  )}
               />
             </View>
             <Text>{recipe.description}</Text>
@@ -47,16 +54,22 @@ const RecipeList = ({ recipes }: RecipeListProps) => {
 export default RecipeList;
 
 const styles = StyleSheet.create({
-  container: {
+  listContainer: {
+    backgroundColor:"white",
+    borderColor:"white",
+    borderRadius:10,
+    borderWidth:2.5,
     flex: 1,
-    backgroundColor: "white",
-    justifyContent: "center",
+    justifyContent:"center",
+    margin:5,
+    padding:5,
   },
 
   recipePreview: {
-    marginBottom: 30,
-    backgroundColor: "#e0e0e0",
-    padding: 10,
+    backgroundColor:"#e0e0e0",
+    marginTop:10,
+    marginBottom:10,
+    padding:10,
   },
 
   header: {
@@ -64,8 +77,8 @@ const styles = StyleSheet.create({
   },
 
   row: {
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between",
+    flexDirection:"row",
+    display:"flex",
+    justifyContent:"space-between",
   },
 });

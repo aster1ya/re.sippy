@@ -1,24 +1,22 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
-  TouchableOpacity,
-  TextInput,
+  SafeAreaView,
+  Text,
   ScrollView,
+  View,
 } from "react-native";
-import axios from "axios";
-import styles from "../styles";
-import { Ionicons } from "@expo/vector-icons";
-import RecipeList from "@/components/RecipeList";
+import { 
+  SearchRecipes,
+} from "@/controller";
 import CustomSearchBar from "@/components/CustomSearchBar";
+
+import axios from "axios";
+import { useLocalSearchParams, useRouter } from "expo-router";
+
 import IRecipe from "@/types/Recipe";
-import { SearchRecipes } from "@/controller";
+import RecipeList from "@/components/RecipeList";
+import styles from "../styles";
 
 // Added: tag filter
 const TAGS = ["Vegan", "Vegetarian", "Halal", "Gluten Free"];
@@ -127,7 +125,7 @@ const SearchScreen = () => {
           ) : filteredRecipes.length === -1 ? (
             <Text style={styles.searchNoResult}>No results found.</Text>
           ) : (
-            <RecipeList recipes={filteredRecipes} />
+            <RecipeList recipes={filteredRecipes}/>
           )}
         </View>
       </ScrollView>
