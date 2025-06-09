@@ -17,7 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { auth } from "../backend/firebaseConfig";
 import { User } from "firebase/auth";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 
 import IRecipe from "../types/Recipe";
 import styles from "../styles";
@@ -49,7 +49,6 @@ const Index = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-
       console.log("auth updated: ", user?.email);
     });
 
@@ -183,6 +182,15 @@ const Index = () => {
             <>
             </>
           )}
+
+          {currentUser && (
+          <Link href="/profile" style={styles.indexTabButton}>
+            <Ionicons name="person" size={24} />
+            <Text style={styles.indexTabLabel}>
+              Profile
+            </Text>
+          </Link>
+        )}
         </View>
       </View>
     </SafeAreaProvider>

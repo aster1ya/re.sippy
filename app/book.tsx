@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { 
   Button,
-  Text, 
   ScrollView,
+  Text,
+  TouchableOpacity,
   View, 
 } from "react-native";
 import { 
@@ -60,9 +61,24 @@ const Book = () => {
     <SafeAreaProvider>
       <ScrollView>
         <View style={styles.bookContainer}>
+          {/* All Recipes and Done List Buttons */}
+          <View style={{ flexDirection: "row", justifyContent: "space-around", marginVertical: 10 }}>
+            <TouchableOpacity
+              style={{ padding: 10, backgroundColor: "#ccc", borderRadius: 10 }}
+              onPress={fetchAllRecipes}
+            >
+            <Text>All Recipes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ padding: 10, backgroundColor: "#ccc", borderRadius: 10 }}
+              onPress={() => router.push("/donelist")}
+            >
+            <Text>Done List</Text>
+          </TouchableOpacity>
+          </View>
+
           <Text style={styles.bookTitle}>All Recipes</Text>
           <RecipeList recipes={recipes}/>
-        </View>
 
           {auth.currentUser ? (
             <View style={styles.longButton}>
@@ -81,6 +97,7 @@ const Book = () => {
               />
             </View>
           )}
+        </View>
       </ScrollView>
     </SafeAreaProvider>
   );

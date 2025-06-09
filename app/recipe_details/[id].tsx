@@ -11,6 +11,7 @@ import {
   CheckIfFavorited,
   GetCurrentUID,
   GetRecipeById,
+  MarkRecipeAsDone,
 } from "../../controller";
 import FavoriteStar from "@/components/FavoriteStar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -95,6 +96,23 @@ const Details = () => {
         },
       ]
     );
+  };
+
+  // ✅ Mark as Done Handler (추가된 부분)
+  const handleMarkAsDone = async () => {
+    try {
+      const idStr = Array.isArray(id) ? id[0] : id;
+      const result = await MarkRecipeAsDone(idStr, uid);
+      
+      if (result.success) {
+        Alert.alert("Done!", "Recipe has been added to your Done List.");
+      } else {
+        Alert.alert("Error", result.message);
+      }
+    } catch (error) {
+      console.error("Mark as Done failed:", error);
+      Alert.alert("Error", "Could not mark as done.");
+    }
   };
 
   if (loading)
@@ -203,6 +221,17 @@ const Details = () => {
             )}
           </View>
         </View>
+
+        {/* ✅ Mark as Done 버튼 - Edit Recipe 위에 추가 */}
+        {auth.currentUser && (
+          <View style={styles.longButton}>
+            <Button
+              title="Mark as Done"
+              color="#62C370"
+              onPress={handleMarkAsDone}
+            />
+          </View>
+        )}
         
         {/*Show the Edit Recipe and Delete button ONLY if the authorId matches the logged-in user's uId.*/}
         {auth.currentUser?.uid === recipe?.authorId ? (
