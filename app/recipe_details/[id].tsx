@@ -148,7 +148,18 @@ const Details = () => {
             <View style={styles.infoGrid}>
               <View style={styles.infoSection}>
                 <Text style={styles.infoLabel}>Author</Text>
-                <Text>{recipe?.author}</Text>
+                <Text 
+                  style={{ color: 'blue', textDecorationLine: 'underline' }}
+                  onPress={() => router.push({
+                    pathname: "/author/[id]",
+                    params: { 
+                      id: recipe?.authorId,
+                      name: recipe?.author 
+                    },
+                  })}
+                >
+                  {recipe?.author}
+                </Text>
               </View>
 
               <View style={styles.infoSection}>
