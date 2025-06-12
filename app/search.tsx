@@ -5,6 +5,7 @@ import {
   Text,
   ScrollView,
   View,
+  TouchableOpacity
 } from "react-native";
 import { 
   SearchRecipes,
